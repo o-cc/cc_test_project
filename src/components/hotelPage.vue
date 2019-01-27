@@ -48,7 +48,7 @@
           <div class="home" @click.passive="showLeftSide">
             <img width="55%" src="./../../static/imgs/home.png" alt="">
           </div>
-          <div class="home home_title">
+          <div class="home home_title"  v-if="showHotel">
             酒店
           </div>
           <div class="home right_arrow">
@@ -57,16 +57,19 @@
         </div>
 
         <!-- 酒店页面组件 -->
-        <showHotel></showHotel>
+        <showHotel v-if="showHotel"></showHotel>
+
+        <userInfo v-if="userDetail"></userInfo>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import topArrow from "./childComponents/topArrow";
+  import topArrow  from "./childComponents/topArrow";
   import showHotel from "./childComponents/showHotel"
-  import Swiper from "swiper";
+  import userInfo  from "./childComponents/userInfo"
+  import Swiper    from "swiper";
   // import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
   export default {
@@ -76,7 +79,8 @@
     },
     components: {
       topArrow,
-      showHotel
+      showHotel,
+      userInfo
     },
     data() {
       return {
@@ -85,7 +89,9 @@
         userInfo: {
           userName: "啦啦啦",
           email   : "357104242@qq.com"
-        }
+        },
+        showHotel: false,
+        userDetail : true
       };
     },
     methods   : {

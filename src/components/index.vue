@@ -1,7 +1,8 @@
 <template>
   <div class="swiper-container">
     <login v-if="login"></login>
-     <hotelPage v-if="hotelPage"></hotelPage>
+    <!--<hotelPage v-if="hotelPage"></hotelPage>-->
+
   </div>
 </template>
 
@@ -21,7 +22,7 @@
     },
     data() {
       return {
-          login: false,
+          login: true,
           hotelPage: true
       };
     },

@@ -1,50 +1,33 @@
 <template>
   <div class="order">
     <div class="banner_tab">
-      <div class="banner_tab_btn" :class="{tab_active: firstTabBtn}" @click="clickFirstTabBtn">全部</div>
-      <div class="banner_tab_btn" :class="{tab_active: secondTabBtn}" @click="clickSecondTabBtn">待评价</div>
-      <div class="banner_tab_btn" :class="{tab_active: lastTabBtn}" @click="clickLastTabBtn">待入住</div>
+      <div class="banner_tab_btn" type="all" :class="{tab_active: firstTabBtn}" @click="clickFirstTabBtn('all')">全部</div>
+      <div class="banner_tab_btn" type="evaluate" :class="{tab_active: secondTabBtn}" @click="clickSecondTabBtn('evaluate')">待评价</div>
+      <div class="banner_tab_btn" type="waitIn" :class="{tab_active: lastTabBtn}" @click="clickLastTabBtn('waitIn')">待入住</div>
     </div>
 
-    <div class="order_info">
-      <div>
+    <div class="order_info" v-if="orderInfo">
+      <div style="padding-bottom: 0;" v-for="( item, key, index ) in hotelInfoData" :key="index">
         <div class="hotel_info_wrap">
-          <div class="img"></div>
+          <div class="img" :style='{background: "url("+item.imgUrl+") no-repeat center center", backgroundSize: "100%"}'></div>
           <div class="hotel_info_txt">
-            <p class="hotel_name">xxx阳光酒店（中国站）</p>
-            <p class="hotel_detail">8月9日-8月10日 共一晚</p>
-            <p class="hotel_detail">标准双人房</p>
-            <p class="hotel_detail" style="height: 1rem;line-height: 1rem;">￥299</p>
+            <p class="hotel_name">{{ formatHotelName( item.hotelName ) }}</p>
+            <p class="hotel_detail">{{ item.date }}</p>
+            <p class="hotel_detail">{{ item.typeRoom}}</p>
+            <p class="hotel_detail" style="height: 1rem;line-height: 1rem;">{{ item.price }}</p>
           </div>
         </div>
         <div class="hotel_info_btns">
-          <div>
-            <p class="left_prompt">待评价</p>
+          <p class="left_prompt">{{ item.status }}</p>
+          <div class="order_info_btn"
+               :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
+          >
+            {{ item.btn1.text }}
           </div>
-          <div class="order_info_btns">
-            <div class="order_info_btn">删除</div>
-            <div  class="order_info_btn order_info_btn_active">待评价</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="hotel_info_wrap">
-          <div class="img"></div>
-          <div class="hotel_info_txt">
-            <p class="hotel_name">xxx阳光酒店（中国站）</p>
-            <p class="hotel_detail">8月9日-8月10日 共一晚</p>
-            <p class="hotel_detail">标准双人房</p>
-            <p class="hotel_detail" style="height: 1rem;line-height: 1rem;">￥299</p>
-          </div>
-        </div>
-        <div class="hotel_info_btns">
-          <div>
-            <p class="left_prompt">待评价</p>
-          </div>
-          <div class="order_info_btns">
-            <div class="order_info_btn">删除</div>
-            <div  class="order_info_btn order_info_btn_active">待评价</div>
+          <div class="order_info_btn order_info_btn_active"
+            :class="{ hide: item.btn2.hide, flex: (!item.btn2.hide) }"
+          >
+            {{ item.btn2.text }}
           </div>
         </div>
       </div>
@@ -72,17 +55,95 @@
 
         firstTabBtn : true,
         secondTabBtn: false,
-        lastTabBtn  : false
+        lastTabBtn  : false,
+
+        orderInfo: true,
+
+        hotelInfoData: [
+          {
+            type: "evaluate",
+            hotelName: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            imgUrl: "./../../../static/imgs/Koala.jpg",
+            typeRoom: "标准双人房",
+            price: "$299",
+            status: "未评价",
+            btn1: {
+              text: "删除",
+              hide: false
+            },
+            btn2: {
+              text: "重新预订",
+              hide: false
+            },
+          },
+          {
+            type: "evaluate",
+            hotelName: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            imgUrl: "./../../../static/imgs/Koala.jpg",
+            typeRoom: "标准双人房",
+            price: "$299",
+            status: "未评价",
+            btn1: {
+              text: "取消",
+              hide: false
+            },
+            btn2: {
+              text: "立即评价",
+              hide: true
+            },
+          },
+          {
+            type: "evaluate",
+            hotelName: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            imgUrl: "./../../../static/imgs/Koala.jpg",
+            typeRoom: "标准双人房",
+            price: "$299",
+            status: "未评价",
+            btn1: {
+              text: "删除",
+              hide: true
+            },
+            btn2: {
+              text: "去评价",
+              hide: false
+            },
+          },
+          {
+            type: "evaluate",
+            hotelName: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            imgUrl: "./../../../static/imgs/Koala.jpg",
+            typeRoom: "标准双人房",
+            price: "$299",
+            status: "已预订",
+            btn1: {
+              text: "已评价",
+              hide: false
+            },
+            btn2: {
+              text: "立即评价",
+              hide: true
+            },
+          },
+
+        ]
+
       }
 
     },
 
     methods: {
-      clickFirstTabBtn() {
+      clickFirstTabBtn( ShowAll ) {
         //console.log( "点击第一个" );
         this.firstTabBtn  = true;
         this.secondTabBtn = false;
         this.lastTabBtn   = false;
+
+
+
 
       },
 
@@ -99,6 +160,20 @@
         this.firstTabBtn  = false;
         this.secondTabBtn = false;
         this.lastTabBtn   = true;
+
+      },
+
+      formatHotelName ( name ) {
+
+        if( typeof name !== "string" ) {
+          return name;
+        }
+
+        if( name.length > 10 ) {
+          return name.slice( 0,10 ) + "...";
+        }
+
+        return name;
 
       }
 
@@ -145,8 +220,9 @@
       div {
         width: 95%;
         background-color: #fff;
-        margin: 0 auto;
+        margin: 0 auto 0.5rem;
         padding: .2rem 0;
+
         .hotel_info_wrap {
           width: 95%;
           display: flex;
@@ -182,6 +258,7 @@
             .hotel_detail {
               height: .5rem;
               line-height: .5rem;
+              color: #a0a1a6;
             }
           }
 
@@ -191,11 +268,8 @@
         .hotel_info_btns {
           width: 90%;
           display: flex;
-
-          div {
-            width: 100%;
-            padding: 0;
-            display: flex;
+          justify-content: space-between;
+          padding-bottom: 0;
 
             .left_prompt {
               font-size: .3rem;
@@ -203,28 +277,35 @@
               text-align: left;
               line-height: 1rem;
               margin: 0;
+              width: 50%;
             }
 
             .order_info_btn {
               font-size: .4rem;
-              height: .9rem;
+              height: .5rem;
               display: flex;
-              width: 30%;
+              width: 20%;
               justify-content: center;
               align-items: center;
               background-color: #f8f8f8;
               border-radius: 5px;
             }
 
+            .hide {
+              display: none;
+            }
+
+            .flex {
+              display: flex;
+            }
+
             .order_info_btn_active {
-              width: 60%;
+              width: 25%;
               color: #fff;
               background-color: #f5b400;
             }
-          }
 
-
-          }
+        }
 
 
 

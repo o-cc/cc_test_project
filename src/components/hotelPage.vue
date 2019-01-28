@@ -58,8 +58,13 @@
 
         <!-- 酒店页面组件 -->
         <showHotel v-if="showHotel"></showHotel>
-
+        <!-- 个人中心 -->
         <userInfo v-if="userDetail"></userInfo>
+
+        <!-- 我的收藏 -->
+
+
+
       </div>
     </div>
   </div>

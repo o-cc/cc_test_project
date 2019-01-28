@@ -64,19 +64,19 @@
         <!-- 我的收藏 -->
         <favorite v-if="myFavorite"></favorite>
         <!-- 我的订单 -->
-        <order></order>
+        <order v-if="order"></order>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import topArrow  from "./childComponents/topArrow";
+  import topArrow from "./childComponents/topArrow";
   import showHotel from "./childComponents/showHotel"
-  import userInfo  from "./childComponents/userInfo"
-  import Swiper    from "swiper";
-  import favorite  from "./childComponents/favoritePage"
-  import order  from "./childComponents/order"
+  import userInfo from "./childComponents/userInfo"
+  import Swiper from "swiper";
+  import favorite from "./childComponents/favoritePage"
+  import order from "./childComponents/order"
 
   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
@@ -105,6 +105,7 @@
         showHotel : false,
         userDetail: false,
         myFavorite: false,
+        order     : true,
       };
     },
     methods   : {

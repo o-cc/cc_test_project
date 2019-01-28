@@ -157,7 +157,7 @@
         .hotel_img {
           width: 35%;
           height: 3.5rem;
-          background: url("./../../../static/imgs/Koala.jpg") no-repeat;
+          background: url("./../../../static/imgs/Koala.jpg") no-repeat center center;
           background-size: 100%;
           border-radius: 5px;
         }

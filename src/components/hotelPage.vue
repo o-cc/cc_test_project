@@ -62,9 +62,9 @@
         <userInfo v-if="userDetail"></userInfo>
 
         <!-- 我的收藏 -->
-
-        <favorite v-if="true"></favorite>
-
+        <favorite v-if="myFavorite"></favorite>
+        <!-- 我的订单 -->
+        <order></order>
       </div>
     </div>
   </div>
@@ -76,8 +76,9 @@
   import userInfo  from "./childComponents/userInfo"
   import Swiper    from "swiper";
   import favorite  from "./childComponents/favoritePage"
+  import order  from "./childComponents/order"
 
-   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
+  //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
   export default {
     name      : "hotelPage",
@@ -88,20 +89,22 @@
       topArrow,
       showHotel,
       userInfo,
-      favorite
+      favorite,
+      order
     },
     data() {
       return {
 
-        right   : "right",
-        userInfo: {
+        right    : "right",
+        userInfo : {
           userName: "啦啦啦",
           email   : "357104242@qq.com"
         },
         homeTitle: "我的收藏",
 
-        showHotel: false,
-        userDetail : false
+        showHotel : false,
+        userDetail: false,
+        myFavorite: false,
       };
     },
     methods   : {
@@ -152,7 +155,7 @@
 
 <style scoped lang="scss">
   .rotelPage {
-    width: 95%;
+    width: 100%;
     height: 100%;
     margin: 0 auto;
 
@@ -167,7 +170,7 @@
       }
 
       .home_title {
-        font-size: 0.6rem;
+        font-size: 0.5rem;
         font-weight: bold;
         margin-top: -5px;
         width: 50%;

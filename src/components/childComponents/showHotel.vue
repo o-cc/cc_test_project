@@ -534,35 +534,6 @@
 
   }
 
-  .search {
-    width: 95%;
-    height: 1.5rem;
-    margin: 0rem auto 0;
-    position: relative;
-
-    .weui-search-bar {
-      padding: 0;
-      background: none;
-
-      .weui-search-bar__form {
-        padding: 8px 10px;
-
-        .weui-search-bar__label {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-        }
-      }
-
-      .weui-search-bar__cancel-btn {
-        display: none !important;
-      }
-
-    }
-
-  }
-
 </style>
 
 

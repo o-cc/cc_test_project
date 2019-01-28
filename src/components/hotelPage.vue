@@ -48,8 +48,8 @@
           <div class="home" @click.passive="showLeftSide">
             <img width="55%" src="./../../static/imgs/home.png" alt="">
           </div>
-          <div class="home home_title"  v-if="showHotel">
-            酒店
+          <div class="home home_title">
+            {{ homeTitle }}
           </div>
           <div class="home right_arrow">
             <topArrow :direction="right"></topArrow>
@@ -63,7 +63,7 @@
 
         <!-- 我的收藏 -->
 
-
+        <favorite v-if="true"></favorite>
 
       </div>
     </div>
@@ -75,7 +75,9 @@
   import showHotel from "./childComponents/showHotel"
   import userInfo  from "./childComponents/userInfo"
   import Swiper    from "swiper";
-  // import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
+  import favorite  from "./childComponents/favoritePage"
+
+   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
   export default {
     name      : "hotelPage",
@@ -85,7 +87,8 @@
     components: {
       topArrow,
       showHotel,
-      userInfo
+      userInfo,
+      favorite
     },
     data() {
       return {
@@ -95,8 +98,10 @@
           userName: "啦啦啦",
           email   : "357104242@qq.com"
         },
+        homeTitle: "我的收藏",
+
         showHotel: false,
-        userDetail : true
+        userDetail : false
       };
     },
     methods   : {
@@ -165,6 +170,8 @@
         font-size: 0.6rem;
         font-weight: bold;
         margin-top: -5px;
+        width: 50%;
+        white-space: nowrap;
       }
       .right_arrow {
         width: 15%;

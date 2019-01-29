@@ -63,20 +63,26 @@
 
         <!-- 我的收藏 -->
         <favorite v-if="myFavorite"></favorite>
+
         <!-- 我的订单 -->
         <order v-if="order"></order>
+
+        <!-- orderDetail -->
+        <orderDetail v-if="orderDetail"></orderDetail>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import topArrow from "./childComponents/topArrow";
-  import showHotel from "./childComponents/showHotel"
-  import userInfo from "./childComponents/userInfo"
-  import Swiper from "swiper";
-  import favorite from "./childComponents/favoritePage"
-  import order from "./childComponents/order"
+  import topArrow    from "./childComponents/topArrow";
+  import showHotel   from "./childComponents/showHotel"
+  import userInfo    from "./childComponents/userInfo"
+  import Swiper      from "swiper";
+  import favorite    from "./childComponents/favoritePage"
+  import order       from "./childComponents/order"
+  import orderDetail from "./childComponents/orderDetail"
+
 
   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
@@ -90,7 +96,8 @@
       showHotel,
       userInfo,
       favorite,
-      order
+      order,
+      orderDetail
     },
     data() {
       return {
@@ -100,12 +107,14 @@
           userName: "啦啦啦",
           email   : "357104242@qq.com"
         },
-        homeTitle: "我的收藏",
+        homeTitle : "我的收藏",
 
-        showHotel : false,
-        userDetail: false,
-        myFavorite: false,
-        order     : true,
+        showHotel  : false,
+        userDetail : false,
+        myFavorite : false,
+        order      : false,
+        orderDetail: false,
+
       };
     },
     methods   : {

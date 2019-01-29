@@ -233,7 +233,7 @@
 
   .order {
     width: 100%;
-    height: 90%;
+    min-height: 90%;
 
     .banner_tab {
       width: 100%;

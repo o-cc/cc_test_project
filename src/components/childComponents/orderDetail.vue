@@ -13,7 +13,7 @@
 
                   <div class="hotel_tag">
                     <p style="line-height: 0.2rem;">标准双人床</p>
-                    <p style="background-color:#cef2e1;padding: .1rem;">七天可退</p>
+                    <p style="background-color:#cef2e1;padding: .1rem;color: #109d59;">七天可退</p>
                   </div>
 
                 </div>

@@ -69,6 +69,10 @@
 
         <!-- orderDetail -->
         <orderDetail v-if="orderDetail"></orderDetail>
+
+        <!-- evaluate -->
+
+        <evaluate v-if="evaluate"></evaluate>
       </div>
     </div>
   </div>
@@ -82,6 +86,7 @@
   import favorite    from "./childComponents/favoritePage"
   import order       from "./childComponents/order"
   import orderDetail from "./childComponents/orderDetail"
+  import evaluate    from "./childComponents/evaluate"
 
 
   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
@@ -97,7 +102,8 @@
       userInfo,
       favorite,
       order,
-      orderDetail
+      orderDetail,
+      evaluate
     },
     data() {
       return {
@@ -114,7 +120,7 @@
         myFavorite : false,
         order      : false,
         orderDetail: false,
-
+        evaluate   : true
       };
     },
     methods   : {

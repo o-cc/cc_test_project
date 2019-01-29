@@ -1,13 +1,13 @@
 <template>
   <div class="order">
     <div class="banner_tab">
-      <div class="banner_tab_btn" type="all" :class="{tab_active: firstTabBtn}" @click="clickFirstTabBtn('all')">全部</div>
-      <div class="banner_tab_btn" type="evaluate" :class="{tab_active: secondTabBtn}" @click="clickSecondTabBtn('evaluate')">待评价</div>
-      <div class="banner_tab_btn" type="waitIn" :class="{tab_active: lastTabBtn}" @click="clickLastTabBtn('waitIn')">待入住</div>
+      <div class="banner_tab_btn" type="all" :class="{tab_active: firstTabBtn}" @click="clickFirstTabBtn">全部</div>
+      <div class="banner_tab_btn" type="evaluate" :class="{tab_active: secondTabBtn}" @click="clickSecondTabBtn">待评价</div>
+      <div class="banner_tab_btn" type="waitIn" :class="{tab_active: lastTabBtn}" @click="clickLastTabBtn">待入住</div>
     </div>
 
     <div class="order_info" v-if="orderInfo">
-      <div style="padding-bottom: 0;" v-for="( item, key, index ) in hotelInfoData" :key="index">
+      <div style="padding-bottom: 0;" v-for="( item, key, index ) in showHotelInfo" :key="index">
         <div class="hotel_info_wrap">
           <div class="img" :style='{background: "url("+item.imgUrl+") no-repeat center center", backgroundSize: "100%"}'></div>
           <div class="hotel_info_txt">
@@ -18,7 +18,8 @@
           </div>
         </div>
         <div class="hotel_info_btns">
-          <p class="left_prompt">{{ item.status }}</p>
+          <!-- 动态控制宽度 -->
+          <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.status }}</p>
           <div class="order_info_btn"
                :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
           >
@@ -48,6 +49,9 @@
       ButtonTabItem
     },
     mounted() {
+      let self = this;
+
+      self.showHotelInfo = self.hotelInfoData;
 
     },
     data() {
@@ -59,6 +63,7 @@
 
         orderInfo: true,
 
+        //原始数据
         hotelInfoData: [
           {
             type: "evaluate",
@@ -78,7 +83,7 @@
             },
           },
           {
-            type: "evaluate",
+            type: "waitHotel",
             hotelName: "考拉四季阳光酒店 (中国站)",
             date: "8月9日-8月10日 共一晚",
             imgUrl: "./../../../static/imgs/Koala.jpg",
@@ -112,7 +117,7 @@
             },
           },
           {
-            type: "evaluate",
+            type: "waitHotel",
             hotelName: "考拉四季阳光酒店 (中国站)",
             date: "8月9日-8月10日 共一晚",
             imgUrl: "./../../../static/imgs/Koala.jpg",
@@ -129,37 +134,64 @@
             },
           },
 
-        ]
+        ],
+        //显示数据
+        showHotelInfo: [],
 
       }
 
     },
 
     methods: {
-      clickFirstTabBtn( ShowAll ) {
+      clickFirstTabBtn() {
         //console.log( "点击第一个" );
-        this.firstTabBtn  = true;
-        this.secondTabBtn = false;
-        this.lastTabBtn   = false;
+        let self = this;
 
+        self.firstTabBtn  = true;
+        self.secondTabBtn = false;
+        self.lastTabBtn   = false;
 
-
-
+        self.showHotelInfo = self.hotelInfoData;
       },
 
       clickSecondTabBtn() {
-        //console.log( "点击第2个" );
-        this.firstTabBtn  = false;
-        this.secondTabBtn = true;
-        this.lastTabBtn   = false;
+        let self = this;
+
+        self.firstTabBtn  = false;
+        self.secondTabBtn = true;
+        self.lastTabBtn   = false;
+        //待评价
+
+        self.showHotelInfo = [];
+
+
+        for( let i = 0; i < self.hotelInfoData.length; i++ ) {
+
+          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.favoriteButtonStatus.showEvaluateHotelInfo ) {
+            self.showHotelInfo.push( self.hotelInfoData[ i ] );
+          }
+
+        }
 
       },
 
       clickLastTabBtn() {
-        //console.log( "点击第3个" );
-        this.firstTabBtn  = false;
-        this.secondTabBtn = false;
-        this.lastTabBtn   = true;
+        let self = this;
+        self.firstTabBtn  = false;
+        self.secondTabBtn = false;
+        self.lastTabBtn   = true;
+
+
+        self.showHotelInfo = [];
+
+        for( let i = 0; i < self.hotelInfoData.length; i++ ) {
+
+          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.favoriteButtonStatus.showWaitHotelInfo ) {
+            self.showHotelInfo.push( self.hotelInfoData[ i ] );
+          }
+
+        }
+
 
       },
 
@@ -175,7 +207,23 @@
 
         return name;
 
-      }
+      },
+
+      //这个函数动态控制左边文字提示的宽度
+      computerPromptWidth ( btn1Status, btn2tatus ) {
+        //false 说明都显示  true 说明都隐藏
+        if( !btn1Status && !btn2tatus ) {
+          //默认50%
+            return "50%";
+        }
+
+        if( !btn1Status || !btn2tatus ) {
+          //只有一个的时候 70%
+            return "70%";
+        }
+
+
+      },
 
     },
   }
@@ -199,7 +247,7 @@
       .banner_tab_btn {
         width: 25%;
         height: 100%;
-        /*background-color: #f5b400;*/
+
         line-height: 1rem;
         color: #8b8a99;
         border-radius: 5px;
@@ -214,8 +262,7 @@
 
     .order_info {
       width: 100%;
-      height: 90%;
-      /*background-color: #f90;*/
+      min-height: 90%;
 
       div {
         width: 95%;

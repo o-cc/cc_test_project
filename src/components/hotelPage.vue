@@ -71,8 +71,9 @@
         <orderDetail v-if="orderDetail"></orderDetail>
 
         <!-- evaluate -->
-
         <evaluate v-if="evaluate"></evaluate>
+
+
       </div>
     </div>
   </div>

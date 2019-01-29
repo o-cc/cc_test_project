@@ -27,11 +27,14 @@
     </div>
 
     <div class="evaluate_text">
-      <textarea name="" id="xx" cols="30" rows="10" placeholder="聊聊您本次交易的感受"></textarea>
+      <group>
+        <x-textarea title="" v-model="textValue"  placeholder="聊聊您本次交易的感受~"></x-textarea>
+      </group>
+      <!--<textarea name="" id="xx" cols="30" rows="10" placeholder="聊聊您本次交易的感受"></textarea>-->
     </div>
 
     <div class="evaluate_comfrim">
-      <div>
+      <div @click="submit">
         提交
       </div>
     </div>
@@ -41,14 +44,40 @@
 </template>
 
 <script>
-    export default {
-      name: "evaluate",
-      mounted() {
 
+  import { Group, XTextarea } from 'vux'
+
+  export default {
+      name: "evaluate",
+      components: {
+        XTextarea,
+        Group
+
+      },
+      mounted() {
+        let bool;
         let stars = document.getElementsByClassName("cc");
         for ( let i = 0; i < stars.length; i++ ) {
-          stars[i].index = i;
+          stars[i].index   = i;
           stars[i].onclick = function () {
+            //就这么写了吧赶时间, 以后一定要对这种辣鸡代码0容忍！
+            //手机端不知道是否会出问题0.0
+            if( bool === this.index ) {
+
+              let bg = stars[ this.index ].style.background;
+
+              if( bg === "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat" )
+              {
+                stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星2.png\") center center / contain no-repeat";
+                stars[ this.index ].style.backgroundSize = "contain";
+              }
+              else
+              {
+                stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat";
+                stars[ this.index ].style.backgroundSize = "contain";
+              }
+              return;
+            }
 
             for ( let j = 0; j < this.index + 1; j++ ) {
               stars[j].style.background     = "url(./../../../static/imgs/星2.png) no-repeat center center";
@@ -60,6 +89,8 @@
               stars[j].style.backgroundSize = "contain";
             }
 
+            bool = this.index;
+
           }
 
         }
@@ -68,13 +99,13 @@
 
       data (){
         return {
-          textPrompt: true
+          textValue: ""
         }
 
       },
       methods: {
-        fu () {
-          this.textPrompt = false
+        submit () {
+          console.log( "确定" );
         }
       }
     }

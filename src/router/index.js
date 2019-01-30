@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/components/index'
 import login from '@/components/login'
+import hotelDetail from '@/components/hotelDetail'
 import globalVal from "../globalVal/globalTips"
 
 global.globalVal = globalVal;
@@ -17,6 +18,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/hotelDetail',
+      name: 'hotelDetail',
+      component: hotelDetail
     }
   ]
 })

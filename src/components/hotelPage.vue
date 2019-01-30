@@ -116,12 +116,12 @@
         },
         homeTitle : "我的收藏",
 
-        showHotel  : false,
+        showHotel  : true,
         userDetail : false,
         myFavorite : false,
         order      : false,
         orderDetail: false,
-        evaluate   : true
+        evaluate   : false
       };
     },
     methods   : {

@@ -1,6 +1,6 @@
-let globalVal = {};
+let globalTips = {};
 
-globalVal.favoriteButtonStatus = {
+globalTips.favoriteButtonStatus = {
   showAllHotelInfo     : "全部",
   showEvaluateHotelInfo: "evaluate",
   showWaitHotelInfo    : "waitHotel"
@@ -8,4 +8,4 @@ globalVal.favoriteButtonStatus = {
 };
 
 
-export default globalVal;
+export default globalTips;

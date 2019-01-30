@@ -22,7 +22,7 @@
     data() {
       return {
           login: false,
-          hotelPage: false
+          hotelPage: true
       };
     },
     methods: {

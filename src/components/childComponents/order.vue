@@ -167,7 +167,7 @@
 
         for( let i = 0; i < self.hotelInfoData.length; i++ ) {
 
-          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.favoriteButtonStatus.showEvaluateHotelInfo ) {
+          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.globalTips.favoriteButtonStatus.showEvaluateHotelInfo ) {
             self.showHotelInfo.push( self.hotelInfoData[ i ] );
           }
 
@@ -186,7 +186,7 @@
 
         for( let i = 0; i < self.hotelInfoData.length; i++ ) {
 
-          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.favoriteButtonStatus.showWaitHotelInfo ) {
+          if( self.hotelInfoData[ i ][ "type" ] === global.globalVal.globalTips.favoriteButtonStatus.showWaitHotelInfo ) {
             self.showHotelInfo.push( self.hotelInfoData[ i ] );
           }
 

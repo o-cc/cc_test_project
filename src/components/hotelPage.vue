@@ -116,7 +116,7 @@
         },
         homeTitle : "我的收藏",
 
-        showHotel  : true,
+        showHotel  : false,
         userDetail : false,
         myFavorite : false,
         order      : false,

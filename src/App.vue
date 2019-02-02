@@ -40,7 +40,7 @@ export default {
 
 
   .search {
-    width: 95%;
+    width: 100%;
     height: 1.5rem;
     margin: 0rem auto 0;
     position: relative;
@@ -64,9 +64,14 @@ export default {
         display: none !important;
       }
 
+
+      .weui-search-bar__form:after {
+        border: 0;
+      }
     }
 
   }
+
 
 
 </style>

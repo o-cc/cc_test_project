@@ -4,8 +4,8 @@
       <div class="swiper-container" style="height: 100%;">
         <div class="swiper-wrapper">
           <img class="swiper-slide" src="./../../static/imgs/Koala.jpg" alt="">
-          <img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">
-          <img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">
+          <!--<img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">-->
+          <!--<img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">-->
 
         </div>
 
@@ -40,7 +40,7 @@
         </div>
         <div class="date_picker">
           <group>
-            <calendar title="title" v-model="dateTimeValue" :display-format="formatDate" @on-change="fn"></calendar>
+            <calendar title="title" v-model="dateTimeValue" :display-format="formatDate" @on-change="dateChange"></calendar>
           </group>
 
           <p class="first_date">
@@ -56,17 +56,141 @@
             <span style="color:#bfbec6;padding-left: .1rem;font-size: 0.3rem">{{lastDateObj.weekDay}}</span>
           </p>
         </div>
-        <!--<h1>{{ dateTimeValue }}</h1>-->
 
+        <div class="search">
+          <Search placeholder="地标位置/酒店标题" v-model="searchValue" position="absolute" @on-blur="searchBlur"
+                  @on-submit="searchSubmit"></Search>
+        </div>
+
+        <div class="center_btn">
+          <div class="btn_search" @click="btnSearch">
+            开始查找
+          </div>
+        </div>
       </div>
-
     </div>
+
+    <div class="search_recommend">
+        <div class="recommend_title">
+            <p style="font-size: .5rem;"><span>为你</span>•<span style="color: #eeb730;">推荐</span></p>
+            <p style="color: #bfbec6;">为你推荐品质好 服务佳 设备全的优质房源</p>
+        </div>
+
+        <div class="recommend_hotel">
+
+          <div class="recommend_item">
+              <div class="item_img">
+                <div class="img_price">
+                  $499
+                </div>
+              </div>
+
+              <div class="recommend_bom">
+                <div class="item_title">
+                    <p style="font-size: .4rem;">考拉四季阳光</p>
+                </div>
+                <div class="item_address">
+                    <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
+                </div>
+              </div>
+
+          </div>
+          <div class="recommend_item">
+            <div class="item_img">
+              <div class="img_price">
+                $499
+              </div>
+            </div>
+
+            <div class="recommend_bom">
+              <div class="item_title">
+                <p style="font-size: .4rem;">考拉四季阳光</p>
+              </div>
+              <div class="item_address">
+                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
+              </div>
+            </div>
+
+          </div>
+          <div class="recommend_item">
+            <div class="item_img">
+              <div class="img_price">
+                $499
+              </div>
+            </div>
+
+            <div class="recommend_bom">
+              <div class="item_title">
+                <p style="font-size: .4rem;">考拉四季阳光</p>
+              </div>
+              <div class="item_address">
+                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
+              </div>
+            </div>
+
+          </div>
+          <div class="recommend_item">
+            <div class="item_img">
+              <div class="img_price">
+                $499
+              </div>
+            </div>
+
+            <div class="recommend_bom">
+              <div class="item_title">
+                <p style="font-size: .4rem;">考拉四季阳光</p>
+              </div>
+              <div class="item_address">
+                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="recommend_change">
+            <p>换一批</p>
+        </div>
+
+        <div class="recommend_introduce">
+          <div>
+            <div>
+
+              <div class="introduce_img">
+
+              </div>
+              <p style="color: #8c8b91;">真实房源</p>
+              <p style="color: #cfcfd9;">上门实拍</p>
+
+            </div>
+            <div>
+
+              <div class="introduce_img">
+
+              </div>
+              <p style="color: #8c8b91;">真实房源</p>
+              <p style="color: #cfcfd9;">上门实拍</p>
+
+            </div>
+            <div>
+
+              <div class="introduce_img">
+
+              </div>
+              <p style="color: #8c8b91;">真实房源</p>
+              <p style="color: #cfcfd9;">上门实拍</p>
+
+            </div>
+          </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
   import Swiper from "swiper";
-  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group } from 'vux'
+  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
 
   export default {
     name      : "hotelSearch",
@@ -75,7 +199,8 @@
       Flexbox,
       FlexboxItem,
       Calendar,
-      Group
+      Group,
+      Search
     },
     mounted() {
       this._initSwiper();
@@ -102,10 +227,13 @@
           date   : "",
           weekDay: "请选择日期"
         },
-        totalDay: "请选择"
+        totalDay: "请选择",
+
+        searchValue: ""
       }
     },
     methods   : {
+
       _initSwiper() {
         let self = this;
 
@@ -216,7 +344,7 @@
         return this.dateTimeValue.length + "晚";
       },
 
-      fn() {
+      dateChange() {
         let self = this;
         this.dateTimeValue.sort( ( a, b ) => {
           let val1 = new Date( a );
@@ -239,6 +367,23 @@
         self.lastDateObj.date    = (lastDate.getMonth() + 1) + "月" + (lastDate.getDate()) + "日";
 
         self.totalDay = self.formatDate();
+
+      },
+
+      searchBlur () {
+        console.log( "搜索框失去焦点事件" );
+
+      },
+
+      searchSubmit () {
+
+        console.log( "enter键和可能手机的确认键" );
+
+      },
+
+
+      btnSearch () {
+        console.log( "开始查找" );
 
       }
 
@@ -263,11 +408,11 @@
     }
 
     .search_info {
-      height: 5rem;
       border-radius: .3rem .3rem 0 0;
       background-color: #fff;
       position: absolute;
       z-index: 1;
+      height: 7.5rem;
       margin-top: -.3rem;
 
       .search_center {
@@ -334,9 +479,185 @@
 
         }
 
+        .center_btn {
+          width: 100%;
+          height: 3rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .btn_search {
+            width: 65%;
+            height: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            -webkit-border-radius: .8rem;
+            -moz-border-radius: .8rem;
+            border-radius: .8rem;
+            background: url("./../../static/imgs/1.png") center center;
+            -webkit-background-size: cover;
+            background-size: cover;
+            font-size: .4rem;
+            color: #fff;
+          }
+        }
       }
+
+
+
     }
 
+
+    .search_recommend {
+      width: 100%;
+      margin-top: 7.5rem;
+      background-color: #fff;
+
+
+      .recommend_title {
+        width: 100%;
+        height: 2rem;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        letter-spacing: 2px;
+
+        p{
+          margin: 0.1rem;
+        }
+      }
+
+      .recommend_hotel {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .recommend_item {
+          width: 48%;
+          height: 4.5rem;
+          margin-bottom: .3rem;
+
+          .item_img {
+            width: 100%;
+            height: 2.5rem;
+            background: url("./../../static/imgs/Koala.jpg") center center;
+            background-size: 100%;
+            overflow: hidden;
+
+            .img_price {
+              width: 35%;
+              height: .7rem;
+              margin-top: .3rem;
+              background-color: rgba(0,0,0, 0.7);
+              border-radius: 0 1rem 1rem 0;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: .4rem;
+            }
+          }
+
+          .recommend_bom {
+            width: 100%;
+            height: 2rem;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            .item_title {
+              width: 100%;
+              height: 0.8rem;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              padding-left: 0.3rem;
+              letter-spacing: 2px;
+
+
+
+              p{
+                margin: 0;
+              }
+            }
+
+            .item_address{
+              width: 100%;
+              height: 0.8rem;
+              display: flex;
+              justify-content: flex-start;
+              padding-left: 0.3rem;
+              letter-spacing: 2px;
+
+              p{
+                margin: 0;
+              }
+            }
+
+          }
+
+        }
+
+
+      }
+
+      .recommend_change {
+        width: 90%;
+        height: 1rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+          margin: 0;
+          font-size: .4rem;
+          color: #eeb730;
+        }
+      }
+
+      .recommend_introduce {
+        width: 100%;
+        height: 2.5rem;
+        border-top: .3rem solid #f8f8f8;
+        padding-bottom: 1rem;
+
+        >div {
+          width: 90%;
+          height: 100%;
+          margin: 0 auto;
+          display: flex;
+
+          > div {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            p {
+              margin: 0.1rem 0 0 0;
+            }
+            .introduce_img {
+              width: 25%;
+              height: 1rem;
+              background: url("./../../static/imgs/空调.png") no-repeat center center;
+              background-size: 100%;
+
+            }
+          }
+        }
+      }
+
+
+    }
   }
 
 </style>

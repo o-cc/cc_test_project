@@ -28,6 +28,9 @@ export default {
   }
 
   *{ touch-action: none;  }
+  a{
+    text-decoration: none;
+  }
   @media  screen and (min-width: 780px) {
      #app {
         width: 780px;

@@ -156,30 +156,22 @@
           <div>
             <div>
 
-              <div class="introduce_img">
+              <div class="introduce_img"></div>
+                <p style="color: #8c8b91;font-size: .4rem">真实房源</p>
+                <p style="color: #cfcfd9;">上门实拍</p>
+            </div>
+            <div>
 
-              </div>
-              <p style="color: #8c8b91;">真实房源</p>
-              <p style="color: #cfcfd9;">上门实拍</p>
+              <div class="introduce_img"></div>
+                <p style="color: #8c8b91;font-size: .4rem">安心入住</p>
+                <p style="color: #cfcfd9;">无房赔付</p>
 
             </div>
             <div>
 
-              <div class="introduce_img">
-
-              </div>
-              <p style="color: #8c8b91;">真实房源</p>
-              <p style="color: #cfcfd9;">上门实拍</p>
-
-            </div>
-            <div>
-
-              <div class="introduce_img">
-
-              </div>
-              <p style="color: #8c8b91;">真实房源</p>
-              <p style="color: #cfcfd9;">上门实拍</p>
-
+              <div class="introduce_img"></div>
+                <p style="color: #8c8b91;font-size: .4rem">投诉建议</p>
+                <p style="color: #cfcfd9;">7*24小时</p>
             </div>
           </div>
       </div>
@@ -401,7 +393,7 @@
     }
     .top_img {
       width: 100%;
-      height: 4rem;
+      height: 5rem;
       /*background-color: #fff;*/
       /*background: url("./../../static/imgs/Koala.jpg") no-repeat center center;*/
 
@@ -427,15 +419,15 @@
 
         .location {
           width: 50%;
-          height: 1rem;
+          height: 0.8rem;
         }
 
         .date_picker {
           width: 100%;
           height: 1.5rem;
           overflow: hidden;
-          border-top: 1px solid #ccc;
-          border-bottom: 1px solid #ccc;
+          border-top: 1px solid #f5ecec;
+          border-bottom: 1px solid #f5ecec;
           position: relative;
 
           > div {
@@ -609,7 +601,7 @@
 
       .recommend_change {
         width: 90%;
-        height: 1rem;
+        height: 1.5rem;
         margin: 0 auto;
         display: flex;
         justify-content: center;
@@ -631,7 +623,7 @@
         >div {
           width: 90%;
           height: 100%;
-          margin: 0 auto;
+          margin: 0.5rem auto;
           display: flex;
 
           > div {
@@ -659,6 +651,7 @@
 
     }
   }
+
 
 </style>
 
@@ -706,11 +699,13 @@
           justify-content: center;
           align-items: center;
           height: 100%;
+          font-size: 0.4rem;
 
           .vux-popup-picker-value {
             width: 70%;
             text-align: center;
             margin-left: -0.5rem;
+            color: #000;
           }
         }
 
@@ -763,6 +758,12 @@
       right: 2px;
     }
 
+  }
+
+  @media  screen and (min-width: 780px) {
+    .search_info {
+      width: 780px !important;
+    }
   }
 
 </style>

@@ -10,18 +10,18 @@ global.globalVal = globalVal;
 Vue.use(Router)
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'index',
-      component: index
-    },
+    //{
+    //  path: '/',
+    //  name: 'index',
+    //  component: index
+    //},
     {
       path: '/login',
       name: 'login',
       component: login
     },
     {
-      path: '/hotelSearch',
+      path: '/',
       name: 'hotelSearch',
       component: hotelSearch
     },

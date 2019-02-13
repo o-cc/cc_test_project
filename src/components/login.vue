@@ -92,13 +92,7 @@
         if ( !self.username || !self.password || self.password.length < 6 ) {
           AlertModule.show( {
             title  : '提示',
-            content: "用户名不存在或密码长度错误",
-            //onShow () {
-            //  console.log('Module: I\'m showing')
-            //},
-            //onHide () {
-            //  console.log('Module: I\'m hiding now')
-            //}
+            content: "用户名不存在或密码长度错误"
           } );
           return;
         }
@@ -123,9 +117,13 @@
 
       register() {
         let self = this;
-        console.log( "register" );
+
         if( self.warnning ) {
 
+          AlertModule.show( {
+            title  : '提示',
+            content: "输入有误: " + self.warnning
+          } );
           return;
         }
 
@@ -134,14 +132,17 @@
           if( err ) {
             AlertModule.show( {
               title  : '提示',
-              content: err,
+              content: err
             } );
             return;
           }
 
           AlertModule.show( {
             title  : '提示',
-            content: '注册成功'
+            content: '注册成功',
+            onHide () {
+              self.LoginRouter = "/homePage";
+            }
           } );
 
         } );
@@ -182,7 +183,7 @@
         }
 
         self.warnning = "";
-        self.usernameBlur();
+        self.passwordBlur();
       }
     },
   }

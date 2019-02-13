@@ -1,6 +1,6 @@
 let axios = require( "axios" );
 let qs    = require( 'qs' );
-let jq    = require( "jquery" );
+//let jq    = require( "jquery" );
 /*
 用户登录操作
 * @param1 username [ String ] 用户名
@@ -19,14 +19,14 @@ function userLogin( username, password, callback ) {
       "Content-Type": 'application/json',
     }
   } ).then( function ( res ) {
-    console.log( res );
     //{"username":"huang","user_id":6,"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIjoxNTQ4Mzk5MTM4LCJ1c2VyX2lkIjo2LCJlbWFpbCI6IiJ9.mzwhgxZTHbGcv2gpvt1ReZcIMaz1ORDW8PoyUjJFJm8"}
-    if ( !res.token ) {
+    let msg = res.data;
+    if ( !msg.token ) {
       alert( "无法获取token验证" );
       return callback( false );
     }
 
-    global.globalVal.accessToken.token = res.token;
+    global.globalVal.accessToken.token = "JWT " + msg.token;
     return callback( true );
 
   } ).catch( function ( err ) {
@@ -90,7 +90,7 @@ function userRegister ( username, password1, password2, callback ) {
         return callback( "无法获取必备验证", null );
       }
 
-      global.globalVal.accessToken = data.token;
+      global.globalVal.accessToken.token = "JWT " + data.token;
 
       return callback( null, true );
 
@@ -107,6 +107,6 @@ export default {
 
   userLogin               : userLogin,
   checkUserNameIsSingleOne: checkUserNameIsSingleOne,
-  userRegister: userRegister
+  userRegister            : userRegister
 }
 

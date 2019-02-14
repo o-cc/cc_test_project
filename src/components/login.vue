@@ -31,7 +31,9 @@
 
         <div class="bom_btn flex_center" style="height: 45%;">
           <div class="bom_center">
-            <XButton @click.native="register" type="primary" class="btn_login">注册</XButton>
+            <router-link :to="LoginRouter">
+              <XButton @click.native="register" type="primary" class="btn_login">注册</XButton>
+            </router-link>
           </div>
         </div>
       </div>
@@ -152,6 +154,15 @@
       usernameBlur() {
         let self = this;
 
+
+        if( self.registerUsername.trim().length < 5 ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: '用户名长度必须大于5',
+          } );
+          return;
+        }
+
         global.globalVal.oauth.checkUserNameIsSingleOne( self.registerUsername, function ( err, tf ) {
           if ( err ) {
             self.warnning = err;
@@ -160,18 +171,19 @@
 
           self.warnning = "";
           self.passwordBlur();
+
         } );
       },
 
       passwordBlur() {
         let self = this;
         if ( self.registerPassword.length < 6 ) {
-          self.warnning = "长度不能小于6位";
+          self.warnning = "密码长度不能小于6位";
           return;
         }
 
         self.warnning = "";
-        self.usernameBlur();
+        self.comfirmPasswordBlur();
 
       },
 
@@ -181,9 +193,8 @@
           self.warnning = "密码不一致";
           return;
         }
-
         self.warnning = "";
-        self.passwordBlur();
+
       }
     },
   }

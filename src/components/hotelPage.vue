@@ -114,7 +114,7 @@
           phone    : "357104242@qq.com",
           headerImg: "./../../static/imgs/Koala.jpg"
         },
-        homeTitle: "我的收藏",
+        homeTitle: "酒店",
 
         showHotel  : true,
         userDetail : false,

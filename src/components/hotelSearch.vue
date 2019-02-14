@@ -4,8 +4,8 @@
       <div class="swiper-container" style="height: 100%;">
         <div class="swiper-wrapper">
           <img class="swiper-slide" src="./../../static/imgs/Koala.jpg" alt="">
-          <!--<img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">-->
-          <!--<img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">-->
+          <img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">
+          <img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">
 
         </div>
 
@@ -28,7 +28,7 @@
                 <div>
                   <div class="select_city">
                     <PopupPicker @on-show="selectClick" @on-hide="selectClick" v-model="pickerValue" :data="pickerData"
-                                 :columns=3 @on-change="changePicker">
+                                 :columns=2 @on-change="changePicker">
                     </PopupPicker>
                     <span :class="popupPickArrow"></span>
                   </div>
@@ -182,7 +182,7 @@
 
 <script>
   import Swiper from "swiper";
-  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
+  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search, Value2nameFilter as value2name, ChinaAddressV4Data} from 'vux'
 
   export default {
     name      : "hotelSearch",
@@ -195,9 +195,8 @@
       Search
     },
     mounted() {
-      this._initSwiper();
-      this.pickerDataFn();
 
+      this.run();
     },
     data() {
       return {
@@ -221,10 +220,17 @@
         },
         totalDay: "请选择",
 
-        searchValue: ""
+        searchValue: "",
+        city: ""
       }
     },
     methods   : {
+
+      run() {
+        global.globalVal.searchPage.searchPageSingleOne.setSearchPageIndexVueObj( this );
+        this._initSwiper();
+        this.pickerDataFn();
+      },
 
       _initSwiper() {
         let self = this;
@@ -262,73 +268,24 @@
       },
 
       changePicker() {
-        this.pickerValue = [ this.pickerValue[ this.pickerValue.length - 1 ] ];
-        if ( this.pickerValue[ 0 ].length > 5 ) {
-          this.pickArrowRight = 0.5;
+        let self = this;
+        //这里修改了pickValue时，会触发三次函数，问题待查..
+        if ( !self.boo ) {
+          self.boo = true;
+
+          self.pickerValue = [ self.getName( self.pickerValue ).split( " " )[ 1 ] ];
+          self.city =  self.pickerValue[0];
+          //显示了中间市级城市 vux的第4版本的city_data直辖市的下一级默认是市辖区 这里修改了源代码为北京市等
+          if ( self.pickerValue[ 0 ].length > 5 ) {
+            self.pickArrowRight = 0.5;
+          }
         }
+
       },
 
       pickerDataFn() {
-        let data        = [
-          {
-            name  : '中国',
-            value : 'china',
-            parent: '0' // 为一级时可以不写 parent，但是此时允许为数字 0、空字符串或者字符串 '0'
-          }, {
-            name  : '美国',
-            value : 'USA',
-            parent: '0'
-          }, {
-            name  : '广东',
-            value : '广东',
-            parent: 'china'
-          }, {
-            name  : '广西',
-            value : 'china002',
-            parent: 'china'
-          }, {
-            name  : '美国001',
-            value : 'usa001',
-            parent: 'USA'
-          }, {
-            name  : '美国002',
-            value : 'usa002',
-            parent: 'USA'
-          }, {
-            name  : '广州',
-            value : '广州的名字其实很长',
-            parent: '广东'
-          }, {
-            name  : '深圳',
-            value : '深圳有五个',
-            parent: '广东'
-          }, {
-            name  : '广西001',
-            value : '广西001',
-            parent: 'china002'
-          }, {
-            name  : '广西002',
-            value : '广西的名字其实很长',
-            parent: 'china002'
-          }, {
-            name  : '美国001_001',
-            value : '美国001_001',
-            parent: 'usa001'
-          }, {
-            name  : '美国001_002乌鲁木齐',
-            value : '美国001_002乌鲁木齐',
-            parent: 'usa001'
-          }, {
-            name  : '美国002_001',
-            value : '美国002_001',
-            parent: 'usa002'
-          }, {
-            name  : '美国002_002',
-            value : '美国002_002',
-            parent: 'usa002'
-          }
-        ];
-        this.pickerData = data;
+
+        this.pickerData = ChinaAddressV4Data;
 
       },
 
@@ -375,9 +332,26 @@
 
 
       btnSearch () {
-        console.log( "开始查找" );
+        let self = this;
 
-      }
+        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue, self.searchValue, function ( err, res ) {
+
+          if( err ){
+            return;
+          }
+
+          //goto
+          self.$router.push( '/homepage' );
+
+        } );
+
+      },
+      getName( value ) {
+        //value is array
+        return value2name( value, ChinaAddressV4Data );
+        //return string
+      },
+
 
     },
   }

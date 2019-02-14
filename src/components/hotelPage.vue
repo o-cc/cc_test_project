@@ -162,6 +162,7 @@
         let self = this;
 
         //验证是否登录/获取邮箱名字信息
+        if( global.globalVal)
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
           if ( err ) {

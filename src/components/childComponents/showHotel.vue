@@ -7,7 +7,7 @@
           <div>
             <div class="select_city">
               <PopupPicker @on-show="selectClick" @on-hide="selectClick" v-model="pickerValue" :data="pickerData"
-                           :columns=3 @on-change="changePicker">
+                           :columns=2 @on-change="changePicker">
               </PopupPicker>
               <span :class="popupPickArrow"></span>
 
@@ -81,7 +81,6 @@
   export default {
 
     mounted() {
-      this.pickerDataFn();
       this.run();
     },
     components: {
@@ -201,21 +200,14 @@
 
       run() {
         let self = this;
-        global.globalVal.hotelInfo.getHotelInfo( undefined, undefined, function( err, res ) {
 
-          if( err ) {
-            return;
-          }
+        //获取城市
+        let city = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city ;
+        console.log( city );
+        self.pickerValue[0] = city,
+        self.hotelDetailInfo = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
+        self.pickerDataFn();
 
-          if( Object.prototype.toString.call(res) !== "[Object Array]" ) {
-
-            console.log( "获取到的酒店列表是错误数据!" );
-            return;
-          }
-
-          self.hotelDetailInfo = res;
-
-        })
 
       },
       clickFavorite( el ) {
@@ -344,7 +336,7 @@
         console.log( "表单提交触发了" );
 
       },
-      colorRgb ( color ) {
+      colorRgb( color ) {
         return global.globalVal.formatDate.colorRgb( color );
       }
 

@@ -73,7 +73,6 @@
       clickSave() {
         let self = this;
         if( self.checkPhone() ) {
-
           return;
         }
 

@@ -143,7 +143,7 @@
             title  : '提示',
             content: '注册成功',
             onHide () {
-              self.LoginRouter = "/homePage";
+              self.LoginRouter = "/";
             }
           } );
 

@@ -17,8 +17,11 @@
         <FlexboxItem>
           <div>
             <div class="select_city">
-              <PopupPicker @on-show="selectTimeClick" @on-hide="selectTimeClick" v-model="pickerTimeValue"
-                           :data="pickerTimeData" :columns=2 @on-change="changeTimePicker"></PopupPicker>
+              <!--<PopupPicker @on-show="selectTimeClick" @on-hide="selectTimeClick" v-model="pickerTimeValue"-->
+              <!--:data="pickerTimeData" :columns=2 @on-change="changeTimePicker"></PopupPicker>-->
+              <datetime @on-show="selectTimeClick" @on-hide="selectTimeClick" v-model="pickerTimeValue"
+                        :data="pickerTimeData"></datetime>
+
               <span :class="popupPickArrowTime"></span>
             </div>
           </div>
@@ -35,25 +38,24 @@
 
       <div v-for="(item, key, index ) in hotelDetailInfo" :key="index" class="hotel_item">
         <div class="img_wrap">
-          <img class="hotel_img" src='./../../../static/imgs/Koala.jpg' alt="">
-          <p class="price">{{ item.price }}</p>
+          <img class="hotel_img" :src='item.image' alt="">
+          <p class="price">{{ item.low_price }}</p>
           <p @click="clickFavorite" class="favorite"></p>
         </div>
 
         <div class="hotel_introduce">
           <p class="hotel_name">{{ item.name }}</p>
           <p class="hotel_address">
-            <span style="color: #f9c558;">{{ item.score }}分</span>
+            <span style="color: #f9c558;">{{ item.comm_score }}分</span>
             <span class="circle"></span>
-            <span>{{ item.evaluate }}条评价</span>
+            <span>{{ item.total_comm }}条评价</span>
             <span class="circle"></span>
-            <span>{{ item.address }}</span>
+            <span>{{ item.place }}</span>
           </p>
           <p class="hotel_tag">
-            <span style="background: #fff1cc;color:#f7b500;">{{ item.tag.firstTag }}</span>
-            <span style="background: #cef2e1;color:#109d59;">{{ item.tag.secondTag }}</span>
-            <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.thrithTag }}</span>
-            <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.lastTag }} </span>
+            <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in item.types"
+                  v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
+
           </p>
         </div>
         <div class="hotel_placeHolder"></div>
@@ -65,24 +67,36 @@
 
 <script>
 
-  import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
+  import {
+    Flexbox,
+    FlexboxItem,
+    PopupPicker,
+    Search,
+    ChinaAddressV4Data,
+    XAddress,
+    Value2nameFilter as value2name,
+    Datetime
+  } from 'vux'
 
   export default {
 
     mounted() {
       this.pickerDataFn();
+      this.run();
     },
     components: {
       Search,
       Flexbox,
       FlexboxItem,
       PopupPicker,
-      Search
+      Search,
+      XAddress,
+      Datetime
     },
     data() {
       return {
         pickerValue       : [ "城市" ],
-        pickerTimeValue   : [ "时间" ],
+        pickerTimeValue   : "时间",
         pickerData        : [],
         pickerTimeData    : [],
         arrowUp           : true,
@@ -104,72 +118,117 @@
         hotelDetailInfo: [
           {
             name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
+            comm_score : "5.0",
+            total_comm : "48",
+            place      : "滨江道/四季阳光/考拉原始村落",
+            "types"    : [
+              {
+                "name" : "速定",
+                "color": null
+              },
+              {
+                "name" : "七天可退",
+                "color": null
+              },
+              {
+                "name" : "超干净",
+                "color": null
+              }, {
+                "name" : "实拍",
+                "color": null
+              }
+            ],
+            low_price  : "$299",
+            isFavorites: 1,
+            image      : "./../../../static/imgs/Koala.jpg"
           },
+          {
+            "id"       : 1,
+            "name"     : "万达嘉华酒店",
+            image      : "./../../../static/imgs/Koala.jpg",
+            "place"    : "广州市增城增城广场南",
+            "types"    : [
+              {
+                "name" : "速定",
+                "color": "red"
+              },
+              {
+                "name" : "七天可退",
+                "color": "green"
+              },
+              {
+                "name" : "超干净",
+                "color": null
+              }
+            ],
+            "low_price": "150.00",
+            comm_score : "5.0",
+            total_comm : "48",
+          },
+          {
+            "id"       : 2,
+            "name"     : "万达嘉华酒店",
+            image      : "./../../../static/imgs/Koala.jpg",
+            "place"    : "广州市增城增城广场南",
+            "types"    : [
+              {
+                "name" : "速定",
+                "color": "red"
+              },
+              {
+                "name" : "七天可退",
+                "color": "green"
+              },
+              {
+                "name" : "超干净",
+                "color": null
+              }
+            ],
+            "low_price": "150.00",
+            comm_score : "5.0",
+            total_comm : "48",
+          },
+
         ],
 
         //红心
         redHeat: false,
+
+        boo: false
       }
     },
     methods   : {
 
+      run() {
+        let self = this;
+        global.globalVal.hotelInfo.getHotelInfo( undefined, undefined, function( err, res ) {
+
+          if( err ) {
+            return;
+          }
+
+          if( Object.prototype.toString.call(res) !== "[Object Array]" ) {
+
+            console.log( "获取到的酒店列表是错误数据!" );
+            return;
+          }
+
+          self.hotelDetailInfo = res;
+
+        })
+
+      },
       clickFavorite( el ) {
 
-        if( this.redHeat ) {
-          this.redHeat = false;
-          el.path[0].style.background     = "url(./../../../static/imgs/心.png) no-repeat";
-          el.path[0].style.backgroundSize = "100%";
+        if ( this.redHeat ) {
+          this.redHeat                      = false;
+          el.path[ 0 ].style.background     = "url(./../../../static/imgs/心.png) no-repeat";
+          el.path[ 0 ].style.backgroundSize = "100%";
 
-        }else {
-          this.redHeat = true;
-          el.path[0].style.background     = "url(./../../../static/imgs/红心.png) no-repeat";
-          el.path[0].style.backgroundSize = "100%";
+        } else {
+          this.redHeat                      = true;
+          el.path[ 0 ].style.background     = "url(./../../../static/imgs/红心.png) no-repeat";
+          el.path[ 0 ].style.backgroundSize = "100%";
 
         }
       },
@@ -183,6 +242,9 @@
           this.popupPickArrow[ "popup_pick_arrow_up" ]   = true;
           this.popupPickArrow[ "popup_pick_arrow_down" ] = false;
         }
+
+        //这个有点碍眼真的...0.0
+        this.boo = false;
 
       },
 
@@ -199,65 +261,6 @@
       },
 
       pickerDataFn() {
-        let data = [
-          {
-            name  : '中国',
-            value : 'china',
-            parent: '0' // 为一级时可以不写 parent，但是此时允许为数字 0、空字符串或者字符串 '0'
-          }, {
-            name  : '美国',
-            value : 'USA',
-            parent: '0'
-          }, {
-            name  : '广东',
-            value : '广东',
-            parent: 'china'
-          }, {
-            name  : '广西',
-            value : 'china002',
-            parent: 'china'
-          }, {
-            name  : '美国001',
-            value : 'usa001',
-            parent: 'USA'
-          }, {
-            name  : '美国002',
-            value : 'usa002',
-            parent: 'USA'
-          }, {
-            name  : '广州',
-            value : '广州的名字其实很长',
-            parent: '广东'
-          }, {
-            name  : '深圳',
-            value : '深圳有五个',
-            parent: '广东'
-          }, {
-            name  : '广西001',
-            value : '广西001',
-            parent: 'china002'
-          }, {
-            name  : '广西002',
-            value : '广西的名字其实很长',
-            parent: 'china002'
-          }, {
-            name  : '美国001_001',
-            value : '美国001_001',
-            parent: 'usa001'
-          }, {
-            name  : '美国001_002乌鲁木齐',
-            value : '美国001_002乌鲁木齐',
-            parent: 'usa001'
-          }, {
-            name  : '美国002_001',
-            value : '美国002_001',
-            parent: 'usa002'
-          }, {
-            name  : '美国002_002',
-            value : '美国002_002',
-            parent: 'usa002'
-          }
-        ];
 
         let timeData = [
           {
@@ -300,15 +303,28 @@
         ];
 
         this.pickerTimeData = timeData;
-        this.pickerData     = data;
+        this.pickerData     = ChinaAddressV4Data;
 
+      },
+      getName( value ) {
+        //value is array
+        return value2name( value, ChinaAddressV4Data );
+        //return string
       },
 
       changePicker() {
-        this.pickerValue = [ this.pickerValue[ this.pickerValue.length - 1 ] ];
-        if ( this.pickerValue[ 0 ].length > 5 ) {
-          this.pickArrowRight = 0.5;
+        let self = this;
+        //这里修改了pickValue时，会触发三次函数，问题待查..
+        if ( !self.boo ) {
+          self.boo = true;
+
+          self.pickerValue = [ self.getName( self.pickerValue ).split( " " )[ 1 ] ];
+          //显示了中间市级城市 vux的第4版本的city_data直辖市的下一级默认是市辖区 这里修改了源代码为北京市等
+          if ( self.pickerValue[ 0 ].length > 5 ) {
+            self.pickArrowRight = 0.5;
+          }
         }
+
       },
 
       changeTimePicker() {
@@ -327,6 +343,9 @@
 
         console.log( "表单提交触发了" );
 
+      },
+      colorRgb ( color ) {
+        return global.globalVal.formatDate.colorRgb( color );
       }
 
     }
@@ -528,8 +547,15 @@
       top: -2px;
       position: absolute;
       top: 50%;
-      margin-top: -4px;
+      margin-top: -6px;
       right: 2px;
+    }
+
+    .weui-cell_access .weui-cell__ft::after {
+      content: ' ';
+      width: 0px;
+      height: 0px;
+      border: 0;
     }
 
   }

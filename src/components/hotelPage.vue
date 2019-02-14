@@ -7,12 +7,12 @@
     <div class="swiper-slide menu">
       <!-- menu side -->
       <div class="user_info">
-        <div class="user_center">
-          <div class="user_img"></div>
+        <div @click="showUserInfo" class="user_center">
+          <div class="user_img" :style="{backgroundImage: userInfo.headerImg}"></div>
 
           <div class="user_info_detail">
             <span class="user_name" style="font-size: .5rem;"> {{ userInfo.userName }} </span>
-            <span class="user_email">{{userInfo.email }}</span>
+            <span class="user_email">{{userInfo.phone }}</span>
           </div>
         </div>
       </div>
@@ -73,22 +73,20 @@
         <!-- evaluate -->
         <evaluate v-if="evaluate"></evaluate>
 
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import topArrow    from "./childComponents/topArrow";
-  import showHotel   from "./childComponents/showHotel"
-  import userInfo    from "./childComponents/userInfo"
-  import Swiper      from "swiper";
-  import favorite    from "./childComponents/favoritePage"
-  import order       from "./childComponents/order"
+  import topArrow from "./childComponents/topArrow";
+  import showHotel from "./childComponents/showHotel"
+  import userInfo from "./childComponents/userInfo"
+  import Swiper from "swiper";
+  import favorite from "./childComponents/favoritePage"
+  import order from "./childComponents/order"
   import orderDetail from "./childComponents/orderDetail"
-  import evaluate    from "./childComponents/evaluate"
-
+  import evaluate from "./childComponents/evaluate"
 
   //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
 
@@ -96,6 +94,7 @@
     name      : "hotelPage",
     mounted() {
       this._initSwiper();
+      this.run();
     },
     components: {
       topArrow,
@@ -111,12 +110,13 @@
 
         right    : "right",
         userInfo : {
-          userName: "啦啦啦",
-          email   : "357104242@qq.com"
+          userName : "啦啦啦",
+          phone    : "357104242@qq.com",
+          headerImg: "./../../static/imgs/Koala.jpg"
         },
-        homeTitle : "我的收藏",
+        homeTitle: "我的收藏",
 
-        showHotel  : false,
+        showHotel  : true,
         userDetail : false,
         myFavorite : false,
         order      : false,
@@ -125,6 +125,7 @@
       };
     },
     methods   : {
+
       showLeftSide( el ) {
         console.log( 1 );
       },
@@ -139,7 +140,7 @@
           slideToClickedSlide: true,
           mousewheel         : false,
           on                 : {
-            init       : function () {
+            init: function () {
               var slider = this;
               menuButton.addEventListener(
                 "click",
@@ -152,20 +153,34 @@
                 },
                 true
               );
-            },
-            slideChange: function () {
-              //var slider = this;
-              //if (slider.activeIndex === 0) {
-              //  menuButton.classList.add("cross");
-              //} else {
-              //  menuButton.classList.remove("cross");
-              //}
-            },
+            }
 
           }
         } );
       },
+      run() {
+        let self = this;
 
+        //验证是否登录/获取邮箱名字信息
+        global.globalVal.userInfo.getUserInfo( function ( err, res ) {
+
+          if ( err ) {
+
+            return;
+          }
+
+          self.userInfo.userName  = res[ "nickname" ];
+          self.userInfo.phone     = res[ "mobile" ];
+          self.userInfo.headerImg = res[ "user_pic" ];
+
+        } );
+
+      },
+
+      showUserInfo() {
+        let self        = this;
+        self.userDetail = true;
+      }
     }
   };
 </script>

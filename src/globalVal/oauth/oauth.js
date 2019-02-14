@@ -42,12 +42,13 @@ function checkUserNameIsSingleOne( username, callback ) {
   axios.get( global.globalVal.httpServerUrl.checkusername + username + "/" )
     .then( function ( res ) {
       //{"count":0,"username":"huang"}
-      if( typeof res.count !== "number" ) {
+      let data = res.data;
+      if( typeof data.count !== "number" ) {
 
         return callback ( "无法验证用户名", null );
       }
 
-      if( res.count ) {
+      if( data.count ) {
         return callback ( "用户名已存在", null );
       }
 
@@ -55,6 +56,7 @@ function checkUserNameIsSingleOne( username, callback ) {
 
     } )
     .catch( function ( err ) {
+      console.log( err );
       return callback( "无法验证用户名", null );
 
     } )
@@ -75,11 +77,11 @@ function checkUserNameIsSingleOne( username, callback ) {
 };
 
 
-function userRegister ( username, password1, password2, callback ) {
+function userRegister ( username, password, password2, callback ) {
 
   axios.post( global.globalVal.httpServerUrl.userRegister, qs.stringify({
     username: username,
-    password1: password1,
+    password: password,
     password2: password2
   }) )
     .then( function ( res ) {

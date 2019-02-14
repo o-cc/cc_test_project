@@ -1,25 +1,26 @@
 <template>
 
   <div class="userInfo">
-      <div class="top_banner_bgc"></div>
-      <div>
-        <img class="userInfo_img" src="./../../../static/imgs/Koala.jpg" alt="">
-      </div>
+    <div class="top_banner_bgc"></div>
+    <div style="position: relative;">
+      <input type="file" accept="image/*" multiple @change="headImgChange" class="image_file">
+      <img class="userInfo_img" :src="headImg" alt="">
+    </div>
 
     <div class="userInfo_detail">
       <div>
-        <input class="inp_item" type="text">
+        <input class="inp_item" type="text" v-model="name">
         <span class="inp_title">昵称</span>
       </div>
       <div>
-        <input class="inp_item" type="text">
+        <input class="inp_item" type="text" @blur="checkPhone" v-model="phone">
         <span class="inp_title">手机</span>
 
       </div>
       <div>
         <!--<input type="text" v-model="pickerSexValue">-->
         <span class="inp_title">性别</span>
-        <PopupPicker  class="inp_item" v-model="pickerSexValue" :columns="1" :data="pickerSexData"></PopupPicker>
+        <PopupPicker class="inp_item" v-model="pickerSexValue" :columns="1" :data="pickerSexData"></PopupPicker>
       </div>
     </div>
 
@@ -29,7 +30,7 @@
         <p class="btn-item">保存</p>
       </div>
       <div>
-        <img src="./../../../static/imgs/2.png" alt=""  @click="clickCancel">
+        <img src="./../../../static/imgs/2.png" alt="" @click="clickCancel">
         <p class="btn-item" style="color: #f5b400;">取消</p>
       </div>
     </div>
@@ -38,36 +39,116 @@
 </template>
 
 <script>
-  import { PopupPicker } from 'vux'
+  import { PopupPicker, AlertModule } from 'vux'
 
-	export default {
+  export default {
 
     components: {
-      PopupPicker
+      PopupPicker,
+      AlertModule
     },
 
-		data() {
-			return {
-				msg: "wo de wfeilai dbushi ddmeng",
-        pickerSexValue: ["123"],
-        pickerSexData: ["男","女"]
-			};
-		},
+    mounted() {
+      this.run();
+
+    },
+    data() {
+      return {
+        pickerSexValue: [ "男" ],
+        pickerSexData : [ "男", "女" ],
+
+        name        : "",
+        phone       : "",
+        headImg     : "./../../../static/imgs/Koala.jpg",
+        headImgValue: ""
+      };
+    },
 
     methods: {
-      clickCancel () {
-        console.log( "点击取消" );
+      clickCancel() {
+        //应该回到上一页才对
+        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
+      },
+
+      clickSave() {
+        let self = this;
+        if( self.checkPhone() ) {
+
+          return;
+        }
+
+
+        global.globalVal.userInfo.putUserInfo( self.name, self.phone, self.headImg, self.pickerSexValue[ 0 ] ,function ( err, res ) {
+
+          if( err ) {
+            console.log( err );
+            return;
+          }
+
+          AlertModule.show( {
+            title  : '提示',
+            content: "修改成功",
+            onHide () {
+              window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
+            }
+          } );
+
+        } )
+      },
+
+      run() {
+        let self = this;
+        //尝试减少请求次数 然而代码增多？改天想想办法
+        let userInfo = global.globalVal.userInfoIncache.getUserInfo();
+        if( JSON.stringify(userInfo ) === "{}") {
+          //没有数据
+          global.globalVal.userInfo.getUserInfo( function ( err, res ) {
+
+            if ( err ) {
+              console.log( err );
+              return;
+            }
+
+            self.name                = userInfo[ "nickname" ];
+            self.phone               = userInfo[ "mobile" ];
+            self.pickerSexValue[ 0 ] = userInfo[ "gender" ] ? "男" : "女";
+            self.headImg             = userInfo[ "user_pic" ];
+          } );
+
+        } else {
+          self.name                = userInfo[ "nickname" ];
+          self.phone               = userInfo[ "mobile" ];
+          self.pickerSexValue[ 0 ] = userInfo[ "gender" ] ? "男" : "女";
+          self.headImg             = userInfo[ "user_pic" ];
+        }
 
       },
 
-      clickSave () {
-        console.log( "点击保存" );
+      checkPhone() {
+        let self = this;
+        if ( !(/^1[34578]\d{9}$/.test( self.phone )) ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "手机号码有误"
+          } );
+          return true;
+        }
 
       },
+
+      headImgChange( e ) {
+        let self   = this;
+        var reader = new FileReader();
+        reader.readAsDataURL( e.target.files[ 0 ] );
+        reader.onload = function ( e ) {
+          self.headImg = e.target.result;
+        }
+
+      }
 
     },
 
-	}
+  }
 </script>
 
 <style scoped lang="scss">
@@ -86,6 +167,15 @@
       z-index: -1;
     }
 
+    .image_file {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2.8rem;
+      height: 2.8rem;
+      transform: translateX(-50%);
+      opacity: 0;
+    }
     .userInfo_img {
       width: 2.8rem;
       height: 2.8rem;
@@ -101,7 +191,7 @@
       align-items: center;
       margin: .5rem auto 1rem;
 
-      div{
+      div {
         width: 100%;
         position: relative;
         font-size: .45rem;
@@ -124,6 +214,10 @@
           border-bottom: 2px solid #d1c0a5;
           padding-right: .2rem;
           text-align: right;
+
+          .weui-cell {
+            padding: 0;
+          }
         }
 
         .inp_item:focus {
@@ -137,7 +231,6 @@
         }
       }
 
-
     }
 
     .btns {
@@ -149,18 +242,18 @@
       div {
         position: relative;
 
-          img {
-            width: 80%;
-            margin: 0.25rem;
-          }
+        img {
+          width: 80%;
+          margin: 0.25rem;
+        }
 
-          .btn-item {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            color: #fff;
-            transform: translateY(-50%) translateX(-50%);
-          }
+        .btn-item {
+          position: absolute;
+          top: 30%;
+          left: 50%;
+          color: #fff;
+          transform: translateY(-50%) translateX(-50%);
+        }
       }
 
     }

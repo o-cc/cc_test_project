@@ -51,7 +51,7 @@
           <div class="home home_title">
             {{ homeTitle }}
           </div>
-          <div class="home right_arrow">
+          <div class="home right_arrow" @click="goBack">
             <topArrow :direction="right"></topArrow>
           </div>
         </div>
@@ -180,6 +180,10 @@
       showUserInfo() {
         let self        = this;
         self.userDetail = true;
+      },
+
+      goBack () {
+        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
       }
     }
   };

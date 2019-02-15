@@ -16,8 +16,8 @@ function getHotelInfo ( city, input, callback ) {
 
   axios.get( global.globalVal.httpServerUrl.getHotelInfo, {
     params: {
-      city: city,
-      input: input
+      city: "增城",
+      input: "万达"
     }
   })
     .then( res => {

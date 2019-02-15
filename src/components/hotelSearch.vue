@@ -4,8 +4,8 @@
       <div class="swiper-container" style="height: 100%;">
         <div class="swiper-wrapper">
           <img class="swiper-slide" src="./../../static/imgs/Koala.jpg" alt="">
-          <img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">
-          <img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">
+          <!--<img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">-->
+          <!--<img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">-->
 
         </div>
 
@@ -182,7 +182,7 @@
 
 <script>
   import Swiper from "swiper";
-  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search, Value2nameFilter as value2name, ChinaAddressV4Data} from 'vux'
+  import { AlertModule, Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search, Value2nameFilter as value2name, ChinaAddressV4Data} from 'vux'
 
   export default {
     name      : "hotelSearch",
@@ -192,7 +192,8 @@
       FlexboxItem,
       Calendar,
       Group,
-      Search
+      Search,
+      AlertModule
     },
     mounted() {
 
@@ -340,6 +341,13 @@
             return;
           }
 
+          if( res.length < 1 ) {
+            AlertModule.show( {
+              title  : '提示',
+              content: "未查询到该地区酒店",
+            } );
+            return;
+          }
           //goto
           self.$router.push( '/homepage' );
 

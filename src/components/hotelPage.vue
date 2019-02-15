@@ -88,7 +88,7 @@
   import orderDetail from "./childComponents/orderDetail"
   import evaluate from "./childComponents/evaluate"
 
-  //import { Flexbox, FlexboxItem, PopupPicker, Search } from 'vux'
+  import { AlertModule } from 'vux'
 
   export default {
     name      : "hotelPage",
@@ -103,7 +103,8 @@
       favorite,
       order,
       orderDetail,
-      evaluate
+      evaluate,
+      AlertModule
     },
     data() {
       return {
@@ -162,19 +163,29 @@
         let self = this;
 
         //验证是否登录/获取邮箱名字信息
-        if( global.globalVal)
+        if ( !global.globalVal.accessToken.token ){
+          AlertModule.show({
+            title  : '提示',
+            content: "请重新登录",
+            onHide: function() {
+              self.$router.push( '/login' );
+            }
+          })
+          return;
+        }
+
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
-          if ( err ) {
+            if ( err ) {
 
-            return;
-          }
+              return;
+            }
 
-          self.userInfo.userName  = res[ "nickname" ];
-          self.userInfo.phone     = res[ "mobile" ];
-          self.userInfo.headerImg = res[ "user_pic" ];
+            self.userInfo.userName  = res[ "nickname" ];
+            self.userInfo.phone     = res[ "mobile" ];
+            self.userInfo.headerImg = res[ "user_pic" ];
 
-        } );
+          } );
 
       },
 

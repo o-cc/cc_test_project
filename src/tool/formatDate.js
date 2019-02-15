@@ -79,6 +79,7 @@ function colorRgb ( Hex ) {
   var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
 
   var sColor = Hex.toLocaleLowerCase();
+
   if( sColor && reg.test(sColor) ){
     if( sColor.length === 4 ){
       var sColorNew = "#";

@@ -23,6 +23,9 @@ export default {
     height: 100%;
 
 
+    .weui-cell {
+      padding: 0;
+    }
 
 
   }

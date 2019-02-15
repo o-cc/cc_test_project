@@ -8,7 +8,7 @@ import searchPage from "./globalVal/searchPage/searchPage"
 let httpUrl       = "http://127.0.0.1:8000/api/";
 let httpServerUrl = {};
 let accessToken   = {
-  token: ""
+  token: "123"
 };
 
 httpServerUrl.login         = httpUrl + "authorizations/";
@@ -20,7 +20,7 @@ httpServerUrl.getHotelInfo  = httpUrl + "hotels/";
 
 let globalValue = {
   globalTips,
-  formatDate: formatDate,
+  formatDate,
   oauth,
   httpServerUrl,
   accessToken,

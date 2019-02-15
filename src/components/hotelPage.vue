@@ -57,21 +57,21 @@
         </div>
 
         <!-- 酒店页面组件 -->
-        <showHotel v-if="showHotel"></showHotel>
+        <showHotel v-if="comp.showHotel"></showHotel>
         <!-- 个人中心 -->
-        <userInfo v-if="userDetail"></userInfo>
+        <userInfo v-if="comp.userDetail"></userInfo>
 
         <!-- 我的收藏 -->
-        <favorite v-if="myFavorite"></favorite>
+        <favorite v-if="comp.myFavorite"></favorite>
 
         <!-- 我的订单 -->
-        <order v-if="order"></order>
+        <order v-if="comp.order"></order>
 
         <!-- orderDetail -->
-        <orderDetail v-if="orderDetail"></orderDetail>
+        <orderDetail v-if="comp.orderDetail"></orderDetail>
 
         <!-- evaluate -->
-        <evaluate v-if="evaluate"></evaluate>
+        <evaluate v-if="comp.evaluate"></evaluate>
 
       </div>
     </div>
@@ -111,18 +111,21 @@
 
         right    : "right",
         userInfo : {
-          userName : "啦啦啦",
-          phone    : "357104242@qq.com",
+          userName : "未登录",
+          phone    : "",
           headerImg: "./../../static/imgs/Koala.jpg"
         },
         homeTitle: "酒店",
 
-        showHotel  : true,
-        userDetail : false,
-        myFavorite : false,
-        order      : false,
-        orderDetail: false,
-        evaluate   : false
+        comp: {
+          showHotel  : true,
+          userDetail : false,
+          myFavorite : false,
+          order      : false,
+          orderDetail: false,
+          evaluate   : false
+        },
+
       };
     },
     methods   : {
@@ -163,21 +166,9 @@
         let self = this;
 
         //验证是否登录/获取邮箱名字信息
-        if ( !global.globalVal.accessToken.token ){
-          AlertModule.show({
-            title  : '提示',
-            content: "请重新登录",
-            onHide: function() {
-              self.$router.push( '/login' );
-            }
-          })
-          return;
-        }
-
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
             if ( err ) {
-
               return;
             }
 
@@ -191,9 +182,22 @@
 
       showUserInfo() {
         let self        = this;
-        self.userDetail = true;
+
+        self.showComp( "userDetail" );
       },
 
+      showComp ( showcomp ) {
+        let self = this;
+        for ( let i in self.comp ) {
+          if( i === showcomp ) {
+            self.comp[i] = true;
+          }else {
+            self.comp[i] = false;
+          }
+
+        }
+
+      },
       goBack () {
         window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
       }

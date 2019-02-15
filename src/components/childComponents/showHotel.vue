@@ -36,13 +36,12 @@
     <!-- 酒店信息 -->
     <div class="hotel_info">
 
-      <div v-for="(item, key, index ) in hotelDetailInfo" :key="index" class="hotel_item">
+      <div v-for="(item, key, index ) in hotelDetailInfo" :key="item.id" class="hotel_item" @click="goHotelDetail(item.id)">
         <div class="img_wrap">
           <img class="hotel_img" :src='item.image' alt="">
           <p class="price">{{ item.low_price }}</p>
           <p @click="clickFavorite" class="favorite"></p>
         </div>
-
         <div class="hotel_introduce">
           <p class="hotel_name">{{ item.name }}</p>
           <p class="hotel_address">
@@ -75,7 +74,8 @@
     ChinaAddressV4Data,
     XAddress,
     Value2nameFilter as value2name,
-    Datetime
+    Datetime,
+    AlertModule
   } from 'vux'
 
   export default {
@@ -90,7 +90,8 @@
       PopupPicker,
       Search,
       XAddress,
-      Datetime
+      Datetime,
+      AlertModule
     },
     data() {
       return {
@@ -116,6 +117,7 @@
 
         hotelDetailInfo: [
           {
+            id: 0,
             name       : "考拉酒店 (四季阳光店)",
             comm_score : "5.0",
             total_comm : "48",
@@ -193,7 +195,8 @@
         //红心
         redHeat: false,
 
-        boo: false
+        boo: false,
+
       }
     },
     methods   : {
@@ -202,14 +205,21 @@
         let self = this;
 
         //获取城市
-        let city = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city ;
-        console.log( city );
-        self.pickerValue[0] = city,
-        self.hotelDetailInfo = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
-        self.pickerDataFn();
+        try {
+          let city = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city ;
+          self.pickerValue[0] = city;
+          self.hotelDetailInfo = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
+          self.pickerDataFn();
+        }catch ( e ) {
+          console.log( e );
+        }
 
+
+
+        global.globalVal.hotelInfo.hotelInfoSingleOne.setHotelPageVueObj( self );
 
       },
+
       clickFavorite( el ) {
 
         if ( this.redHeat ) {
@@ -327,19 +337,43 @@
       },
 
       searchBlur() {
+        let self = this;
 
-        console.log( "搜索失去焦点了" );
+        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue[0], self.searchValue, function (err, res) {
+
+          if( err ) {
+            console.log( err );
+            return;
+          }
+
+          self.hotelDetailInfo = res;
+
+        } );
+
+
       },
 
       searchSubmit() {
-
-        console.log( "表单提交触发了" );
-
+        //键盘提交
+        this.searchBlur();
       },
+
+      goHotelDetail ( hotelId ) {
+        let self = this;
+        if( !hotelId ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "没有该酒店",
+          } );
+          return;
+        }
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId = hotelId;
+        self.$router.push( '/hotelDetail' );
+      },
+
       colorRgb( color ) {
         return global.globalVal.formatDate.colorRgb( color );
       }
-
     }
   };
 </script>

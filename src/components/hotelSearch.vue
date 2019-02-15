@@ -640,113 +640,119 @@
 
 <style lang="scss">
 
-  .bullet_item {
-    width: 8px;
-    height: 8px;
-    display: inline-block;
-    border-radius: 100%;
-    background: #000;
-    opacity: .4;
-    margin: 0 .1rem;
-  }
+  #app {
+    .hotel_search {
 
-  .bullet_item_active {
-    background: #f8f8f8;
-    opacity: 1;
-  }
+      .bullet_item {
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        border-radius: 100%;
+        background: #000;
+        opacity: .4;
+        margin: 0 .1rem;
+      }
 
-  .select_city {
+      .bullet_item_active {
+        background: #f8f8f8;
+        opacity: 1;
+      }
 
-    width: 90%;
-    margin: 0 auto;
-    height: 1.3rem;
-    border-radius: .1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    position: relative;
+      .select_city {
 
-    //暂时想到 如此下策地 修改框架样式,但庆幸属于局部 不影响全局
-    .vux-cell-box {
+        width: 90%;
+        margin: 0 auto;
+        height: 1.3rem;
+        border-radius: .1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        position: relative;
 
-      width: 100%;
-      height: 100%;
-      .vux-tap-active {
-        height: 100%;
-        padding: 0;
-        .vux-popup-picker-select, .vux-popup-picker-select-box {
+        //暂时想到 如此下策地 修改框架样式,但庆幸属于局部 不影响全局
+        .vux-cell-box {
+
+          width: 100%;
           height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100%;
-          font-size: 0.4rem;
+          .vux-tap-active {
+            height: 100%;
+            padding: 0;
+            .vux-popup-picker-select, .vux-popup-picker-select-box {
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100%;
+              font-size: 0.4rem;
 
-          .vux-popup-picker-value {
-            width: 70%;
-            text-align: center;
-            margin-left: -0.5rem;
-            color: #000;
+              .vux-popup-picker-value {
+                width: 70%;
+                text-align: center;
+                margin-left: -0.5rem;
+                color: #000;
+              }
+            }
+
+            .weui-cell__ft::after {
+              content: "";
+              border: 0;
+            }
+
           }
         }
 
-        .weui-cell__ft::after {
-          content: "";
-          border: 0;
+        .popup_pick_arrow {
+          position: absolute;
+          right: 1rem;
+        }
+
+        .popup_pick_arrow_down::after {
+          content: " ";
+          display: inline-block;
+          height: 6px;
+          width: 6px;
+          border-width: 2px 0px 0px 2px;
+          border-color: #C8C8CD;
+          border-style: solid;
+          -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+          transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+          position: relative;
+          top: -2px;
+          position: absolute;
+          top: 50%;
+          margin-top: -4px;
+          right: 2px;
+        }
+
+        .popup_pick_arrow_up::after {
+          content: " ";
+          display: inline-block;
+          height: 6px;
+          width: 6px;
+          border-width: 0px 2px 2px 0px;
+          border-color: #C8C8CD;
+          border-style: solid;
+          -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+          transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+          position: relative;
+          top: -2px;
+          position: absolute;
+          top: 50%;
+          margin-top: -4px;
+          right: 2px;
         }
 
       }
+
     }
-
-    .popup_pick_arrow {
-      position: absolute;
-      right: 1rem;
-    }
-
-    .popup_pick_arrow_down::after {
-      content: " ";
-      display: inline-block;
-      height: 6px;
-      width: 6px;
-      border-width: 2px 0px 0px 2px;
-      border-color: #C8C8CD;
-      border-style: solid;
-      -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-      transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-      position: relative;
-      top: -2px;
-      position: absolute;
-      top: 50%;
-      margin-top: -4px;
-      right: 2px;
-    }
-
-    .popup_pick_arrow_up::after {
-      content: " ";
-      display: inline-block;
-      height: 6px;
-      width: 6px;
-      border-width: 0px 2px 2px 0px;
-      border-color: #C8C8CD;
-      border-style: solid;
-      -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-      transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-      position: relative;
-      top: -2px;
-      position: absolute;
-      top: 50%;
-      margin-top: -4px;
-      right: 2px;
-    }
-
-  }
-
-  @media  screen and (min-width: 780px) {
-    .search_info {
-      width: 780px !important;
+    @media  screen and (min-width: 780px) {
+      .search_info {
+        width: 780px !important;
+      }
     }
   }
+
 
 </style>
 

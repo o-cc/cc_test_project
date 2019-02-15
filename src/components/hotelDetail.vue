@@ -9,7 +9,7 @@
     <div class="top_img">
       <div class="swiper-container" style="height: 100%;">
         <div class="swiper-wrapper">
-          <img class="swiper-slide" src="./../../static/imgs/Koala.jpg" alt="">
+          <img class="swiper-slide" :src="hotelInfo.image" alt="">
           <!--<img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">-->
           <!--<img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">-->
 
@@ -25,23 +25,21 @@
         <!--地址介绍-->
         <div class="hotel_info">
 
-          <div v-for="(item, key, index ) in hotelDetailInfo" :key="index" class="hotel_item">
-            <p class="price">{{ item.price }}</p>
+          <div class="hotel_item">
+            <!--<p class="price">{{ hotelInfo.price }}</p>-->
 
             <div class="hotel_introduce">
-              <p class="hotel_name">{{ item.name }}</p>
+              <p class="hotel_name">{{ hotelInfo.name }}</p>
               <p class="hotel_tag">
-                <span style="background: #fff1cc;color:#f7b500;">{{ item.tag.firstTag }}</span>
-                <span style="background: #cef2e1;color:#109d59;">{{ item.tag.secondTag }}</span>
-                <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.thrithTag }}</span>
-                <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.lastTag }} </span>
+                 <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in hotelInfo.types"
+                       v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
               </p>
               <p class="hotel_address">
                 <!--<span style="color: #f9c558;">{{ item.score }}分</span>-->
                 <!--<span class="circle"></span>-->
                 <!--<span>{{ item.evaluate }}条评价</span>-->
                 <!--<span class="circle"></span>    -->
-                <span>{{ item.address }}</span>
+                <span>{{ hotelInfo.place }}</span>
               </p>
 
             </div>
@@ -50,39 +48,19 @@
         </div>
         <!-- 房间介绍 -->
         <div class="hotel_all_room">
-          <div style="border: 2px solid #f90;" class="hotel_room">
-            <div class="room_img"></div>
+          <div style="border: 2px solid #f90;" class="hotel_room" v-for="( room, index ) in hotelInfo.hotel_rooms" :key="room.id">
+            <div :style="{backgroundImage: 'url('+ room.default_image_url +')' }" class="room_img"></div>
             <div class="room_name">
-              <p>标准双人床</p>
-              <p>标准双人床</p>
+              <p>{{ room.name }}</p>
+              <p>  </p>
               <p class="room_price">
-                <span style="background: #cef2e1;color:#109d59;">七天退换</span>
-                <span style="background: #fff1cc;color:#f7b500;font-size: 0.4rem">$299</span>
+
+                <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in room.types"
+                      v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
               </p>
             </div>
           </div>
-          <div class="hotel_room">
-            <div class="room_img"></div>
-            <div class="room_name">
-              <p>标准双人床</p>
-              <p>标准双人床</p>
-              <p class="room_price">
-                <span style="background: #cef2e1;color:#109d59;">七天退换</span>
-                <span style="background: #fff1cc;color:#f7b500;font-size: 0.4rem">$299</span>
-              </p>
-            </div>
-          </div>
-          <div class="hotel_room">
-            <div class="room_img"></div>
-            <div class="room_name">
-              <p>标准双人床</p>
-              <p>标准双人床</p>
-              <p class="room_price">
-                <span style="background: #cef2e1;color:#109d59;">七天退换</span>
-                <span style="background: #fff1cc;color:#f7b500;font-size: 0.4rem">$299</span>
-              </p>
-            </div>
-          </div>
+
         </div>
         <!--评论-->
         <div class="discuss">
@@ -258,8 +236,8 @@
 
           <div class="entry_tips">
             <div class="item_tips">
-                <p style="font-size: 0.1rem;">入住时间</p>
-                <p style="color: #838493;font-size: 0.3rem;">14:00以后</p>
+              <p style="font-size: 0.1rem;">入住时间</p>
+              <p style="color: #838493;font-size: 0.3rem;">14:00以后</p>
 
             </div>
             <div class="item_tips">
@@ -307,7 +285,7 @@
   import Arrow from "./childComponents/topArrow"
   import Swiper from "swiper"
 
-  import { Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
+  import { AlertModule, Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
 
   export default {
     name      : "hotelDetail",
@@ -318,29 +296,74 @@
       PopupPicker,
       Calendar,
       Group,
-      Search
+      Search,
+      AlertModule
     },
 
     mounted() {
-      this._initSwiper();
-
+      this.run();
     },
 
     data() {
       return {
         redHeat: false,
 
-        hotelDetailInfo: [
-          {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落，我知道我的未来不是梦我认真的过每一分钟",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }
-        ],
+        hotelInfo: {
+            "id"         : 1,
+            "name"       : "万达嘉华酒店",
+            "image"      : "./../../static/imgs/Koala.jpg",
+            "place"      : "广州市增城增城广场南",
+            "types"      : [
+              {
+                "name" : "速定",
+                "color": "red"
+              },
+              {
+                "name" : "七天可退",
+                "color": "green"
+              },
+              {
+                "name" : "超干净",
+                "color": null
+              }
+            ],
+            "desc_detail": "<p>威风威风</p>",
+            "hotel_rooms": [
+              {
+                "id"               : 2,
+                "name"             : "双人豪华房",
+                "price"            : "200.00",
+                "default_image_url": "./../../static/imgs/Koala.jpg",
+                "types"            : [
+                  {
+                    "name" : "七天可退",
+                    "color": "green"
+                  }
+                ]
+              },
+              {
+                "id"               : 3,
+                "name"             : "单人房",
+                "price"            : "150.00",
+                "default_image_url": "http://127.0.0.1/images/iphone_Wx92j0r.jpg",
+                "types"            : [
+                  {
+                    "name" : "七天可退",
+                    "color": "green"
+                  }
+                ]
+              }
+            ],
+            "comments"   : [
+              {
+                "star"     : 5,
+                "stay_time": "2019年01月",
+                "text"     : "nwwnvine",
+                "username" : "huang",
+                "user_pic" : ""
+              }
+            ]
+          },
 
         dateTimeValue: [],
 
@@ -354,11 +377,41 @@
         },
         totalDay    : "请选择",
 
+        headerImg: ""
+
       }
 
     },
 
     methods: {
+
+      run() {
+        let self = this;
+        self._initSwiper();
+        let hotelId = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
+        hotelId = 1;
+        if ( !hotelId ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "没有该酒店",
+            onHide : function () {
+              self.$router.push( '/homepage' );
+            }
+          } );
+          return;
+        }
+
+        global.globalVal.hotelInfo.getHotelDetailInfoById( hotelId, function ( err, res ) {
+
+          if ( err ) {
+            console.log( err );
+            return;
+          }
+
+          self.hotelInfo = res;
+        } );
+
+      },
       clickFavorite( el ) {
 
         if ( this.redHeat ) {
@@ -426,6 +479,9 @@
 
       },
 
+      colorRgb( color ) {
+        return global.globalVal.formatDate.colorRgb( color );
+      },
     }
   }
 </script>
@@ -541,7 +597,8 @@
               }
 
               .hotel_tag {
-                font-size: .4rem;
+                font-size: .3rem;
+
                 span {
                   margin-right: .1rem;
                   padding: .1rem;
@@ -818,7 +875,6 @@
             }
           }
 
-
           .entry_tips {
             width: 100%;
             display: flex;
@@ -841,7 +897,6 @@
 
       }
 
-
       .book_btn {
         width: 100%;
         height: 1.5rem;
@@ -855,10 +910,10 @@
       }
 
       /*.book_btn::before {*/
-        /*content: " ";*/
-        /*width: 1rem;*/
-        /*height: 1rem;*/
-        /*background: url("./../../static/imgs/");*/
+      /*content: " ";*/
+      /*width: 1rem;*/
+      /*height: 1rem;*/
+      /*background: url("./../../static/imgs/");*/
       /*}*/
     }
 

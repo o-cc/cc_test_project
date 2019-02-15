@@ -98,7 +98,8 @@
       run() {
         let self = this;
         //尝试减少请求次数 然而代码增多？改天想想办法
-        let userInfo = global.globalVal.userInfoIncache.getUserInfo();
+
+        let userInfo = global.globalVal.userInfo.userInfoIncache.getUserInfo();
         if( JSON.stringify(userInfo ) === "{}") {
           //没有数据
           global.globalVal.userInfo.getUserInfo( function ( err, res ) {
@@ -152,110 +153,124 @@
 
 <style scoped lang="scss">
 
-  .userInfo {
-    width: 100%;
-    height: 90%;
-
-    .top_banner_bgc {
+    .userInfo {
       width: 100%;
-      position: absolute;
-      top: 0;
-      height: 3rem;
-      background: linear-gradient(to top right, #fdf59d, #f5b400);
-      left: 0;
-      z-index: -1;
-    }
+      height: 90%;
 
-    .image_file {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 2.8rem;
-      height: 2.8rem;
-      transform: translateX(-50%);
-      opacity: 0;
-    }
-    .userInfo_img {
-      width: 2.8rem;
-      height: 2.8rem;
-      border-radius: 50%;
-    }
-
-    .userInfo_detail {
-      width: 65%;
-      height: 35%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: .5rem auto 1rem;
-
-      div {
+      .top_banner_bgc {
         width: 100%;
-        position: relative;
-        font-size: .45rem;
+        position: absolute;
+        top: 0;
+        height: 3rem;
+        background: linear-gradient(to top right, #fdf59d, #f5b400);
+        left: 0;
+        z-index: -1;
+      }
 
-        .inp_title {
-          position: absolute;
-          left: .1rem;
-          top: 1rem;
-          color: #59493f;
+      .image_file {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2.8rem;
+        height: 2.8rem;
+        transform: translateX(-50%);
+        opacity: 0;
+      }
+
+      .userInfo_img {
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 50%;
+      }
+
+      .userInfo_detail {
+        width: 65%;
+        height: 35%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: .5rem auto 1rem;
+
+        div {
+          width: 100%;
+          position: relative;
+          font-size: .45rem;
+
+          .inp_title {
+            position: absolute;
+            left: .1rem;
+            top: 1rem;
+            color: #59493f;
+          }
+
+          .inp_item {
+            width: 100%;
+            height: 40%;
+            border: 0;
+            background: none;
+            color: #f5b400;
+            font-size: .5rem;
+            margin-top: 1rem;
+            border-bottom: 2px solid #d1c0a5;
+            padding-right: .2rem;
+            text-align: right;
+
+            >div {
+              padding: 0;
+
+              .weui-cell__ft::after {
+                content: " ";
+                width: 0;
+                height: 0;
+              }
+            }
+
+
+
+
+
+          }
+
+          .inp_item:focus {
+            outline: none;
+          }
+
+          .inp_item::before {
+            content: '';
+            height: 0;
+            width: 0;
+          }
+
         }
 
-        .inp_item {
-          width: 100%;
-          height: 20%;
-          border: 0;
-          background: none;
-          color: #f5b400;
-          font-size: .5rem;
-          margin-top: 1rem;
-          border-bottom: 2px solid #d1c0a5;
-          padding-right: .2rem;
-          text-align: right;
+      }
 
-          .weui-cell {
-            padding: 0;
+      .btns {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        div {
+          position: relative;
+
+          img {
+            width: 80%;
+            margin: 0.25rem;
+          }
+
+          .btn-item {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            color: #fff;
+            transform: translateY(-50%) translateX(-50%);
           }
         }
 
-        .inp_item:focus {
-          outline: none;
-        }
-
-        .inp_item::before {
-          content: '';
-          height: 0;
-          width: 0;
-        }
       }
-
     }
 
-    .btns {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      div {
-        position: relative;
-
-        img {
-          width: 80%;
-          margin: 0.25rem;
-        }
-
-        .btn-item {
-          position: absolute;
-          top: 30%;
-          left: 50%;
-          color: #fff;
-          transform: translateY(-50%) translateX(-50%);
-        }
-      }
-
-    }
-  }
 
 </style>

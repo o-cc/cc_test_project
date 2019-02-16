@@ -36,7 +36,8 @@
     <!-- 酒店信息 -->
     <div class="hotel_info">
 
-      <div v-for="(item, key, index ) in hotelDetailInfo" :key="item.id" class="hotel_item" @click="goHotelDetail(item.id)">
+      <div v-for="(item, key, index ) in hotelDetailInfo" :key="item.id" class="hotel_item"
+           @click="goHotelDetail(item.id)">
         <div class="img_wrap">
           <img class="hotel_img" :src='item.image' alt="">
           <p class="price">{{ item.low_price }}</p>
@@ -117,7 +118,7 @@
 
         hotelDetailInfo: [
           {
-            id: 0,
+            id         : 0,
             name       : "考拉酒店 (四季阳光店)",
             comm_score : "5.0",
             total_comm : "48",
@@ -206,15 +207,13 @@
 
         //获取城市
         try {
-          let city = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city ;
-          self.pickerValue[0] = city;
-          self.hotelDetailInfo = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
+          let city              = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city;
+          self.pickerValue[ 0 ] = city;
+          self.hotelDetailInfo  = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
           self.pickerDataFn();
-        }catch ( e ) {
+        } catch ( e ) {
           console.log( e );
         }
-
-
 
         global.globalVal.hotelInfo.hotelInfoSingleOne.setHotelPageVueObj( self );
 
@@ -317,14 +316,18 @@
       changePicker() {
         let self = this;
         //这里修改了pickValue时，会触发三次函数，问题待查..
-        if ( !self.boo ) {
-          self.boo = true;
+        //找到问题所在，有三列选择项，三列都改变了 触发三次... 这..
 
+        if ( !self.boo ) {
+          self.boo         = true;
           self.pickerValue = [ self.getName( self.pickerValue ).split( " " )[ 1 ] ];
           //显示了中间市级城市 vux的第4版本的city_data直辖市的下一级默认是市辖区 这里修改了源代码为北京市等
           if ( self.pickerValue[ 0 ].length > 5 ) {
             self.pickArrowRight = 0.5;
           }
+
+          //城市失去焦点也要搜索
+          self.getHotelInfo();
         }
 
       },
@@ -338,10 +341,18 @@
 
       searchBlur() {
         let self = this;
+        if ( self.searchValue.trim() ) {
+          //如果为空的话 不请求 如果有值的话 就请求
+          self.getHotelInfo();
+        }
 
-        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue[0], self.searchValue, function (err, res) {
+      },
 
-          if( err ) {
+      getHotelInfo() {
+        let self = this;
+        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue[ 0 ], self.searchValue, function ( err, res ) {
+
+          if ( err ) {
             console.log( err );
             return;
           }
@@ -350,7 +361,6 @@
 
         } );
 
-
       },
 
       searchSubmit() {
@@ -358,7 +368,7 @@
         this.searchBlur();
       },
 
-      goHotelDetail ( hotelId ) {
+      goHotelDetail( hotelId ) {
         let self = this;
         if( !hotelId ) {
           AlertModule.show( {

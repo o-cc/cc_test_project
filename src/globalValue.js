@@ -8,7 +8,7 @@ import searchPage from "./globalVal/searchPage/searchPage"
 let httpUrl       = "http://127.0.0.1:8000/api/";
 let httpServerUrl = {};
 let accessToken   = {
-  token: "123"
+  token: window.localStorage.token
 };
 
 httpServerUrl.login         = httpUrl + "authorizations/";

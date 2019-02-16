@@ -18,7 +18,8 @@ function userLogin( username, password, callback ) {
     headers: {
       "Content-Type": 'application/json',
     }
-  } ).then( function ( res ) {
+  } )
+    .then( function ( res ) {
     //{"username":"huang","user_id":6,"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIjoxNTQ4Mzk5MTM4LCJ1c2VyX2lkIjo2LCJlbWFpbCI6IiJ9.mzwhgxZTHbGcv2gpvt1ReZcIMaz1ORDW8PoyUjJFJm8"}
     let msg = res.data;
     if ( !msg.token ) {
@@ -26,10 +27,11 @@ function userLogin( username, password, callback ) {
       return callback( false );
     }
 
-    global.globalVal.accessToken.token = "JWT " + msg.token;
+    window.localStorage.setItem( "token",  "JWT " + msg.token );
     return callback( true );
 
-  } ).catch( function ( err ) {
+  } )
+    .catch( function ( err ) {
     console.log( err );
     return callback( false );
 
@@ -92,8 +94,7 @@ function userRegister ( username, password, password2, callback ) {
         return callback( "无法获取必备验证", null );
       }
 
-      global.globalVal.accessToken.token = "JWT " + data.token;
-
+      window.localStorage.setItem( "token",  "JWT " + data.token );
       return callback( null, true );
 
 

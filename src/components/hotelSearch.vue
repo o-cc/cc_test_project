@@ -334,6 +334,13 @@
 
       btnSearch () {
         let self = this;
+        if( self.pickerValue[ 0 ] === "城市" ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请选择城市",
+          } );
+          return;
+        }
 
         global.globalVal.hotelInfo.getHotelInfo( self.pickerValue, self.searchValue, function ( err, res ) {
 

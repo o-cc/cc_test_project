@@ -8,7 +8,7 @@
       <!-- menu side -->
       <div class="user_info">
         <div @click="showUserInfo" class="user_center">
-          <div class="user_img" :style="{backgroundImage: userInfo.headerImg}"></div>
+          <div class="user_img" :style="{backgroundImage: 'url('+userInfo.headerImg+')'}"></div>
 
           <div class="user_info_detail">
             <span class="user_name" style="font-size: .5rem;"> {{ userInfo.userName }} </span>
@@ -19,20 +19,20 @@
 
       <div class="hotel_menu">
         <div class="top_menu">
-          <div>
+          <div @click="showOrder">
             <img src="./../../static/imgs/share.png" alt="">
             <p>我的订单</p>
           </div>
-          <div>
+          <div @click="showFavorite">
             <img src="./../../static/imgs/share.png" alt="">
             <p>我的收藏</p>
           </div>
-          <div>
+          <div @click="showUserInfo">
             <img src="./../../static/imgs/share.png" alt="">
             <p>个人资料</p>
           </div>
         </div>
-        <div class="bom_menu">
+        <div class="bom_menu" @click="signOut">
           <img src="./../../static/imgs/share.png" alt="">
           <p> 退出登录</p>
         </div>
@@ -59,7 +59,7 @@
         <!-- 酒店页面组件 -->
         <showHotel v-if="comp.showHotel"></showHotel>
         <!-- 个人中心 -->
-        <userInfo v-if="comp.userDetail"></userInfo>
+        <userInfo @showHotel="showHotel" v-if="comp.userDetail"></userInfo>
 
         <!-- 我的收藏 -->
         <favorite v-if="comp.myFavorite"></favorite>
@@ -134,6 +134,11 @@
         console.log( 1 );
       },
 
+      showHotel () {
+        let self = this;
+        self.showComp( "showHotel" );
+      },
+
       _initSwiper() {
         let self       = this;
         var menuButton = document.querySelector( ".menu-button" );
@@ -172,7 +177,8 @@
               return;
             }
 
-            self.userInfo.userName  = res[ "nickname" ];
+
+            self.userInfo.userName    = res[ "nickname" ];
             self.userInfo.phone     = res[ "mobile" ];
             self.userInfo.headerImg = res[ "user_pic" ];
 
@@ -181,8 +187,8 @@
       },
 
       showUserInfo() {
-        let self        = this;
-
+        let self = this;
+        self.homeTitle  = "";
         self.showComp( "userDetail" );
       },
 
@@ -199,7 +205,22 @@
 
       },
       goBack () {
-        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
+        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' );
+      },
+
+      showOrder () {
+        this.homeTitle = "我的订单";
+        this.showComp( "order" );
+      },
+
+      showFavorite (){
+        this.homeTitle = "我的收藏";
+        this.showComp( "myFavorite" );
+      },
+
+      signOut () {
+        window.localStorage.setItem("token", "");
+        this.$router.push( '/login' );
       }
     }
   };

@@ -106,7 +106,7 @@
             return;
           }
           //跳转
-          self.LoginRouter = "/";
+          self.$router.push( '/' );
         } );
 
       },

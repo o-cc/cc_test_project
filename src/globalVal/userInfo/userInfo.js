@@ -8,15 +8,14 @@ let userInfoIncache = {
 };
 
 let userInfoObj = {};
-function getUserInfo () {
-   return userInfoObj;
+
+function getUserInfo() {
+  return userInfoObj;
 };
 
-
-function setUserInfo ( userInfo ) {
+function setUserInfo( userInfo ) {
   userInfoObj = userInfo;
 };
-
 
 let userInfo = {
   userInfoIncache: userInfoIncache
@@ -27,19 +26,12 @@ userInfo.getUserInfo = function ( callback ) {
   axios.get( global.globalVal.httpServerUrl.checkuserInfo, {
 
     headers: {
-      "Authorization": global.globalVal.accessToken.token
+      "Authorization": window.localStorage.getItem( "token" )
     }
 
   } )
     .then( res => {
       let msg = res.data;
-      /*{
-      //  "nickname": "huang",
-      //  "mobile": "13155667788",
-      //  "gender": 1,
-      //  "user_pic": ""}
-      */
-
       setUserInfo( msg );
       return callback( null, msg );
 
@@ -56,24 +48,36 @@ userInfo.getUserInfo = function ( callback ) {
 * param3 [ String ] 性别
 * param4 [ String ] 图片base64编码
 * */
-userInfo.putUserInfo = function ( username, phone, gender, userPic, callback ) {
+userInfo.putUserInfo = function ( username, phone, userPic, gender, callback ) {
 
-  axios.put( global.globalVal.httpServerUrl.checkuserInfo, {
+  //这里由于后台验证是multipart/form-data原因需要使用form表单的方式提交，但是我偏不！
+  var data = new FormData();
 
-    data   : {
-      "nickname": username,
-      "mobile"  : phone,
-      "gender"  : gender === "男" ? 1 : 0,
-      "user_pic": userPic
-    },
-    headers: {
-      "Authorization": global.globalVal.accessToken.token
+  if ( userPic ) {
+    data.append( "user_pic", userPic );
+  }
+
+  if ( gender ) {
+    data.append( "gender", gender === "男" ? 1 : 0 );
+  }
+
+  if ( phone ) {
+    data.append( "mobile", phone );
+  }
+
+  if ( username ) {
+    data.append( "nickname", username );
+  }
+
+  axios.put( global.globalVal.httpServerUrl.checkuserInfo, data, {
+      headers: {
+        "Authorization": window.localStorage.getItem( "token" ),
+      }
     }
-  } )
+  )
     .then( res => {
       let msg = res.data;
       //{"id":7,"nickname":"huang","user_pic":null,"gender":1,"mobile":"13155667788"}
-      setUserInfo( msg );
       return callback( null, msg );
 
     } )

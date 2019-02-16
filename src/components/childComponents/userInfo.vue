@@ -54,30 +54,34 @@
     },
     data() {
       return {
-        pickerSexValue: [ "男" ],
+        pickerSexValue: [ "性別" ],
         pickerSexData : [ "男", "女" ],
 
         name        : "",
         phone       : "",
         headImg     : "./../../../static/imgs/Koala.jpg",
-        headImgValue: ""
+        headImgValue: "",
+
+        headImg1: null
       };
     },
 
     methods: {
       clickCancel() {
-        //应该回到上一页才对
-        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
+        //应该回到首页
+        let self = this;
+
+        self.$emit( "showHotel", "showHotel" );
       },
 
       clickSave() {
         let self = this;
+
         if( self.checkPhone() ) {
           return;
         }
 
-
-        global.globalVal.userInfo.putUserInfo( self.name, self.phone, self.headImg, self.pickerSexValue[ 0 ] ,function ( err, res ) {
+        global.globalVal.userInfo.putUserInfo( self.name, self.phone, self.headImg1, self.pickerSexValue[ 0 ] ,function ( err, res ) {
 
           if( err ) {
             console.log( err );
@@ -88,7 +92,7 @@
             title  : '提示',
             content: "修改成功",
             onHide () {
-              window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' )
+              self.$emit( "showHotel", "showHotel" );
             }
           } );
 
@@ -97,29 +101,14 @@
 
       run() {
         let self = this;
-        //尝试减少请求次数 然而代码增多？改天想想办法
 
         let userInfo = global.globalVal.userInfo.userInfoIncache.getUserInfo();
-        if( JSON.stringify(userInfo ) === "{}") {
-          //没有数据
-          global.globalVal.userInfo.getUserInfo( function ( err, res ) {
+        self.name                = userInfo[ "nickname" ];
+        self.phone               = userInfo[ "mobile" ];
+        self.pickerSexValue[ 0 ] = userInfo[ "gender" ] ? "男" : "女";
 
-            if ( err ) {
-              console.log( err );
-              return;
-            }
-
-            self.name                = userInfo[ "nickname" ];
-            self.phone               = userInfo[ "mobile" ];
-            self.pickerSexValue[ 0 ] = userInfo[ "gender" ] ? "男" : "女";
-            self.headImg             = userInfo[ "user_pic" ];
-          } );
-
-        } else {
-          self.name                = userInfo[ "nickname" ];
-          self.phone               = userInfo[ "mobile" ];
-          self.pickerSexValue[ 0 ] = userInfo[ "gender" ] ? "男" : "女";
-          self.headImg             = userInfo[ "user_pic" ];
+        if( userInfo[ "user_pic" ] ) {
+          self.headImg = userInfo[ "user_pic" ];
         }
 
       },
@@ -137,9 +126,11 @@
       },
 
       headImgChange( e ) {
-        let self   = this;
-        var reader = new FileReader();
+        let self = this;
+
+        let reader = new FileReader();
         reader.readAsDataURL( e.target.files[ 0 ] );
+        self.headImg1 = e.target.files[ 0 ];
         reader.onload = function ( e ) {
           self.headImg = e.target.result;
         }

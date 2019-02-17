@@ -62,30 +62,16 @@ function checkUserNameIsSingleOne( username, callback ) {
       return callback( "无法验证用户名", null );
 
     } )
-
-  //
-  //jq.ajax({
-  //  url: "http://127.0.0.1:8000/api/usernames/huang/",
-  //  method: "GET",
-  //  'Content-Type': 'application/json',
-  //  success ( res ) {
-  //    console.log( res );
-  //  },
-  //  error ( err ) {
-  //
-  //    console.log( err );
-  //  }
-  //})
 };
 
 
 function userRegister ( username, password, password2, callback ) {
 
-  axios.post( global.globalVal.httpServerUrl.userRegister, qs.stringify({
+  axios.post( global.globalVal.httpServerUrl.userRegister, {
     username: username,
     password: password,
     password2: password2
-  }) )
+  } )
     .then( function ( res ) {
       //{"id":6,"username":"huang", "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIjoxNTQ4Mzk4ODkwLCJ1c2VyX2lkIjo2LCJlbWFpbCI6IiJ9.6l8L4TObFqnsMY5yMVFnYnqztrsMrurRhi9H9j6eA1s"}
       let data = res.data;

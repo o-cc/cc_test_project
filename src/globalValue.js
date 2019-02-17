@@ -11,12 +11,14 @@ let accessToken   = {
   token: window.localStorage.token
 };
 
-httpServerUrl.login         = httpUrl + "authorizations/";
-httpServerUrl.checkusername = httpUrl + "usernames/";
-httpServerUrl.userRegister  = httpUrl + "users/";
-httpServerUrl.checkuserInfo = httpUrl + "users/infos/";
-httpServerUrl.getHotelInfo  = httpUrl + "hotels/";
-
+httpServerUrl.login              = httpUrl + "authorizations/";
+httpServerUrl.checkusername      = httpUrl + "usernames/";
+httpServerUrl.userRegister       = httpUrl + "users/";
+httpServerUrl.checkuserInfo      = httpUrl + "users/infos/";
+httpServerUrl.getHotelInfo       = httpUrl + "hotels/";
+httpServerUrl.favoriteHotel      = httpUrl + "collects/";
+httpServerUrl.AllfavoriteHotelId = httpUrl + "collects/hotels/";
+httpServerUrl.AllfavoriteHotel   = httpUrl + "collects/";
 
 let globalValue = {
   globalTips,

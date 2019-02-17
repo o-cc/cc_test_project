@@ -28,7 +28,7 @@
                 <div>
                   <div class="select_city">
                     <PopupPicker @on-show="selectClick" @on-hide="selectClick" v-model="pickerValue" :data="pickerData"
-                                 :columns=2 @on-change="changePicker">
+                                 :columns=3 @on-change="changePicker">
                     </PopupPicker>
                     <span :class="popupPickArrow"></span>
                   </div>
@@ -40,7 +40,7 @@
         </div>
         <div class="date_picker">
           <group>
-            <calendar title="title" v-model="dateTimeValue" :display-format="formatDate" @on-change="dateChange"></calendar>
+            <calendar title="title" v-model="dateTimeValue" :start-date="startDate" :display-format="formatDate" @on-change="dateChange"></calendar>
           </group>
 
           <p class="first_date">
@@ -222,15 +222,23 @@
         totalDay: "请选择",
 
         searchValue: "",
-        city: ""
+        city: "",
+        startDate: ""
       }
     },
     methods   : {
 
       run() {
-        global.globalVal.searchPage.searchPageSingleOne.setSearchPageIndexVueObj( this );
-        this._initSwiper();
-        this.pickerDataFn();
+        let self = this;
+        //选择的日期必须是今天之后 这里其实应该使用tool.format 先这样子吧..
+        let date       = new Date();
+        let month      = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+        self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
+
+
+        global.globalVal.searchPage.searchPageSingleOne.setSearchPageIndexVueObj( self );
+        self._initSwiper();
+        self.pickerDataFn();
       },
 
       _initSwiper() {
@@ -265,15 +273,16 @@
           this.popupPickArrow[ "popup_pick_arrow_up" ]   = true;
           this.popupPickArrow[ "popup_pick_arrow_down" ] = false;
         }
-
+        //注意这个有点碍眼0.0
+        this.boo = false;
       },
 
       changePicker() {
         let self = this;
+
         //这里修改了pickValue时，会触发三次函数，问题待查..
         if ( !self.boo ) {
           self.boo = true;
-
           self.pickerValue = [ self.getName( self.pickerValue ).split( " " )[ 1 ] ];
           self.city =  self.pickerValue[0];
           //显示了中间市级城市 vux的第4版本的city_data直辖市的下一级默认是市辖区 这里修改了源代码为北京市等
@@ -285,9 +294,7 @@
       },
 
       pickerDataFn() {
-
         this.pickerData = ChinaAddressV4Data;
-
       },
 
       formatDate() {
@@ -315,8 +322,9 @@
         self.lastDateObj.weekDay = lastDateWeekDate;
         //格式化日期
         self.lastDateObj.date    = (lastDate.getMonth() + 1) + "月" + (lastDate.getDate()) + "日";
+        self.totalDay            = self.formatDate();
 
-        self.totalDay = self.formatDate();
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue = self.dateTimeValue;
 
       },
 
@@ -346,15 +354,15 @@
 
           if( err ){
             return;
-          }
+        }
 
-          if( res.length < 1 ) {
-            AlertModule.show( {
-              title  : '提示',
-              content: "未查询到该地区酒店",
-            } );
-            return;
-          }
+        if( res.length < 1 ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "未查询到该地区酒店",
+          } );
+          return;
+        }
           //goto
           self.$router.push( '/homepage' );
 

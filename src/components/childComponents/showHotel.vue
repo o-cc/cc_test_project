@@ -7,7 +7,7 @@
           <div>
             <div class="select_city">
               <PopupPicker @on-show="selectClick" @on-hide="selectClick" v-model="pickerValue" :data="pickerData"
-                           :columns=2 @on-change="changePicker">
+                           :columns=3 @on-change="changePicker">
               </PopupPicker>
               <span :class="popupPickArrow"></span>
 
@@ -20,7 +20,7 @@
               <!--<PopupPicker @on-show="selectTimeClick" @on-hide="selectTimeClick" v-model="pickerTimeValue"-->
               <!--:data="pickerTimeData" :columns=2 @on-change="changeTimePicker"></PopupPicker>-->
               <datetime @on-show="selectTimeClick" @on-hide="selectTimeClick" v-model="pickerTimeValue"
-                        :data="pickerTimeData"></datetime>
+                        :data="pickerTimeData" :start-date="startDate"></datetime>
 
               <span :class="popupPickArrowTime"></span>
             </div>
@@ -194,16 +194,19 @@
         ],
 
         //红心
-        redHeat: false,
-
-        boo: false,
-
+        redHeat  : false,
+        boo      : false,
+        startDate: ""
       }
     },
     methods   : {
 
       run() {
         let self = this;
+
+        let date       = new Date();
+        let month      = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+        self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
 
         //获取城市
         try {
@@ -214,8 +217,6 @@
         } catch ( e ) {
           console.log( e );
         }
-
-        global.globalVal.hotelInfo.hotelInfoSingleOne.setHotelPageVueObj( self );
 
       },
 

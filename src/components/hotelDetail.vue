@@ -2,8 +2,7 @@
   <div class="hotel_detail_info">
     <div class="top_icon">
       <Arrow direction="left"></Arrow>
-      <p @click="clickFavorite" class="favorite"></p>
-
+      <p @click="clickFavorite" class="favorite" :style="{backgroundImage: favoriteImg}"></p>
     </div>
 
     <div class="top_img">
@@ -48,19 +47,21 @@
         </div>
         <!-- 房间介绍 -->
         <div class="hotel_all_room">
-          <div style="border: 2px solid #f90;" class="hotel_room" v-for="( room, index ) in hotelInfo.hotel_rooms" :key="room.id">
+          <div @click="roomClick(room, index)" :class="{room_border: index === roomBorder}" class="hotel_room"
+               v-for="( room, index ) in hotelInfo.hotel_rooms"
+               :key="room.id">
             <div :style="{backgroundImage: 'url('+ room.default_image_url +')' }" class="room_img"></div>
             <div class="room_name">
               <p>{{ room.name }}</p>
-              <p>  </p>
+              <p class="roo_desc" v-html="room.desc"></p>
               <p class="room_price">
-
+                <span v-if="room.types.length<1"></span>
                 <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in room.types"
                       v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
+                <span style="background: #fff1cc;color:#f7b500;font-size: 0.4rem;">{{ room.price }}</span>
               </p>
             </div>
           </div>
-
         </div>
         <!--评论-->
         <div class="discuss">
@@ -68,88 +69,31 @@
             近期热评
           </div>
 
-          <div class="discuss_item">
+          <div class="discuss_item" v-if="showDefailDiscuss(index)" v-for="(item, index) in hotelInfo.comments">
 
             <div class="discuss_head_img">
-              <div class="head_img"></div>
+              <div class="head_img" :style="{backgroundImage: item.user_pic}"></div>
             </div>
             <div class="discuss_item_info">
               <div class="item_name">
-                <div>金针菇</div>
-                <div class="item_time">2019年01月04号</div>
+                <div>{{ item.username }}</div>
+                <div class="item_time">{{item.stay_time}}</div>
               </div>
               <div class="item_detail_info">
                 <div class="user_discuss">
-                  我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动
+                  {{ item.text }}
                 </div>
                 <div class="user_start">
-
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
+                  <p v-for="star in item.star"></p>
+                  <p class="star_by_empty" v-for="star in (item.star<5)?(5-item.star):0"></p>
 
                 </div>
               </div>
             </div>
           </div>
-          <div class="discuss_item">
-
-            <div class="discuss_head_img">
-              <div class="head_img"></div>
-            </div>
-            <div class="discuss_item_info">
-              <div class="item_name">
-                <div>金针菇</div>
-                <div class="item_time">2019年01月04号</div>
-              </div>
-              <div class="item_detail_info">
-                <div class="user_discuss">
-                  我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动
-                </div>
-                <div class="user_start">
-
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="discuss_item">
-
-            <div class="discuss_head_img">
-              <div class="head_img"></div>
-            </div>
-            <div class="discuss_item_info">
-              <div class="item_name">
-                <div>金针菇</div>
-                <div class="item_time">2019年01月04号</div>
-              </div>
-              <div class="item_detail_info">
-                <div class="user_discuss">
-                  我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动
-                </div>
-                <div class="user_start">
-
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-                  <p class="cc"></p>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="show_all_discuss">
+          <div class="show_all_discuss" v-if="allDiscuss" @click="showAllDiscuss">
             <div>
-              全部31条评论
+              全部{{ hotelInfo.comments.length }}条评论
             </div>
 
           </div>
@@ -163,7 +107,7 @@
           <div class="date_picker">
             <group>
               <calendar title="title" v-model="dateTimeValue" :display-format="formatDate"
-                        @on-change="dateChange"></calendar>
+                        @on-change="dateChange" :start-date="startDate"></calendar>
             </group>
           </div>
 
@@ -270,7 +214,7 @@
 
       </div>
 
-      <div class="book_btn">
+      <div class="book_btn" @click="goOrder">
         <i></i>
         <p>立即预订</p>
       </div>
@@ -285,7 +229,7 @@
   import Arrow from "./childComponents/topArrow"
   import Swiper from "swiper"
 
-  import { AlertModule, Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
+  import { Confirm, AlertModule, Flexbox, FlexboxItem, PopupPicker, Calendar, Group, Search } from 'vux'
 
   export default {
     name      : "hotelDetail",
@@ -297,7 +241,8 @@
       Calendar,
       Group,
       Search,
-      AlertModule
+      AlertModule,
+      Confirm
     },
 
     mounted() {
@@ -306,79 +251,115 @@
 
     data() {
       return {
-        redHeat: false,
-
-        hotelInfo: {
-            "id"         : 1,
-            "name"       : "万达嘉华酒店",
-            "image"      : "./../../static/imgs/Koala.jpg",
-            "place"      : "广州市增城增城广场南",
-            "types"      : [
-              {
-                "name" : "速定",
-                "color": "red"
-              },
-              {
-                "name" : "七天可退",
-                "color": "green"
-              },
-              {
-                "name" : "超干净",
-                "color": null
-              }
-            ],
-            "desc_detail": "<p>威风威风</p>",
-            "hotel_rooms": [
-              {
-                "id"               : 2,
-                "name"             : "双人豪华房",
-                "price"            : "200.00",
-                "default_image_url": "./../../static/imgs/Koala.jpg",
-                "types"            : [
-                  {
-                    "name" : "七天可退",
-                    "color": "green"
-                  }
-                ]
-              },
-              {
-                "id"               : 3,
-                "name"             : "单人房",
-                "price"            : "150.00",
-                "default_image_url": "http://127.0.0.1/images/iphone_Wx92j0r.jpg",
-                "types"            : [
-                  {
-                    "name" : "七天可退",
-                    "color": "green"
-                  }
-                ]
-              }
-            ],
-            "comments"   : [
-              {
-                "star"     : 5,
-                "stay_time": "2019年01月",
-                "text"     : "nwwnvine",
-                "username" : "huang",
-                "user_pic" : ""
-              }
-            ]
-          },
-
-        dateTimeValue: [],
-
-        firstDateObj: {
+        hotelInfo      : {
+          "id"         : 1,
+          "name"       : "万达嘉华酒店",
+          "image"      : "http://127.0.0.1/images/timg.jpg",
+          "place"      : "广州市增城增城广场南",
+          "types"      : [
+            {
+              "name" : "速定",
+              "color": "red"
+            },
+            {
+              "name" : "七天可退",
+              "color": "green"
+            },
+            {
+              "name" : "超干净",
+              "color": null
+            }
+          ],
+          "desc_detail": "<p>威风威风</p>",
+          "hotel_rooms": [
+            {
+              "id"               : 2,
+              "name"             : "双人豪华房",
+              "price"            : "200.00",
+              "default_image_url": "./../../static/imgs/Koala.jpg",
+              "types"            : [
+                {
+                  "name" : "七天可退",
+                  "color": "#ffff00"
+                },
+                {
+                  "name" : "七天可退",
+                  "color": "#ffff00"
+                }
+              ]
+            },
+            {
+              "id"               : 3,
+              "name"             : "单人房",
+              "price"            : "150.00",
+              "default_image_url": "http://127.0.0.1/images/iphone_Wx92j0r.jpg",
+              "types"            : [
+                {
+                  "name" : "七天可退",
+                  "color": "green"
+                }
+              ]
+            }
+          ],
+          "comments"   : [
+            {
+              "star"     : 5,
+              "stay_time": "2019年01月",
+              "text"     : "我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动",
+              "username" : "huang",
+              "user_pic" : "http://127.0.0.1/images/timg.jpg"
+            },
+            {
+              "star"     : 5,
+              "stay_time": "2019年01月",
+              "text"     : "我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动",
+              "username" : "huang",
+              "user_pic" : "http://127.0.0.1/images/timg.jpg"
+            },
+            {
+              "star"     : 5,
+              "stay_time": "2019年01月",
+              "text"     : "我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动",
+              "username" : "huang",
+              "user_pic" : "http://127.0.0.1/images/timg.jpg"
+            },
+            {
+              "star"     : 5,
+              "stay_time": "2019年01月",
+              "text"     : "我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动",
+              "username" : "huang",
+              "user_pic" : "http://127.0.0.1/images/timg.jpg"
+            },
+            {
+              "star"     : 5,
+              "stay_time": "2019年01月",
+              "text"     : "我知道我的未来不是梦我认真的过每一分钟 我的未来不是噩梦 我的新跟着希望在动 跟着希望在动",
+              "username" : "huang",
+              "user_pic" : "http://127.0.0.1/images/timg.jpg"
+            }
+          ]
+        },
+        dateTimeValue  : [],
+        firstDateObj   : {
           date   : "",
           weekDay: "请选择日期"
         },
-        lastDateObj : {
+        lastDateObj    : {
           date   : "",
           weekDay: "请选择日期"
         },
-        totalDay    : "请选择",
+        totalDay       : "请选择",
+        headerImg      : "",
+        hotelId        : "",
+        redHeat        : false,
+        favoriteImg    : "url(./../../../static/imgs/心.png)",
+        roomBorder     : null,
+        allDiscuss     : true,
+        startDate      : "",
+        //默认显示几条评论
+        showDiscussItem: 3,
 
-        headerImg: ""
-
+        choseRoomInfo  : null
       }
 
     },
@@ -388,9 +369,8 @@
       run() {
         let self = this;
         self._initSwiper();
-        let hotelId = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
-        hotelId = 1;
-        if ( !hotelId ) {
+        self.hotelId = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
+        if ( !self.hotelId ) {
           AlertModule.show( {
             title  : '提示',
             content: "没有该酒店",
@@ -401,31 +381,124 @@
           return;
         }
 
-        global.globalVal.hotelInfo.getHotelDetailInfoById( hotelId, function ( err, res ) {
+        //获取首页选择的日期
+        let date       = new Date();
+        let month      = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+        self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
 
+        let dateTimeValue  = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue;
+        self.dateTimeValue = dateTimeValue ? dateTimeValue : self.dateTimeValue;
+
+        //这里其实应该用promise.all比较合理才对.. 暂时先这样
+        global.globalVal.hotelInfo.getFavoriteHotelIds( function ( err, res ) {
           if ( err ) {
             console.log( err );
             return;
           }
 
-          self.hotelInfo = res;
+          global.globalVal.hotelInfo.getHotelDetailInfoById( self.hotelId, function ( err, res ) {
+
+            if ( err ) {
+              console.log( err );
+              return;
+            }
+
+            //self.hotelInfo = res;
+            global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelDetailInfo = res;
+            //self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
+
+          } );
+
+          //res是获取到已收藏的酒店的id数组
+          //{"collected_hotels_id": [1, 2]}
+          let hotelIds = res[ "collected_hotels_id" ];
+
+          if ( hotelIds.length < 1 ) {
+            //未收藏
+            return;
+          }
+
+          for ( let i = 0; i < hotelIds.length; i++ ) {
+            //如果类型不一致呢??
+            if ( self.hotelId === hotelIds[ i ] ) {
+              //显示红心
+              self.redHeat     = true;
+              self.favoriteImg = "url(./../../../static/imgs/红心.png)";
+            }
+          }
+
         } );
 
       },
+
       clickFavorite( el ) {
+        //验证有没有登录
+        let self = this;
+        if ( !window.localStorage.getItem( "token" ) ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请登录后再收藏"
+          } );
+        }
 
-        if ( this.redHeat ) {
-          this.redHeat                      = false;
-          el.path[ 0 ].style.background     = "url(./../../../static/imgs/心.png) no-repeat";
-          el.path[ 0 ].style.backgroundSize = "100%";
+        if ( !self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否确认添加收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postAddFavorite( self.hotelId, function ( err, tf ) {
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
 
-        } else {
-          this.redHeat                      = true;
-          el.path[ 0 ].style.background     = "url(./../../../static/imgs/红心.png) no-repeat";
-          el.path[ 0 ].style.backgroundSize = "100%";
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "添加成功!",
+                  onHide() {
+                    self.redHeat     = true;
+                    self.favoriteImg = "url(./../../../static/imgs/红心.png)";
+                  }
+                } );
+              } )
+            }
+          } );
+        }
 
+        if ( self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否取消收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postCancelFavorite( self.hotelId, function ( err, tf ) {
+
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
+
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "取消收藏!",
+                  onHide() {
+                    self.redHeat     = false;
+                    self.favoriteImg = "url(./../../../static/imgs/心.png)";
+                  }
+                } );
+              } );
+            }
+          } );
         }
       },
+
       _initSwiper() {
         let self = this;
 
@@ -474,9 +547,57 @@
         self.lastDateObj.weekDay = lastDateWeekDate;
         //格式化日期
         self.lastDateObj.date    = (lastDate.getMonth() + 1) + "月" + (lastDate.getDate()) + "日";
+        self.totalDay            = self.formatDate();
 
-        self.totalDay = self.formatDate();
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue = self.dateTimeValue;
 
+      },
+
+      roomClick( roomInfo, index ) {
+        let self        = this;
+        self.roomBorder = index;
+        //需要获取到房间id
+        self.choseRoomInfo = roomInfo;
+
+      },
+
+      showAllDiscuss() {
+        let self             = this;
+        self.allDiscuss      = false;
+        self.showDiscussItem = self.hotelInfo.comments.length;
+      },
+
+      showDefailDiscuss( index ) {
+        //显示前三
+        let self = this;
+        if ( index < self.showDiscussItem ) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
+      goOrder() {
+        let self = this;
+        if ( self.dateTimeValue.length < 1 ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请选择入离日期",
+          } );
+          return;
+        }
+        //判断是否选择了房间
+        if( !self.choseRoomInfo ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请选择房间"
+          } );
+          return;
+        }
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelRoomInfo    = self.choseRoomInfo;
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.showHomePageComp = "orderDetail";
+        self.$router.push( '/homepage' );
+        //让homePage 显示order组件
       },
 
       colorRgb( color ) {
@@ -485,7 +606,15 @@
     }
   }
 </script>
-
+<style scoped>
+  /*解决房间介绍后台发送html代码导致样式冲突的问题
+  >>> 可以实现穿透
+  */
+  .roo_desc >>> p {
+    margin: 0;
+    padding: 0;
+  }
+</style>
 <style scoped lang="scss">
 
   .hotel_detail_info {
@@ -620,6 +749,11 @@
           height: auto;
           margin: 0.2rem 0;
 
+          .room_border {
+            border: 2px solid #f90;
+
+          }
+
           .hotel_room {
             width: 100%;
             height: 2.5rem;
@@ -639,7 +773,6 @@
               width: 60%;
               height: 100%;
               text-align: left;
-
               display: flex;
               flex-direction: column;
               justify-content: center;
@@ -738,6 +871,10 @@
                     background-size: contain;
                   }
 
+                  .star_by_empty {
+                    background-image: url("./../../static/imgs/星1.png");
+                  }
+
                 }
               }
 
@@ -782,7 +919,6 @@
 
             > div {
               opacity: 0;
-
             }
 
           }

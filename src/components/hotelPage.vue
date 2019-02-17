@@ -79,14 +79,14 @@
 </template>
 
 <script>
-  import topArrow from "./childComponents/topArrow";
-  import showHotel from "./childComponents/showHotel"
-  import userInfo from "./childComponents/userInfo"
-  import Swiper from "swiper";
-  import favorite from "./childComponents/favoritePage"
-  import order from "./childComponents/order"
+  import topArrow    from "./childComponents/topArrow";
+  import showHotel   from "./childComponents/showHotel"
+  import userInfo    from "./childComponents/userInfo"
+  import Swiper      from "swiper";
+  import favorite    from "./childComponents/favoritePage"
+  import order       from "./childComponents/order"
   import orderDetail from "./childComponents/orderDetail"
-  import evaluate from "./childComponents/evaluate"
+  import evaluate    from "./childComponents/evaluate"
 
   import { AlertModule } from 'vux'
 
@@ -134,7 +134,7 @@
         console.log( 1 );
       },
 
-      showHotel () {
+      showHotel() {
         let self = this;
         self.showComp( "showHotel" );
       },
@@ -173,53 +173,60 @@
         //验证是否登录/获取邮箱名字信息
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
-            if ( err ) {
-              return;
-            }
+          if ( err ) {
+            return;
+          }
 
+          self.userInfo.userName  = res[ "nickname" ];
+          self.userInfo.phone     = res[ "mobile" ];
+          self.userInfo.headerImg = res[ "user_pic" ];
 
-            self.userInfo.userName    = res[ "nickname" ];
-            self.userInfo.phone     = res[ "mobile" ];
-            self.userInfo.headerImg = res[ "user_pic" ];
+        } );
+        //路由跳转到此页面，默认打开哪个组件
+        let showComp = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.showHomePageComp;
+        if( showComp ) {
+          global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.showHomePageComp = "";
+          self.showComp( showComp );
+        }
 
-          } );
+        global.globalVal.hotelInfo.hotelInfoSingleOne.setHotelPageVueObj( self );
 
       },
 
       showUserInfo() {
-        let self = this;
-        self.homeTitle  = "";
+        let self       = this;
+        self.homeTitle = "";
         self.showComp( "userDetail" );
       },
 
-      showComp ( showcomp ) {
+      showComp( showcomp ) {
         let self = this;
         for ( let i in self.comp ) {
-          if( i === showcomp ) {
-            self.comp[i] = true;
-          }else {
-            self.comp[i] = false;
+          if ( i === showcomp ) {
+            self.comp[ i ] = true;
+          } else {
+            self.comp[ i ] = false;
           }
 
         }
 
       },
-      goBack () {
+      goBack() {
         window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' );
       },
 
-      showOrder () {
+      showOrder() {
         this.homeTitle = "我的订单";
         this.showComp( "order" );
       },
 
-      showFavorite (){
+      showFavorite() {
         this.homeTitle = "我的收藏";
         this.showComp( "myFavorite" );
       },
 
-      signOut () {
-        window.localStorage.setItem("token", "");
+      signOut() {
+        window.localStorage.setItem( "token", "" );
         this.$router.push( '/login' );
       }
     }

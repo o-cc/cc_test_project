@@ -118,11 +118,11 @@
         homeTitle: "酒店",
 
         comp: {
-          showHotel  : true,
+          showHotel  : false,
           userDetail : false,
           myFavorite : false,
           order      : false,
-          orderDetail: false,
+          orderDetail: true,
           evaluate   : false
         },
 

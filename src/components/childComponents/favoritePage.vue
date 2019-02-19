@@ -6,26 +6,25 @@
     </div>
 
     <div class="favorite_hotel">
-        <div class="hotel_item" v-for="(item,key, index) in hotelDetailInfo">
-          <div class="hotel_img"></div>
+        <div class="hotel_item" v-for="(item, value, index) in hotelDetailInfo" :key="item.id">
+          <div class="hotel_img" :style="{backgroundImage: item.image}"></div>
           <div class="hotel_info">
             <p class="hotel_name">{{ item.name }}</p>
-            <p @click="clickFavorite" class="favorite"></p>
+            <p @click="clickFavorite( item.id )" class="favorite"></p>
             <p class="hotel_address">
-              <span style="color: #f9c558;">{{ item.score }}分</span>
+              <span style="color: #f9c558;">{{ item.comm_score }}分</span>
               <span class="circle"></span>
-              <span>{{ item.evaluate }}条评价</span>
+              <span>{{ item.total_comm }}条评价</span>
               <span class="circle"></span>
-              <span>{{ item.address }}</span>
+              <span>{{ item.place }}</span>
             </p>
             <p class="hotel_tag">
-              <span style="background: #fff1cc;color:#f7b500;">{{ item.tag.firstTag }}</span>
-              <span style="background: #cef2e1;color:#109d59;">{{ item.tag.secondTag }}</span>
-              <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.thrithTag }}</span>
-              <span style="background: #f8f8f8;color:#8b8a99;">{{ item.tag.lastTag }} </span>
+              <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in item.types"
+                    v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
+
             </p>
             <p style="text-align: left">
-              <span style="color:#f7b500;font-size: .4rem;">{{ item.price }}</span>
+              <span style="color:#f7b500;font-size: .4rem;">{{ item.low_price }}</span>
 
             </p>
           </div>
@@ -37,99 +36,178 @@
 </template>
 
 <script>
-  import { Search } from "vux"
+  import { Search,AlertModule } from "vux"
 
   export default {
     name      : "favoritePage",
     components: {
-
-      Search
+      Search,
+      AlertModule
     },
+    mounted () {
+      let self = this;
+
+      self.run();
+
+    },
+
     data() {
       return {
         searchValue: "",
-        hotelDetailInfo: [
-          {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          }, {
-            name       : "考拉酒店 (四季阳光店)",
-            score      : "5.0",
-            evaluate   : "48",
-            address    : "滨江道/四季阳光/考拉原始村落",
-            tag        : { firstTag: "速定", secondTag: "七天可退", thrithTag: "实拍", lastTag: "很干净" },
-            price      : "$299",
-            isFavorites: 1
-          },
-        ],
+        hotelDetailInfo:
+          [
+            {
+              "id"        : 1,
+              "name"      : "万达嘉华酒店",
+              "image"     : "http://127.0.0.1/images/ix.jpg",
+              "place"     : "广州市增城增城广场南",
+              "types"     : [
+                {
+                  "name" : "速定",
+                  "color": "#cccccc"
+                },
+                {
+                  "name" : "七天可退",
+                  "color": "#000333"
+                },
+                {
+                  "name" : "超干净",
+                  "color": "#000000"
+                }
+              ],
+              "low_price" : "150.00",
+              "comm_score": 5,
+              "total_comm": 3
+            },
+            {
+              "id"        : 2,
+              "name"      : "太阳城酒店",
+              "image"     : "http://127.0.0.1/images/ix_6DQawxB.jpg",
+              "place"     : "广州市增城增城广场南",
+              "types"     : [ {
+                "name" : "超干净",
+                "color": "#000000"
+              } ],
+              "low_price" : "150.00",
+              "comm_score": 0,
+              "total_comm": 0
+            }
+          ],
 
-        //红心
-        redHeat: false,
+        redHeat: true,
+
       }
 
     },
     methods: {
+
       searchSubmit () {
         console.log( "按了提交" );
-
       },
 
       searchBlur () {
         console.log( "失去焦点" );
       },
 
-      clickFavorite( el ) {
+      run () {
+        let self = this;
+        if ( !window.localStorage.getItem( "token" ) ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请登录查看收藏",
+            onHide () {
+              self.$router.push( "/login" );
+            }
+          } );
 
-        if( this.redHeat ) {
-          this.redHeat = false;
-          el.path[0].style.background     = "url(./../../../static/imgs/心.png) no-repeat";
-          el.path[0].style.backgroundSize = "100%";
+          return;
+        }
 
-        }else {
-          this.redHeat = true;
-          el.path[0].style.background     = "url(./../../../static/imgs/红心.png) no-repeat";
-          el.path[0].style.backgroundSize = "100%";
+        //应该先获取到所有的已收藏的酒店的信息然后写入
+        global.globalVal.favorite.getFavoriteHotelLists()
+          .then( res => {
+            self.hotelDetailInfo = res;
 
+          })
+          .catch( err => {
+            console.log( err );
+          })
+
+      },
+
+      clickFavorite( id ) {
+        //验证有没有登录
+        let self = this;
+
+        if ( !self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否确认添加收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postAddFavorite( id, function ( err, tf ) {
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
+
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "添加成功!",
+                  onHide() {
+                    self.redHeat     = true;
+                    self.favoriteImg = "url(./../../../static/imgs/红心.png)";
+                  }
+                } );
+              } )
+            }
+          } );
+        }
+
+        if ( self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否取消收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postCancelFavorite( id, function ( err, tf ) {
+
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
+
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "取消收藏!",
+                  onHide() {
+                    //这里应该请求一次数据
+                    global.globalVal.favorite.getFavoriteHotelLists()
+                      .then( res => {
+                        self.hotelDetailInfo = res;
+
+                      })
+                      .catch( err => {
+                        console.log( err );
+                      })
+
+                  }
+                } );
+              } );
+            }
+          } );
         }
       },
 
+      colorRgb( color ) {
+        return global.globalVal.formatDate.colorRgb( color );
+      },
     }
   }
 </script>
@@ -187,7 +265,7 @@
             bottom: 0%;
             width: .2rem;
             height: .4rem;
-            background: url("./../../../static/imgs/心.png") no-repeat;
+            background: url("./../../../static/imgs/红心.png") no-repeat;
             -webkit-background-size: 100%;
             background-size: 100%;
             filter: drop-shadow(0px 0px 20px rgb(255, 20, 20)); //阴影实现:filter: drop-shadow(x偏移, y偏移, 模糊大小, 色值);

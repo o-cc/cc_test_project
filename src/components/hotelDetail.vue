@@ -403,9 +403,9 @@
               return;
             }
 
-            //self.hotelInfo = res;
+            self.hotelInfo = res;
             global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelDetailInfo = res;
-            //self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
+            self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
 
           } );
 

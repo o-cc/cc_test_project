@@ -371,6 +371,7 @@
           } );
           return true;
         }
+        return false;
       },
 
       nameBlur () {
@@ -440,7 +441,7 @@
           return;
         }
 
-        if( checkPhone( self.phone ) ) {
+        if( !self.checkPhone( self.phone ) ) {
           return;
         }
 

@@ -23,19 +23,21 @@ function userLogin( username, password, callback ) {
     //{"username":"huang","user_id":6,"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIjoxNTQ4Mzk5MTM4LCJ1c2VyX2lkIjo2LCJlbWFpbCI6IiJ9.mzwhgxZTHbGcv2gpvt1ReZcIMaz1ORDW8PoyUjJFJm8"}
     let msg = res.data;
     if ( !msg.token ) {
-      alert( "无法获取token验证" );
-      return callback( false );
+      return callback( "登录失败", null );
     }
 
     window.localStorage.setItem( "token",  "JWT " + msg.token );
-    return callback( true );
+    return callback( null, true );
 
   } )
     .catch( function ( err ) {
-    console.log( err );
-    return callback( false );
+      if( !err.response.data.detail ) {
+        return callback( "登录失败", null );
+      }
 
-  } )
+      return callback( err.response.data.detail, null );
+
+    } )
 
 };
 
@@ -58,8 +60,12 @@ function checkUserNameIsSingleOne( username, callback ) {
 
     } )
     .catch( function ( err ) {
-      console.log( err );
-      return callback( "无法验证用户名", null );
+
+      if( !err.response.data.detail ) {
+        return callback( "无法验证用户名", null );
+      }
+
+      return callback( err.response.data.detail, null );
 
     } )
 };
@@ -86,8 +92,12 @@ function userRegister ( username, password, password2, callback ) {
 
     })
     .catch( function ( err ) {
-      console.log( err );
-      return callback( "无法注册", null );
+
+      if( !err.response.data.detail ) {
+        return callback( "注册失败", null );
+      }
+
+      return callback( err.response.data.detail, null );
 
     })
 

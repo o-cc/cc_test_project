@@ -174,6 +174,10 @@
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
           if ( err ) {
+            AlertModule.show( {
+              title  : '提示',
+              content: err
+            } );
             return;
           }
 

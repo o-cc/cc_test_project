@@ -84,7 +84,10 @@
         global.globalVal.userInfo.putUserInfo( self.name, self.phone, self.headImg1, self.pickerSexValue[ 0 ] ,function ( err, res ) {
 
           if( err ) {
-            console.log( err );
+            AlertModule.show( {
+              title  : '提示',
+              content: err
+            } );
             return;
           }
 

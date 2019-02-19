@@ -392,14 +392,20 @@
         //这里其实应该用promise.all比较合理才对.. 暂时先这样
         global.globalVal.hotelInfo.getFavoriteHotelIds( function ( err, res ) {
           if ( err ) {
-            console.log( err );
+            AlertModule.show( {
+              title  : '提示',
+              content: err
+            } );
             return;
           }
 
           global.globalVal.hotelInfo.getHotelDetailInfoById( self.hotelId, function ( err, res ) {
 
             if ( err ) {
-              console.log( err );
+              AlertModule.show( {
+                title  : '提示',
+                content: err
+              } );
               return;
             }
 

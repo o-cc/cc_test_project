@@ -10,27 +10,17 @@ function getOrderInfoByRoomId ( roomId ) {
         }
       } )
       .then( res => {
-        /*
-        * {
-          "name": "双人豪华房",  # 房间名称
-          "price": "200.00",  # 单价
-          "default_image_url": "http://127.0.0.1/images/iphone.jpg",  # 房间默认图片
-          "insurance": "0.00",  # 住宿意外险
-          "hotel_name": "万达嘉华酒店",  # 酒店名称
-          "types": [  # 房间类型识别键列表
-            {
-              "name": "七天可退",  # 房间类型识别键名
-              "color": "green"  # 房间类型识别键颜色
-            }
-          ]
-        }
-        * */
         let data = res.data;
         return resolve( data );
 
       })
       .catch( err => {
-        return reject( err );
+        if( !err.response.data.detail ) {
+          return reject( "无法提交订单" );
+        }
+
+        return reject( err.response.data.detail );
+
       })
 
 
@@ -45,19 +35,7 @@ function postOrder ( data ) {
 
   return new Promise( (resolve, reject) => {
 
-    axios.post( global.globalVal.httpServerUrl.getOrderInfo, {
-      "name"      : "huang",
-      "count"     : 2,
-      "start_time": "2018-12-1",
-      "number"    : 5,
-      "end_time"  : "2018-12-2",
-      "room_id"   : 2,
-      "mobile"    : "13155667788",
-      "stayInfos" : [
-        { "name": "欧珍惜", "IDNum": "440825199808033656" },
-        { "name": "wfwe", "IDNum": "440825199808033656" }
-      ]
-    }, {
+    axios.post( global.globalVal.httpServerUrl.getOrderInfo, data, {
       headers: {
         "Authorization": window.localStorage.getItem( "token" ),
       }
@@ -69,7 +47,11 @@ function postOrder ( data ) {
 
     })
       .catch( err => {
-        return reject( err );
+        if( !err.response.data.detail ) {
+          return reject( "订单交易失败" );
+        }
+
+        return reject( err.response.data.detail );
 
       })
 

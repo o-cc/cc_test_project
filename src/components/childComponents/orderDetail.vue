@@ -287,7 +287,7 @@
           .catch( err => {
             AlertModule.show( {
               title  : '提示',
-              content: "无法处理该订单,返回！",
+              content: "订单处理失败: " +err,
               onHide() {
                 self.$router.push( "/hotelDetail" );
               }
@@ -489,7 +489,11 @@
             }
 
           } ).catch( err => {
-          console.log( err );
+          AlertModule.show( {
+            title  : '提示',
+            content: "请输入联系人姓名"
+          } );
+          return;
         } )
 
       },

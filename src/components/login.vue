@@ -100,9 +100,13 @@
         }
 
         //post
-        global.globalVal.oauth.userLogin( self.username.trim(), self.password.trim(), function ( tf ) {
+        global.globalVal.oauth.userLogin( self.username.trim(), self.password.trim(), function ( err, res ) {
 
-          if ( !tf ) {
+          if ( !err ) {
+            AlertModule.show( {
+              title  : '提示',
+              content: err
+            } );
             return;
           }
           //跳转

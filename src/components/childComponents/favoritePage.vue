@@ -207,7 +207,10 @@
 
                       })
                       .catch( err => {
-                        console.log( err );
+                        AlertModule.show( {
+                          title  : '提示',
+                          content: err
+                        } );
                       })
 
                   }

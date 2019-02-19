@@ -11,10 +11,10 @@ function userLogin( username, password, callback ) {
   axios( {
     method : 'post',
     url    : global.globalVal.httpServerUrl.login,
-    data   : JSON.stringify( {
+    data   : {
       username: username,
       password: password
-    } ),
+    },
     headers: {
       "Content-Type": 'application/json',
     }
@@ -87,7 +87,7 @@ function userRegister ( username, password, password2, callback ) {
       }
 
       window.localStorage.setItem( "token",  "JWT " + data.token );
-      return callback( null, true );
+      return callback( null, data );
 
 
     })

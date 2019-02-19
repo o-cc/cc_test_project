@@ -9,7 +9,7 @@ function getHotelInfo( city, input, callback ) {
 
   axios.get( global.globalVal.httpServerUrl.getHotelInfo, {
     params: {
-      city : "广州",
+      city : "增城",
       input: ""
     }
   } )
@@ -68,11 +68,11 @@ function postAddFavorite( hotelId, callback ) {
     } )
     .catch( function ( err ) {
 
-        if( !err.response.data.detail ) {
+      if( !err.response.data.message ) {
           return callback( "无法添加收藏", null );
         }
 
-        return callback( err.response.data.detail, null );
+        return callback( err.response.data.message, null );
 
     } )
 

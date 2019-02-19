@@ -174,10 +174,7 @@
         global.globalVal.userInfo.getUserInfo( function ( err, res ) {
 
           if ( err ) {
-            AlertModule.show( {
-              title  : '提示',
-              content: err
-            } );
+            //用户未登录，但不用提示
             return;
           }
 

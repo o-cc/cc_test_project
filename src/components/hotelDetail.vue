@@ -449,6 +449,8 @@
             title  : '提示',
             content: "请登录后再收藏"
           } );
+
+          return;
         }
 
         if ( !self.redHeat ) {
@@ -589,6 +591,19 @@
 
       goOrder() {
         let self = this;
+
+        if( window.localStorage.getItem( "token" ) ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请先登录",
+            onHide () {
+              self.$router.push( '/login' );
+            }
+          } );
+
+          return;
+        }
+
         if ( self.dateTimeValue.length < 1 ) {
           AlertModule.show( {
             title  : '提示',

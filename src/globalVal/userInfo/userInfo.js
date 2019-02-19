@@ -37,8 +37,12 @@ userInfo.getUserInfo = function ( callback ) {
 
     } )
     .catch( err => {
-      console.log( err );
-      return callback( err, null );
+      if( !err.response.data.detail ) {
+        return callback( "获取用户信息失败", null );
+      }
+
+      return callback( err.response.data.detail, null );
+
     } )
 };
 

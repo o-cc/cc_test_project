@@ -41,7 +41,7 @@
         <div class="img_wrap">
           <img class="hotel_img" :src='item.image' alt="">
           <p class="price">{{ item.low_price }}</p>
-          <p @click="clickFavorite" class="favorite"></p>
+          <p @click.stop="clickFavorite(item.id)" class="favorite" :style="{backgroundImage:favoriteImgObj[item.id] }" ></p>
         </div>
         <div class="hotel_introduce">
           <p class="hotel_name">{{ item.name }}</p>
@@ -196,9 +196,24 @@
         //红心
         redHeat  : false,
         boo      : false,
-        startDate: ""
+        startDate: "",
+
+        //这里需要组成一个数据 { hotelId1 : 红心, hotelId2 : 红心, hotelId3 : 白心 ,,,}
+        favoriteImgObj : {
+        }
       }
     },
+    //watch: {
+    //
+    //  favoriteImgObj: {
+    //    handler: function (val, oldVal) {
+    //      this.favoriteImgObj = val;
+    //      console.log( this.favoriteImgObj );
+    //    },
+    //    deep: true
+    //  },
+    //
+    //},
     methods   : {
 
       run() {
@@ -215,23 +230,121 @@
           let city              = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city;
           self.pickerValue[ 0 ] = city;
         }
-
+        //获取缓存，但是刷新一下就没了...解决，只能强制返回首页！
         self.hotelDetailInfo  = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
+
+        if( !self.hotelDetailInfo ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请重新选择酒店地址",
+            onHide () {
+              self.$router.push( "/" );
+            }
+          } );
+
+         return;
+        }
+        //到这里 hotelInfo 已经获取到了 并生成了列表  需要组合数据了{ hotelId : "白心路径" };
+        for ( let i = 0; i < self.hotelDetailInfo.length; i++ ) {
+          console.log( self.hotelDetailInfo[ i ][ "id" ] );
+          self.favoriteImgObj[ self.hotelDetailInfo[ i ][ "id" ] ] = "url(./../../../static/imgs/心.png)";
+        }
+        //console.log( "11" );
+        console.log( self.favoriteImgObj[1] );
         self.pickerDataFn();
+
+        //需要知道酒店的id有没有被收藏
+        if( window.localStorage.getItem( "token" ) ){
+
+          global.globalVal.hotelInfo.getFavoriteHotelIds( function ( err, res ) {
+            if ( err ) {
+              AlertModule.show( {
+                title  : '提示',
+                content: err
+              } );
+              return;
+            }
+
+            //{"collected_hotels_id": [ 1, 2 ]}  尽量不要O(n平方)
+
+            for( let i in res[ "collected_hotels_id" ] ) {
+
+              self.favoriteImgObj[res[ "collected_hotels_id" ][i]] = "url(./../../../static/imgs/红心.png)";
+              console.log( self.favoriteImgObj[ res[ "collected_hotels_id" ][ i ] ] );
+
+            }
+
+          })
+        }
       },
 
-      clickFavorite( el ) {
+      clickFavorite( id ) {
+        //验证有没有登录
+        let self = this;
+        if ( !window.localStorage.getItem( "token" ) ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "请登录后再收藏"
+          } );
 
-        if ( this.redHeat ) {
-          this.redHeat                      = false;
-          el.path[ 0 ].style.background     = "url(./../../../static/imgs/心.png) no-repeat";
-          el.path[ 0 ].style.backgroundSize = "100%";
+          return;
+        }
 
-        } else {
-          this.redHeat                      = true;
-          el.path[ 0 ].style.background     = "url(./../../../static/imgs/红心.png) no-repeat";
-          el.path[ 0 ].style.backgroundSize = "100%";
+        if ( !self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否确认添加收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postAddFavorite( id, function ( err, tf ) {
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
 
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "添加成功!",
+                  onHide() {
+                    self.redHeat     = true;
+                    self.favoriteImg = "url(./../../../static/imgs/红心.png)";
+                  }
+                } );
+              } )
+            }
+          } );
+        }
+
+        if ( self.redHeat ) {
+          self.$vux.confirm.show( {
+            title  : '提示',
+            content: '是否取消收藏',
+            onConfirm() {
+              //红心变化
+              global.globalVal.hotelInfo.postCancelFavorite( id, function ( err, tf ) {
+
+                if ( err ) {
+                  AlertModule.show( {
+                    title  : '提示',
+                    content: err
+                  } );
+                  return;
+                }
+
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "取消收藏!",
+                  onHide() {
+                    self.redHeat     = false;
+                    self.favoriteImg = "url(./../../../static/imgs/心.png)";
+                  }
+                } );
+              } );
+            }
+          } );
         }
       },
 
@@ -308,6 +421,7 @@
         this.pickerData     = ChinaAddressV4Data;
 
       },
+
       getName( value ) {
         //value is array
         return value2name( value, ChinaAddressV4Data );

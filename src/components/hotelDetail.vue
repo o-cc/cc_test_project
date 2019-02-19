@@ -1,7 +1,7 @@
 <template>
   <div class="hotel_detail_info">
     <div class="top_icon">
-      <Arrow direction="left"></Arrow>
+      <Arrow direction="left" @click.native="goBack"></Arrow>
       <p @click="clickFavorite" class="favorite" :style="{backgroundImage: favoriteImg}"></p>
     </div>
 
@@ -403,9 +403,9 @@
               return;
             }
 
-            //self.hotelInfo = res;
+            self.hotelInfo = res;
             global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelDetailInfo = res;
-            //self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
+            self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
 
           } );
 
@@ -429,6 +429,10 @@
 
         } );
 
+      },
+
+      goBack () {
+        window.history.length > 1 ? this.$router.go( -1 ) : this.$router.push( '/homePage' );
       },
 
       clickFavorite( el ) {

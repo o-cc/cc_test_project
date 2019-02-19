@@ -5,6 +5,7 @@ import userInfo   from "./globalVal/userInfo/userInfo"
 import hotelInfo  from "./globalVal/hotelInfo/hotelInfo"
 import searchPage from "./globalVal/searchPage/searchPage"
 import hotelOrder from "./globalVal/hotelOrder/hotelOrder"
+import favorite   from "./globalVal/favoriteHotel/favoriteHotel"
 
 let httpUrl       = "http://127.0.0.1:8000/api/";
 let httpServerUrl = {};
@@ -31,7 +32,8 @@ let globalValue = {
   userInfo,
   hotelInfo,
   searchPage,
-  hotelOrder
+  hotelOrder,
+  favorite
 
 };
 

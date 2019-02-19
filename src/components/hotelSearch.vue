@@ -364,7 +364,6 @@
           //goto
 
           global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue = self.dateTimeValue;
-          console.log( global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue );
 
           self.$router.push( '/homepage' );
 

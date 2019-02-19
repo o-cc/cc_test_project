@@ -62,13 +62,13 @@
         <userInfo @showHotel="showHotel" v-if="comp.userDetail"></userInfo>
 
         <!-- 我的收藏 -->
-        <favorite v-if="comp.myFavorite"></favorite>
+        <favorite  @showHotel="showHotel" v-if="comp.myFavorite"></favorite>
 
         <!-- 我的订单 -->
         <order v-if="comp.order"></order>
 
         <!-- orderDetail -->
-        <orderDetail v-if="comp.orderDetail"></orderDetail>
+        <orderDetail @showHotel="showHotel" v-if="comp.orderDetail"></orderDetail>
 
         <!-- evaluate -->
         <evaluate v-if="comp.evaluate"></evaluate>
@@ -118,11 +118,11 @@
         homeTitle: "酒店",
 
         comp: {
-          showHotel  : false,
+          showHotel  : true,
           userDetail : false,
           myFavorite : false,
           order      : false,
-          orderDetail: true,
+          orderDetail: false,
           evaluate   : false
         },
 

@@ -226,6 +226,7 @@
         let dateTimeValue  = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue;
         self.dateTimeValue = dateTimeValue ? dateTimeValue : self.dateTimeValue;
 
+
         //获取房间id
         //{
         //  "id": 3,
@@ -262,7 +263,6 @@
           //return;
         }
 
-        //let hotelId =  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
         global.globalVal.hotelOrder.getOrderInfoByRoomId( self.roomInfo.id )
           .then( res => {
             /*
@@ -342,7 +342,7 @@
         let firstDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( firstDate.getDay() );
         self.firstDateObj.weekDay = firstDateWeekDate;
         //格式化日期
-        self.firstDateObj.date    = (firstDate.getMonth() + 1) + "月" + (firstDate.getDate()) + "日";
+        self.firstDateObj.date   = (firstDate.getMonth() + 1) + "月" + (firstDate.getDate()) + "日";
 
         let lastDate             = new Date( self.dateTimeValue[ self.dateTimeValue.length - 1 ] );
         let lastDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( lastDate.getDay() );
@@ -391,7 +391,7 @@
           }
         }
 
-        if ( boo !== self.personNum ) {
+        if( boo !== self.personNum ) {
           AlertModule.show( {
             title  : '提示',
             content: "请输入入住人姓名"
@@ -482,8 +482,7 @@
                 title  : '提示',
                 content: "支付成功，订单号为: \n"+ res[ "order_id" ] + "",
                 onHide() {
-                  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.showHomePageComp = "showHotel";
-                  self.$router.push( "/homepage" );
+                  self.$emit( "showHotel", true );
                 }
               } );
 

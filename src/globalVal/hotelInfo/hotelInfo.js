@@ -95,8 +95,14 @@ function postAddFavorite( hotelId, callback ) {
 
     } )
     .catch( function ( err ) {
-      console.log( err );
-      return callback( "无法添加收藏", null );
+
+        if( !err.response.data.detail ) {
+          return callback( "无法添加收藏", null );
+        }
+
+        return callback( err.response.data.detail, null );
+
+
 
     } )
 

@@ -324,8 +324,6 @@
         self.lastDateObj.date    = (lastDate.getMonth() + 1) + "月" + (lastDate.getDate()) + "日";
         self.totalDay            = self.formatDate();
 
-        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue = self.dateTimeValue;
-
       },
 
       searchBlur () {
@@ -364,6 +362,10 @@
           return;
         }
           //goto
+
+          global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue = self.dateTimeValue;
+          console.log( global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.dateTimeValue );
+
           self.$router.push( '/homepage' );
 
         } );

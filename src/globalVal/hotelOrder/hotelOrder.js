@@ -3,7 +3,7 @@ let axios = require( "axios" );
 function getOrderInfoByRoomId ( roomId ) {
   let pre = new Promise( function ( resolve, reject ) {
 
-    axios.get( global.globalVal.httpServerUrl.gethotelInfo + roomId + "/rooms/",
+    axios.get( global.globalVal.httpServerUrl.getOrderInfo + roomId + "/rooms/",
       {
         headers: {
           "Authorization": window.localStorage.getItem( "token" ),
@@ -41,11 +41,11 @@ function getOrderInfoByRoomId ( roomId ) {
 };
 
 
-function postOrder () {
+function postOrder ( data ) {
 
   return new Promise( (resolve, reject) => {
 
-    axios.post( global.globalVal.httpServerUrl.getHotelInfo, {
+    axios.post( global.globalVal.httpServerUrl.getOrderInfo, {
       "name"      : "huang",
       "count"     : 2,
       "start_time": "2018-12-1",

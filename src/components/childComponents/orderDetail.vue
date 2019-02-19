@@ -86,14 +86,15 @@
           <div class="id_card_left">
             <div class="id_card_txt">入住人信息</div>
             <div>
-              <input type="text" placeholder="姓名"  v-model="personName[item]" @blur="nameBlur" >
+              <input type="text" placeholder="姓名" v-model="personName[item]" @blur="nameBlur">
             </div>
           </div>
           <div class="id_card_right">
             <div class="id_card_txt idCard" style="text-align: right;"></div>
             <div class="id_card_txt" style="text-align: right;opacity: 0;">入住人信息</div>
             <div>
-              <input type="text" placeholder="身份证" v-model="idCardPerson[item]" @blur="idBlur" style="text-align: right;">
+              <input type="text" placeholder="身份证" v-model="idCardPerson[item]" @blur="idBlur"
+                     style="text-align: right;">
             </div>
           </div>
         </div>
@@ -243,7 +244,7 @@
           AlertModule.show( {
             title  : '提示',
             content: "没有该房间信息",
-            onHide () {
+            onHide() {
               //window.history.length > 1 ? self.$router.go( -1 ) : self.$router.push( '/hotelDetail' );
             }
           } );
@@ -261,8 +262,8 @@
           //return;
         }
 
-        let hotelId =  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
-        global.globalVal.hotelOrder.getOrderInfoByRoomId( hotelId )
+        //let hotelId =  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
+        global.globalVal.hotelOrder.getOrderInfoByRoomId( self.roomInfo.id )
           .then( res => {
             /*
             * {
@@ -341,7 +342,7 @@
         let firstDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( firstDate.getDay() );
         self.firstDateObj.weekDay = firstDateWeekDate;
         //格式化日期
-        self.firstDateObj.date   = (firstDate.getMonth() + 1) + "月" + (firstDate.getDate()) + "日";
+        self.firstDateObj.date    = (firstDate.getMonth() + 1) + "月" + (firstDate.getDate()) + "日";
 
         let lastDate             = new Date( self.dateTimeValue[ self.dateTimeValue.length - 1 ] );
         let lastDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( lastDate.getDay() );
@@ -369,8 +370,9 @@
             title  : '提示',
             content: "手机号码有误"
           } );
-          return true;
+          return false;
         }
+        return true;
       },
 
       nameBlur () {
@@ -378,9 +380,9 @@
         let boo    = 0;
         let Person = self.personName;
 
-        for( let i in Person ){
-          boo ++;
-          if( !Person[i] ) {
+        for ( let i in Person ) {
+          boo++;
+          if ( !Person[ i ] ) {
             AlertModule.show( {
               title  : '提示',
               content: "请输入正确姓名"
@@ -389,7 +391,7 @@
           }
         }
 
-        if( boo !== self.personNum ) {
+        if ( boo !== self.personNum ) {
           AlertModule.show( {
             title  : '提示',
             content: "请输入入住人姓名"
@@ -401,14 +403,14 @@
 
       },
 
-      idBlur () {
-        let self = this;
-        let boo  = 0;
+      idBlur() {
+        let self         = this;
+        let boo          = 0;
         let idCardPerson = self.idCardPerson;
 
-        for( let i in idCardPerson ){
+        for ( let i in idCardPerson ) {
           boo++;
-          if( self.checkIdNum( idCardPerson[i] ) ) {
+          if ( self.checkIdNum( idCardPerson[ i ] ) ) {
             AlertModule.show( {
               title  : '提示',
               content: "身份证号码输入有误"
@@ -417,7 +419,7 @@
           }
         }
         //未填写身份证 一个都没填 有两个只填了一个该如何是好
-        if( boo !== self.personNum ) {
+        if ( boo !== self.personNum ) {
           AlertModule.show( {
             title  : '提示',
             content: "请输入身份证号码"
@@ -428,23 +430,23 @@
         return true;
       },
 
-      submitOrder(){
+      submitOrder() {
         //获取联系人名字 预定数量 起始时间 结束时间 房间id 联系人手机号码 入住人手机号码
         let self = this;
 
-        if( !self.idBlur() ){
+        if ( !self.idBlur() ) {
           return;
         }
 
-        if( !self.nameBlur() ){
+        if ( !self.nameBlur() ) {
           return;
         }
 
-        if( checkPhone( self.phone ) ) {
+        if ( !self.checkPhone( self.phone ) ) {
           return;
         }
 
-        if( self.contactName.length < 1 ) {
+        if ( self.contactName.length < 1 ) {
           AlertModule.show( {
             title  : '提示',
             content: "请输入联系人姓名"
@@ -452,23 +454,21 @@
           return;
         }
 
-        //personName  idCardPerson
         let stayInfosArray = [];
         for ( let i = 1; i < self.personNum + 1; i++ ) {
           let tempObj = {
-            name : self.personName[i],
-            IDNum: self.idCardPerson[i]
+            name : self.personName[ i ],
+            IDNum: self.idCardPerson[ i ]
           };
           stayInfosArray.push( tempObj );
         }
 
-
         let orderInfo = {
           "name"      : self.contactName,
           "count"     : self.roomNum,
-          "start_time": "2018-12-1",
+          "start_time": self.dateTimeValue[0],
           "number"    : self.personNum,
-          "end_time"  : "2018-12-2",
+          "end_time"  : self.dateTimeValue[self.dateTimeValue.length-1],
           "room_id"   : self.roomInfo.id,
           "mobile"    : self.phone,
           "stayInfos" : stayInfosArray
@@ -476,27 +476,28 @@
 
         global.globalVal.hotelOrder.postOrder( orderInfo )
           .then( res => {
-            console.log( res );
-            if( res[ "order_id" ] ){
+
+            if ( res[ "order_id" ] ) {
               AlertModule.show( {
                 title  : '提示',
-                content: "支付成功，订单号为:\n "+res[ "order_id" ]+"",
-                onHide () {
+                content: "支付成功，订单号为: \n"+ res[ "order_id" ] + "",
+                onHide() {
+                  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.showHomePageComp = "showHotel";
                   self.$router.push( "/homepage" );
                 }
               } );
 
             }
 
-          }).catch( err => {
+          } ).catch( err => {
           console.log( err );
-        })
+        } )
 
       },
 
-      checkIdNum ( str ) {
+      checkIdNum( str ) {
         var re = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        if ( !re.test( str )) {
+        if ( !re.test( str ) ) {
           return "请输入正确身份证号码";
         }
 

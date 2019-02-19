@@ -20,7 +20,7 @@ httpServerUrl.getHotelInfo         = httpUrl + "hotels/";
 httpServerUrl.favoriteHotel        = httpUrl + "collects/";
 httpServerUrl.AllfavoriteHotelId   = httpUrl + "collects/hotels/";
 httpServerUrl.AllfavoriteHotel     = httpUrl + "collects/";
-httpServerUrl.gethotelInfo         = httpUrl + "orders/";
+httpServerUrl.getOrderInfo         = httpUrl + "orders/";
 
 let globalValue = {
   globalTips,

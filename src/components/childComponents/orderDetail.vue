@@ -261,7 +261,8 @@
           //return;
         }
 
-        global.globalVal.hotelOrder.getOrderInfoByRoomId( self.roomInfo.id )
+        let hotelId =  global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
+        global.globalVal.hotelOrder.getOrderInfoByRoomId( hotelId )
           .then( res => {
             /*
             * {
@@ -461,7 +462,7 @@
           stayInfosArray.push( tempObj );
         }
 
-        console.log( stayInfosArray );
+
         let orderInfo = {
           "name"      : self.contactName,
           "count"     : self.roomNum,
@@ -475,9 +476,20 @@
 
         global.globalVal.hotelOrder.postOrder( orderInfo )
           .then( res => {
+            console.log( res );
+            if( res[ "order_id" ] ){
+              AlertModule.show( {
+                title  : '提示',
+                content: "支付成功，订单号为:\n "+res[ "order_id" ]+"",
+                onHide () {
+                  self.$router.push( "/homepage" );
+                }
+              } );
 
-        }).catch( err => {
+            }
 
+          }).catch( err => {
+          console.log( err );
         })
 
       },

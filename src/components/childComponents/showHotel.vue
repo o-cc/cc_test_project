@@ -209,15 +209,15 @@
         self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
 
         //获取城市
-        try {
+        let searchPageObj = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj();
+
+        if( searchPageObj ){
           let city              = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj().city;
           self.pickerValue[ 0 ] = city;
-          self.hotelDetailInfo  = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
-          self.pickerDataFn();
-        } catch ( e ) {
-          console.log( e );
         }
 
+        self.hotelDetailInfo  = global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelInfoIncache();
+        self.pickerDataFn();
       },
 
       clickFavorite( el ) {

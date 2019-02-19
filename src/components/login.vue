@@ -102,7 +102,7 @@
         //post
         global.globalVal.oauth.userLogin( self.username.trim(), self.password.trim(), function ( err, res ) {
 
-          if ( !err ) {
+          if ( err ) {
             AlertModule.show( {
               title  : '提示',
               content: err

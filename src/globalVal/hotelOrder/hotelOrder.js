@@ -59,7 +59,51 @@ function postOrder ( data ) {
 
 };
 
+/*用户获取所有的订单列表
+* param1 [ Number ] 查询什么订单
+*   status: {
+    1  # 待入住
+    2  # 已入住
+    3  # 待评价
+    4  # 已评价
+    5  # 已取消
+    }
+* */
+function getAllOrder ( status ) {
+
+  return new Promise( (resolve, reject) => {
+
+    axios.get( global.globalVal.httpServerUrl.getOrderAllInfo, {
+
+      params : {
+        status : status
+      },
+      headers: {
+        "Authorization": window.localStorage.getItem( "token" ),
+      }
+    } )
+      .then( res => {
+
+        let data = res.data;
+        return resolve( data );
+
+      } )
+      .catch( err => {
+        if( !err.response.data.detail ) {
+          return reject( "无法获取订单" );
+        }
+
+        return reject( err.response.data.detail );
+
+
+      })
+
+  } );
+}
+
+
 export default {
   getOrderInfoByRoomId,
-  postOrder
+  postOrder,
+  getAllOrder
 };

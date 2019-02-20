@@ -22,11 +22,14 @@
           <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.status }}</p>
           <div class="order_info_btn"
                :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
+               @click="item.btn1.clickEvent"
           >
             {{ item.btn1.text }}
           </div>
           <div class="order_info_btn order_info_btn_active"
             :class="{ hide: item.btn2.hide, flex: (!item.btn2.hide) }"
+               @click="item.btn2.clickEvent"
+
           >
             {{ item.btn2.text }}
           </div>
@@ -35,24 +38,22 @@
     </div>
 
 
-
   </div>
 </template>
 
 <script>
-  import { ButtonTab, ButtonTabItem } from 'vux'
+  import { ButtonTab, ButtonTabItem, AlertModule } from 'vux'
 
   export default {
     name      : "order",
     components: {
       ButtonTab,
-      ButtonTabItem
+      ButtonTabItem,
+      AlertModule
     },
     mounted() {
       let self = this;
-
-      self.showHotelInfo = self.hotelInfoData;
-
+      self.run();
     },
     data() {
       return {
@@ -67,63 +68,33 @@
         hotelInfoData: [
           {
             type: "evaluate",
-            hotelName: "考拉四季阳光酒店 (中国站)",
+            hotel_name: "考拉四季阳光酒店 (中国站)",
             date: "8月9日-8月10日 共一晚",
-            imgUrl: "./../../../static/imgs/Koala.jpg",
-            typeRoom: "标准双人房",
-            price: "$299",
-            status: "未评价",
-            btn1: {
-              text: "删除",
-              hide: false
-            },
-            btn2: {
-              text: "重新预订",
-              hide: false
-            },
-          },
-          {
-            type: "waitHotel",
-            hotelName: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            imgUrl: "./../../../static/imgs/Koala.jpg",
-            typeRoom: "标准双人房",
-            price: "$299",
-            status: "未评价",
-            btn1: {
-              text: "取消",
-              hide: false
-            },
-            btn2: {
-              text: "立即评价",
-              hide: true
-            },
-          },
-          {
-            type: "evaluate",
-            hotelName: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            imgUrl: "./../../../static/imgs/Koala.jpg",
-            typeRoom: "标准双人房",
-            price: "$299",
-            status: "未评价",
-            btn1: {
-              text: "删除",
-              hide: true
-            },
-            btn2: {
-              text: "去评价",
-              hide: false
-            },
-          },
-          {
-            type: "waitHotel",
-            hotelName: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            imgUrl: "./../../../static/imgs/Koala.jpg",
-            typeRoom: "标准双人房",
-            price: "$299",
+            image: "./../../../static/imgs/Koala.jpg",
+            room_name: "标准双人房",
+            "total_amount": "200.00",
             status: "已预订",
+            "status": 1,
+            btn1: {
+                  text: "删除",
+                  hide: true
+                },
+                btn2: {
+                  text: "去评价",
+                  hide: false
+                },
+            start_time: "",
+            end_time: "",
+          },
+          {
+            type: "waitHotel",
+            hotel_name: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            image: "./../../../static/imgs/Koala.jpg",
+            room_name: "标准双人房",
+            "total_amount": "200.00",
+            status: "已预订",
+            "status": 1,
             btn1: {
               text: "已评价",
               hide: false
@@ -132,6 +103,28 @@
               text: "立即评价",
               hide: true
             },
+            start_time: "",
+            end_time: "",
+          },
+          {
+            type: "waitHotel",
+            hotel_name: "考拉四季阳光酒店 (中国站)",
+            date: "8月9日-8月10日 共一晚",
+            image: "./../../../static/imgs/Koala.jpg",
+            room_name: "标准双人房",
+            "total_amount": "200.00",
+            status: "已预订",
+            "status": 1,
+            btn1: {
+              text: "已评价",
+              hide: false
+            },
+            btn2: {
+              text: "立即评价",
+              hide: true
+            },
+            start_time: "",
+            end_time: "",
           },
 
         ],
@@ -143,6 +136,108 @@
     },
 
     methods: {
+
+      run () {
+        let self = this;
+        //默认加载所有
+        self.getOrderInfoByStatus();
+      },
+
+      getOrderInfoByStatus ( status ) {
+        let self = this;
+
+        global.globalVal.hotelOrder.getAllOrder( status )
+          .then( res => {
+
+            if( Object.prototype.toString.call( res.data ) !== "[object Array]" ){
+              AlertModule.show( {
+                title  : '提示',
+                content: "获取数据错误"
+              } );
+              return;
+            }
+
+            let tempObj = res;
+
+            for( let i = 0; i < tempObj.length; i++ ) {
+
+              for( let j in global.globalVal.globalTips.orderStatusTips ) {
+                //j就是 1 2 3 4 5
+                if( tempObj[ i ][ "status" ] === j ) {
+                  //添加一个type
+                  tempObj[ i ][ "type" ] = global.globalVal.globalTips.orderStatusTips[ j ];
+
+                  tempObj[ i ][ "btn1" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn1"];
+                  tempObj[ i ][ "btn2" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn2"];
+
+                }
+                //需要增加一个中文的提示
+                tempObj[ i ][ "chineseStatus" ] = global.globalVal.globalTips.orderStatusChineseTips[ j ];
+
+              }
+              //这里需要处理btn1 btn2 简单写点过程化代码吧...
+
+              let startTime = new Date( tempObj[ i ][ "start_time" ] );
+              let endTime   = new Date( tempObj[ i ][ "end_time" ] );
+              let nightNum  = ( startTime - endTime )/1000/60/60/24;
+
+              let startTimeTemp = (startTime.getMonth() + 1) +"月" + startTime.getDate() + "日";
+              let endTimeTemp   = (endTime.getMonth() + 1) +"月" + endTime.getDate() + "日";
+              //"8月9日-8月10日 共一晚",
+              tempObj[ i ][ "date" ] = startTimeTemp + "-" + endTimeTemp + " 共" + nightNum + "晚";
+
+            }
+
+            console.log( tempObj );
+            /*
+            * [{
+                "status": 1,
+                "total_amount": "200.00",
+                "image": "iphone.jpg",
+                "hotel_name": "万达嘉华酒店",
+                "room_name": "双人豪华房",
+                start_time: "",
+                end_time: "",
+
+              },]
+            * */
+            //需要格式化成
+            /*
+            * [{
+                type: "waitHotel",
+                hotelName: "考拉四季阳光酒店 (中国站)",
+                date: "8月9日-8月10日 共一晚",
+                imgUrl: "./../../../static/imgs/Koala.jpg",
+                typeRoom: "标准双人房",
+                price: "$299",
+                status: "已预订",
+                btn1: {
+                  text: "已评价",
+                  hide: false
+                },
+                btn2: {
+                  text: "立即评价",
+                  hide: true
+                }
+              }]
+            * */
+            self.hotelInfoData = tempObj;
+            //默认加载全部订单
+
+            self.showHotelInfo = self.hotelInfoData;
+
+          } )
+          .catch( err => {
+            AlertModule.show( {
+              title  : '提示',
+              content: err
+            } );
+          })
+
+
+
+      },
+
       clickFirstTabBtn() {
         //console.log( "点击第一个" );
         let self = this;
@@ -151,7 +246,6 @@
         self.secondTabBtn = false;
         self.lastTabBtn   = false;
 
-        self.showHotelInfo = self.hotelInfoData;
       },
 
       clickSecondTabBtn() {
@@ -163,7 +257,6 @@
         //待评价
 
         self.showHotelInfo = [];
-
 
         for( let i = 0; i < self.hotelInfoData.length; i++ ) {
 
@@ -192,6 +285,27 @@
 
         }
 
+
+      },
+
+      goHotelDetail () {
+        console.log( '重新预定' );
+
+      },
+
+      deleteOrder () {
+        console.log( '删除订单' );
+
+
+      },
+
+      goEvaluate () {
+        console.log( '去评价' );
+
+      },
+
+      cancelOrder () {
+        console.log( "取消订单" );
 
       },
 

@@ -41,7 +41,7 @@
         <div class="img_wrap">
           <img class="hotel_img" :src='item.image' alt="">
           <p class="price">{{ item.low_price }}</p>
-          <p @click.stop="clickFavorite(item.id)" class="favorite" :style="{backgroundImage:favoriteImgObj[item.id] }" ></p>
+          <p @click.stop="clickFavorite(item.id)" class="favorite" :class="{changeImg:favoriteImgObj[item.id] }" ></p>
         </div>
         <div class="hotel_introduce">
           <p class="hotel_name">{{ item.name }}</p>
@@ -247,10 +247,10 @@
         //到这里 hotelInfo 已经获取到了 并生成了列表  需要组合数据了{ hotelId : "白心路径" };
         for ( let i = 0; i < self.hotelDetailInfo.length; i++ ) {
           console.log( self.hotelDetailInfo[ i ][ "id" ] );
-          self.favoriteImgObj[ self.hotelDetailInfo[ i ][ "id" ] ] = "url(./../../../static/imgs/心.png)";
+          self.favoriteImgObj[ self.hotelDetailInfo[ i ][ "id" ] ] = false;
         }
         //console.log( "11" );
-        console.log( self.favoriteImgObj[1] );
+        console.log( self.favoriteImgObj );
         self.pickerDataFn();
 
         //需要知道酒店的id有没有被收藏
@@ -265,14 +265,14 @@
               return;
             }
 
-            //{"collected_hotels_id": [ 1, 2 ]}  尽量不要O(n平方)
+            let flag = 0;
 
-            for( let i in res[ "collected_hotels_id" ] ) {
-
-              self.favoriteImgObj[res[ "collected_hotels_id" ][i]] = "url(./../../../static/imgs/红心.png)";
-              console.log( self.favoriteImgObj[ res[ "collected_hotels_id" ][ i ] ] );
-
+            for( let i in self.favoriteImgObj ) {
+              if( i === res[ "collected_hotels_id" ][  flag ] )
+              self.favoriteImgObj[ i ] = true;
             }
+            console.log( self.favoriteImgObj );
+
 
           })
         }

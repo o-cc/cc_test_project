@@ -311,13 +311,24 @@
         } );
         //排序好之后 第一个日期和最后一个显示出来，
 
-        let firstDate             = new Date( self.dateTimeValue[ 0 ] );
+        //判断是否是连续的，最后一个日期减去第一个日期，的天数 不等于length的话就报错出去
+
+        let firstDate = new Date( self.dateTimeValue[ 0 ] );
+        let lastDate  = new Date( self.dateTimeValue[ self.dateTimeValue.length-1 ] );
+        //这里真是丑陋TAT
+        if( ( firstDate - lastDate )/1000/60/60/24 !== self.dateTimeValue.length -1 ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "系统暂时不允许隔天预定",
+          } );
+          return;
+        }
+
         let firstDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( firstDate.getDay() );
         self.firstDateObj.weekDay = firstDateWeekDate;
         //格式化日期
         self.firstDateObj.date    = (firstDate.getMonth() + 1) + "月" + (firstDate.getDate()) + "日";
 
-        let lastDate             = new Date( self.dateTimeValue[ self.dateTimeValue.length-1 ] );
         let lastDateWeekDate     = "周" + global.globalVal.formatDate.formatDateObj.WeekNumTransformToChineseNum( lastDate.getDay() );
         self.lastDateObj.weekDay = lastDateWeekDate;
         //格式化日期

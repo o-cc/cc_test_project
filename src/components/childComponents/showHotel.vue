@@ -116,82 +116,7 @@
 
         searchValue: "",
 
-        hotelDetailInfo: [
-          {
-            id         : 0,
-            name       : "考拉酒店 (四季阳光店)",
-            comm_score : "5.0",
-            total_comm : "48",
-            place      : "滨江道/四季阳光/考拉原始村落",
-            "types"    : [
-              {
-                "name" : "速定",
-                "color": null
-              },
-              {
-                "name" : "七天可退",
-                "color": null
-              },
-              {
-                "name" : "超干净",
-                "color": null
-              }, {
-                "name" : "实拍",
-                "color": null
-              }
-            ],
-            low_price  : "$299",
-            isFavorites: 1,
-            image      : "./../../../static/imgs/Koala.jpg"
-          },
-          {
-            "id"       : 1,
-            "name"     : "万达嘉华酒店",
-            image      : "./../../../static/imgs/Koala.jpg",
-            "place"    : "广州市增城增城广场南",
-            "types"    : [
-              {
-                "name" : "速定",
-                "color": "red"
-              },
-              {
-                "name" : "七天可退",
-                "color": "green"
-              },
-              {
-                "name" : "超干净",
-                "color": null
-              }
-            ],
-            "low_price": "150.00",
-            comm_score : "5.0",
-            total_comm : "48",
-          },
-          {
-            "id"       : 2,
-            "name"     : "万达嘉华酒店",
-            image      : "./../../../static/imgs/Koala.jpg",
-            "place"    : "广州市增城增城广场南",
-            "types"    : [
-              {
-                "name" : "速定",
-                "color": "red"
-              },
-              {
-                "name" : "七天可退",
-                "color": "green"
-              },
-              {
-                "name" : "超干净",
-                "color": null
-              }
-            ],
-            "low_price": "150.00",
-            comm_score : "5.0",
-            total_comm : "48",
-          },
-
-        ],
+        hotelDetailInfo: [],
 
         //红心
         redHeat  : false,
@@ -208,8 +133,8 @@
         let self = this;
         //如果id是相等的，就返回true
         for ( let i = 0; i < self.favoriteIds.length; i++ ) {
-          if ( Number( id ) === Number( self.favoriteIds[ i ] ) ) {
 
+          if ( Number( id ) === Number( self.favoriteIds[ i ] ) ) {
             self.redHeat = true;
             return true;
           }
@@ -261,7 +186,6 @@
             }
 
             self.favoriteIds = res[ "collected_hotels_id" ];
-
           } )
         }
 
@@ -298,7 +222,7 @@
                   title  : '提示',
                   content: "添加成功!",
                   onHide() {
-                    //注意 这里是辣鸡代码！！太冗余了
+                    //注意 这里是辣鸡代码！！太冗余了 2019/2/20
                     global.globalVal.hotelInfo.getFavoriteHotelIds( function ( err, res ) {
                       if ( err ) {
                         AlertModule.show( {
@@ -312,7 +236,6 @@
                       self.changeImg( id );
 
                     } )
-
                   }
                 } );
               } )
@@ -340,7 +263,7 @@
                   title  : '提示',
                   content: "取消收藏!",
                   onHide() {
-                    //注意 这里是辣鸡代码！！太冗余了
+                    //注意 这里是辣鸡代码！！太冗余了 暂时先这样子吧 2019/2/20
                     global.globalVal.hotelInfo.getFavoriteHotelIds( function ( err, res ) {
                       if ( err ) {
                         AlertModule.show( {
@@ -354,7 +277,6 @@
                       self.changeImg( id );
 
                     } )
-
                   }
                 } );
               } );

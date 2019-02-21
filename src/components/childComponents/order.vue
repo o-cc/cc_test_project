@@ -66,53 +66,53 @@
 
         //原始数据
         hotelInfoData: [
-          {
-            type: "evaluate",
-            order_id: 2,
-            hotel_name: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            image: "./../../../static/imgs/Koala.jpg",
-            room_name: "标准双人房",
-            "total_amount": "200.00",
-            status: "已预订",
-            "status": 1,
-            btn1: {
-                  text: "删除",
-                  hide: true,
-                  clickEvent: ""
-                },
-                btn2: {
-                  text: "去评价",
-                  hide: false,
-                  clickEvent: ""
-                },
-            start_time: "",
-            end_time: "",
-          },
-          {
-            type: "waitHotel",
-            order_id: 1,
-            hotel_name: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            image: "./../../../static/imgs/Koala.jpg",
-            room_name: "标准双人房",
-            "total_amount": "200.00",
-            status: "已预订",
-            "status": 1,
-            btn1: {
-              text: "已评价",
-              hide: false,
-              clickEvent: ""
-            },
-            btn2: {
-              text: "立即评价",
-              hide: true,
-              clickEvent: ""
-            },
-            start_time: "",
-            end_time: "",
-
-          }
+          //{
+          //  type: "evaluate",
+          //  order_id: 2,
+          //  hotel_name: "考拉四季阳光酒店 (中国站)",
+          //  date: "8月9日-8月10日 共一晚",
+          //  image: "./../../../static/imgs/Koala.jpg",
+          //  room_name: "标准双人房",
+          //  "total_amount": "200.00",
+          //  status: "已预订",
+          //  "status": 1,
+          //  btn1: {
+          //        text: "删除",
+          //        hide: true,
+          //        clickEvent: ""
+          //      },
+          //      btn2: {
+          //        text: "去评价",
+          //        hide: false,
+          //        clickEvent: ""
+          //      },
+          //  start_time: "",
+          //  end_time: "",
+          //},
+          //{
+          //  type: "waitHotel",
+          //  order_id: 1,
+          //  hotel_name: "考拉四季阳光酒店 (中国站)",
+          //  date: "8月9日-8月10日 共一晚",
+          //  image: "./../../../static/imgs/Koala.jpg",
+          //  room_name: "标准双人房",
+          //  "total_amount": "200.00",
+          //  status: "已预订",
+          //  "status": 1,
+          //  btn1: {
+          //    text: "已评价",
+          //    hide: false,
+          //    clickEvent: ""
+          //  },
+          //  btn2: {
+          //    text: "立即评价",
+          //    hide: true,
+          //    clickEvent: ""
+          //  },
+          //  start_time: "",
+          //  end_time: "",
+          //
+          //}
         ],
         //显示数据
         showHotelInfo: [],
@@ -296,40 +296,43 @@
 
       },
 
-      goHotelDetail ( Orderitem ) {
+      goHotelDetail ( orderItem ) {
         console.log( '重新预定' );
         //重新预定应该跳转到酒店的详细页面  但是我只有订单, 只能去到首页了哦
         let self = this;
         self.$router.push( "/" );
       },
 
-      deleteOrder ( Orderitem ) {
+      deleteOrder ( orderItem ) {
         console.log( '删除订单' );
 
         let self = this;
         //删除原始数据中的数据，但是后台并没有提供接口删除订单
         for ( let i = 0; i < self.showHotelInfo.length; i++ ) {
 
-          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( Orderitem[ "order_id" ] ) ) {
+          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( orderItem[ "order_id" ] ) ) {
             //删除这个东西
             self.showHotelInfo.splice( i, 1 );
           }
         }
+
+
       },
 
-      goEvaluate ( Orderitem ) {
+      goEvaluate ( orderItem ) {
         console.log( '去评价' );
         let self = this;
-        self.$emit( "showHotel", "evaluate" );
+        global.globalVal.hotelOrder.setOrderInfoTemp( orderItem );
+        self.$emit( "showEvaluate", "evaluate" );
 
       },
 
-      cancelOrder ( Orderitem ) {
+      cancelOrder ( orderItem ) {
         console.log( "取消订单" );
         let self = this;
         for ( let i = 0; i < self.showHotelInfo.length; i++ ) {
 
-          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( Orderitem[ "order_id" ] ) ) {
+          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( orderItem[ "order_id" ] ) ) {
             self.showHotelInfo.splice( i, 1 );
           }
         }

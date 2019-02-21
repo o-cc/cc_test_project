@@ -22,13 +22,13 @@
           <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.chineseStatus }}</p>
           <div class="order_info_btn"
                :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
-
+               @click="eventClick(item.btn1.clickEvent, item)"
           >
             {{ item.btn1.text }}
           </div>
           <div class="order_info_btn order_info_btn_active"
             :class="{ hide: item.btn2.hide, flex: (!item.btn2.hide) }"
-               @click="fn(item.btn2.clickEvent)"
+               @click="eventClick(item.btn2.clickEvent, item)"
 
           >
             {{ item.btn2.text }}
@@ -68,6 +68,7 @@
         hotelInfoData: [
           {
             type: "evaluate",
+            order_id: 2,
             hotel_name: "考拉四季阳光酒店 (中国站)",
             date: "8月9日-8月10日 共一晚",
             image: "./../../../static/imgs/Koala.jpg",
@@ -90,6 +91,7 @@
           },
           {
             type: "waitHotel",
+            order_id: 1,
             hotel_name: "考拉四季阳光酒店 (中国站)",
             date: "8月9日-8月10日 共一晚",
             image: "./../../../static/imgs/Koala.jpg",
@@ -120,25 +122,25 @@
     },
 
     methods: {
-      fn ( eventClick ) {
+      eventClick( eventClick, item ) {
         let self = this;
 
-        if( eventClick === "cancelOrder" ) {
-          self.cancelOrder();
+        if ( eventClick === "cancelOrder" ) {
+          self.cancelOrder( item );
         }
 
-        if( eventClick === "deleteOrder" ) {
-          self.deleteOrder();
-
-        }
-
-        if( eventClick === "goEvaluate" ) {
-          self.goEvaluate();
+        if ( eventClick === "deleteOrder" ) {
+          self.deleteOrder( item );
 
         }
 
-        if( eventClick === "goHotelDetail" ) {
-          self.goHotelDetail();
+        if ( eventClick === "goEvaluate" ) {
+          self.goEvaluate( item );
+
+        }
+
+        if ( eventClick === "goHotelDetail" ) {
+          self.goHotelDetail( item );
 
         }
 
@@ -294,24 +296,39 @@
 
       },
 
-      goHotelDetail () {
+      goHotelDetail ( Orderitem ) {
         console.log( '重新预定' );
-
+        //重新预定应该跳转到酒店的详细页面  但是我只有订单,
       },
 
-      deleteOrder () {
+      deleteOrder ( Orderitem ) {
         console.log( '删除订单' );
 
+        let self = this;
+        //删除原始数据中的数据，但是后台并没有提供接口删除订单
+        for ( let i = 0; i < self.showHotelInfo.length; i++ ) {
+
+          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( Orderitem[ "order_id" ] ) ) {
+            //删除这个东西
+            self.showHotelInfo.splice( i, 1 );
+          }
+        }
 
       },
 
-      goEvaluate () {
+      goEvaluate ( Orderitem ) {
         console.log( '去评价' );
-
       },
 
-      cancelOrder () {
+      cancelOrder ( Orderitem ) {
         console.log( "取消订单" );
+        let self = this;
+        for ( let i = 0; i < self.showHotelInfo.length; i++ ) {
+
+          if( Number( self.showHotelInfo[i][ "order_id" ] ) === Number( Orderitem[ "order_id" ] ) ) {
+            self.showHotelInfo.splice( i, 1 );
+          }
+        }
 
       },
 

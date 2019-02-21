@@ -45,9 +45,9 @@ globalTips.orderStatusBtnsTips = {
       clickEvent: "cancelOrder"
     },
     btn2: {
-      text: "取消订单", //待入住的话不可以取消 不可以删除 不可以评价
+      text: "删除", //待入住的话不可以取消 不可以删除 不可以评价
       hide: false,
-      clickEvent: "cancelOrder"
+      clickEvent: "deleteOrder"
 
     }
 
@@ -83,7 +83,7 @@ globalTips.orderStatusBtnsTips = {
   4 :  {
     btn1: {
       text: "取消", //已入住的话不可以取消 不可以删除 不可以评价
-      hide: false,
+      hide: true,
       clickEvent: "cancelOrder"
 
     },
@@ -100,8 +100,6 @@ globalTips.orderStatusBtnsTips = {
       text: "删除", //已入住的话不可以取消 不可以删除 不可以评价
       hide: true,
       clickEvent: "deleteOrder"
-
-
     },
     btn2: {
       text: "重新预定", //待入住的话不可以取消 不可以删除 不可以评价

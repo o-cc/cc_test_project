@@ -11,24 +11,24 @@
         <div class="hotel_info_wrap">
           <div class="img" :style='{background: "url("+item.imgUrl+") no-repeat center center", backgroundSize: "100%"}'></div>
           <div class="hotel_info_txt">
-            <p class="hotel_name">{{ formatHotelName( item.hotelName ) }}</p>
+            <p class="hotel_name">{{ formatHotelName( item.hotel_name ) }}</p>
             <p class="hotel_detail">{{ item.date }}</p>
-            <p class="hotel_detail">{{ item.typeRoom}}</p>
-            <p class="hotel_detail" style="height: 1rem;line-height: 1rem;">{{ item.price }}</p>
+            <p class="hotel_detail">{{ item.room_name}}</p>
+            <p class="hotel_detail" style="height: 1rem;line-height: 1rem;">{{ item.total_amount }}</p>
           </div>
         </div>
         <div class="hotel_info_btns">
           <!-- 动态控制宽度 -->
-          <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.status }}</p>
+          <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.chineseStatus }}</p>
           <div class="order_info_btn"
                :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
-               @click="item.btn1.clickEvent"
+
           >
             {{ item.btn1.text }}
           </div>
           <div class="order_info_btn order_info_btn_active"
             :class="{ hide: item.btn2.hide, flex: (!item.btn2.hide) }"
-               @click="item.btn2.clickEvent"
+               @click="fn(item.btn2.clickEvent)"
 
           >
             {{ item.btn2.text }}
@@ -77,11 +77,13 @@
             "status": 1,
             btn1: {
                   text: "删除",
-                  hide: true
+                  hide: true,
+                  clickEvent: ""
                 },
                 btn2: {
                   text: "去评价",
-                  hide: false
+                  hide: false,
+                  clickEvent: ""
                 },
             start_time: "",
             end_time: "",
@@ -97,36 +99,18 @@
             "status": 1,
             btn1: {
               text: "已评价",
-              hide: false
+              hide: false,
+              clickEvent: ""
             },
             btn2: {
               text: "立即评价",
-              hide: true
+              hide: true,
+              clickEvent: ""
             },
             start_time: "",
             end_time: "",
-          },
-          {
-            type: "waitHotel",
-            hotel_name: "考拉四季阳光酒店 (中国站)",
-            date: "8月9日-8月10日 共一晚",
-            image: "./../../../static/imgs/Koala.jpg",
-            room_name: "标准双人房",
-            "total_amount": "200.00",
-            status: "已预订",
-            "status": 1,
-            btn1: {
-              text: "已评价",
-              hide: false
-            },
-            btn2: {
-              text: "立即评价",
-              hide: true
-            },
-            start_time: "",
-            end_time: "",
-          },
 
+          }
         ],
         //显示数据
         showHotelInfo: [],
@@ -136,7 +120,30 @@
     },
 
     methods: {
+      fn ( eventClick ) {
+        let self = this;
 
+        if( eventClick === "cancelOrder" ) {
+          self.cancelOrder();
+        }
+
+        if( eventClick === "deleteOrder" ) {
+          self.deleteOrder();
+
+        }
+
+        if( eventClick === "goEvaluate" ) {
+          self.goEvaluate();
+
+        }
+
+        if( eventClick === "goHotelDetail" ) {
+          self.goHotelDetail();
+
+        }
+
+
+      },
       run () {
         let self = this;
         //默认加载所有
@@ -149,7 +156,7 @@
         global.globalVal.hotelOrder.getAllOrder( status )
           .then( res => {
 
-            if( Object.prototype.toString.call( res.data ) !== "[object Array]" ){
+            if( Object.prototype.toString.call( res ) !== "[object Array]" ){
               AlertModule.show( {
                 title  : '提示',
                 content: "获取数据错误"
@@ -158,18 +165,17 @@
             }
 
             let tempObj = res;
+            console.log( tempObj );
 
             for( let i = 0; i < tempObj.length; i++ ) {
 
               for( let j in global.globalVal.globalTips.orderStatusTips ) {
                 //j就是 1 2 3 4 5
-                if( tempObj[ i ][ "status" ] === j ) {
+                if( Number( tempObj[ i ][ "status" ] ) === Number( j ) ) {
                   //添加一个type
                   tempObj[ i ][ "type" ] = global.globalVal.globalTips.orderStatusTips[ j ];
-
                   tempObj[ i ][ "btn1" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn1"];
                   tempObj[ i ][ "btn2" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn2"];
-
                 }
                 //需要增加一个中文的提示
                 tempObj[ i ][ "chineseStatus" ] = global.globalVal.globalTips.orderStatusChineseTips[ j ];
@@ -188,7 +194,7 @@
 
             }
 
-            console.log( tempObj );
+            //console.log( tempObj );
             /*
             * [{
                 "status": 1,

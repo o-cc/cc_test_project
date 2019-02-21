@@ -3,7 +3,7 @@
     <div class="top_img">
       <div class="swiper-container" style="height: 100%;">
         <div class="swiper-wrapper">
-          <img class="swiper-slide" src="./../../static/imgs/Koala.jpg" alt="">
+          <img class="swiper-slide" src="./../../static/imgs/timg.jpg" alt="">
           <!--<img class="swiper-slide" src="./../../static/imgs/Chrysanthemum.jpg" alt="">-->
           <!--<img class="swiper-slide" src="./../../static/imgs/Penguins.jpg" alt="">-->
 

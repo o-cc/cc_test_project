@@ -65,13 +65,13 @@
         <favorite  @showHotel="showHotel" v-if="comp.myFavorite"></favorite>
 
         <!-- 我的订单 -->
-        <order v-if="comp.order"></order>
+        <order @showEvaluate="showComp" v-if="comp.order"></order>
 
         <!-- orderDetail -->
         <orderDetail @showHotel="showHotel" v-if="comp.orderDetail"></orderDetail>
 
         <!-- evaluate -->
-        <evaluate v-if="comp.evaluate"></evaluate>
+        <evaluate @showOrder="showComp" v-if="comp.evaluate"></evaluate>
 
       </div>
     </div>
@@ -167,6 +167,7 @@
           }
         } );
       },
+
       run() {
         let self = this;
 
@@ -201,6 +202,7 @@
       },
 
       showComp( showcomp ) {
+        console.log( showcomp );
         let self = this;
         for ( let i in self.comp ) {
           if ( i === showcomp ) {

@@ -101,9 +101,45 @@ function getAllOrder ( status ) {
   } );
 }
 
+let orderInfoTemp = null;
+function getOrderInfoTemp () {
+ return orderInfoTemp;
+}
+
+function setOrderInfoTemp ( orderInfo ) {
+  orderInfoTemp = orderInfo;
+};
+
+
+function postOrderEvalute ( data ) {
+
+  return new Promise( ((resolve, reject) => {
+    axios.post( global.globalVal.httpServerUrl.orderEvalute, data, {
+      headers: {
+        "Authorization": window.localStorage.getItem( "token" ),
+      }
+    })
+      .then( res => {
+        return resolve( res.data );
+      })
+      .catch( err => {
+        if( !err.response.data.detail ) {
+
+          return reject( "无法评价" );
+        }
+        return reject( err.response.data );
+      })
+
+
+  }))
+}
 
 export default {
   getOrderInfoByRoomId,
   postOrder,
-  getAllOrder
+  getAllOrder,
+  getOrderInfoTemp,
+  setOrderInfoTemp,
+
+  postOrderEvalute
 };

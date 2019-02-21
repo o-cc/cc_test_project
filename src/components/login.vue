@@ -110,7 +110,8 @@
             return;
           }
           //跳转
-          self.$router.push( '/' );
+          window.history.length > 1 ? self.$router.go( -1 ) : self.$router.push( '/' );
+
         } );
 
       },
@@ -147,7 +148,8 @@
             title  : '提示',
             content: '注册成功',
             onHide () {
-              self.$router.push( '/' );
+              window.history.length > 1 ? self.$router.go( -1 ) : self.$router.push( '/' );
+
             }
           } );
 

@@ -7,7 +7,7 @@
     </div>
 
     <div class="order_info" v-if="orderInfo">
-      <div style="padding-bottom: 0;" v-for="( item, key, index ) in showHotelInfo" :key="index">
+      <div @click="goOrderDetail(item)" style="padding-bottom: 0;" v-for="( item, key, index ) in showHotelInfo" :key="index">
         <div class="hotel_info_wrap">
           <div class="img" :style='{background: "url("+item.imgUrl+") no-repeat center center", backgroundSize: "100%"}'></div>
           <div class="hotel_info_txt">
@@ -22,13 +22,13 @@
           <p class="left_prompt" :style="{width: computerPromptWidth( item.btn1.hide, item.btn2.hide )}">{{ item.chineseStatus }}</p>
           <div class="order_info_btn"
                :class="{ hide: item.btn1.hide, flex: (!item.btn1.hide) }"
-               @click="eventClick(item.btn1.clickEvent, item)"
+               @click.stop="eventClick(item.btn1.clickEvent, item)"
           >
             {{ item.btn1.text }}
           </div>
           <div class="order_info_btn order_info_btn_active"
             :class="{ hide: item.btn2.hide, flex: (!item.btn2.hide) }"
-               @click="eventClick(item.btn2.clickEvent, item)"
+               @click.stop="eventClick(item.btn2.clickEvent, item)"
 
           >
             {{ item.btn2.text }}
@@ -298,7 +298,9 @@
 
       goHotelDetail ( Orderitem ) {
         console.log( '重新预定' );
-        //重新预定应该跳转到酒店的详细页面  但是我只有订单,
+        //重新预定应该跳转到酒店的详细页面  但是我只有订单, 只能去到首页了哦
+        let self = this;
+        self.$router.push( "/" );
       },
 
       deleteOrder ( Orderitem ) {
@@ -313,11 +315,13 @@
             self.showHotelInfo.splice( i, 1 );
           }
         }
-
       },
 
       goEvaluate ( Orderitem ) {
         console.log( '去评价' );
+        let self = this;
+        self.$emit( "showHotel", "evaluate" );
+
       },
 
       cancelOrder ( Orderitem ) {
@@ -330,6 +334,12 @@
           }
         }
 
+      },
+
+      goOrderDetail ( item ) {
+        let self = this;
+        console.log( "点击了每个订单" );
+        //self.$emit( "showHotel", "orderDetail" );
       },
 
       formatHotelName ( name ) {
@@ -404,7 +414,7 @@
       div {
         width: 95%;
         background-color: #fff;
-        margin: 0 auto 0.5rem;
+        margin: 0 auto 0.3rem;
         padding: .2rem 0;
 
         .hotel_info_wrap {

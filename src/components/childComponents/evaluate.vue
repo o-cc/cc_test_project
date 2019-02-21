@@ -6,12 +6,14 @@
         <div class="hotel_img"></div>
         <div class="hotel_txt">
           <div class="hotel_name">
-            酒店的名字
+            {{ orderInfo.hotel_name }}
           </div>
 
           <div class="hotel_tag">
-            <p style="line-height: 0.2rem;">标准双人床</p>
-            <p style="background-color:#cef2e1;padding: .1rem;color: #109d59;">七天可退</p>
+            <p style="line-height: 0.2rem;">{{ orderInfo.room_name }}</p>
+            <span style="background: #fff1cc;color:#f7b500;" v-for="(type, index) in orderInfo.types"
+                  v-bind:style="{color: type.color,background: colorRgb( type.color?type.color:'#000000' ) }">{{ type.name }}</span>
+
           </div>
 
         </div>
@@ -45,7 +47,7 @@
 
 <script>
 
-  import { Group, XTextarea } from 'vux'
+  import { Group, XTextarea, AlertModule } from 'vux'
 
   export default {
       name: "evaluate",
@@ -55,58 +57,158 @@
 
       },
       mounted() {
-        let bool;
-        let stars = document.getElementsByClassName("cc");
-        for ( let i = 0; i < stars.length; i++ ) {
-          stars[i].index   = i;
-          stars[i].onclick = function () {
-            //就这么写了吧赶时间, 以后一定要对这种辣鸡代码0容忍！
-            //手机端不知道是否会出问题0.0
-            if( bool === this.index ) {
 
-              let bg = stars[ this.index ].style.background;
 
-              if( bg === "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat" )
-              {
-                stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星2.png\") center center / contain no-repeat";
-                stars[ this.index ].style.backgroundSize = "contain";
-              }
-              else
-              {
-                stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat";
-                stars[ this.index ].style.backgroundSize = "contain";
-              }
-              return;
-            }
-
-            for ( let j = 0; j < this.index + 1; j++ ) {
-              stars[j].style.background     = "url(./../../../static/imgs/星2.png) no-repeat center center";
-              stars[j].style.backgroundSize = "contain";
-            }
-
-            for ( let j = stars.length - 1; j > this.index ; j-- ) {
-              stars[j].style.background     = "url(./../../../static/imgs/星1.png) no-repeat center center";
-              stars[j].style.backgroundSize = "contain";
-            }
-
-            bool = this.index;
-
-          }
-
-        }
+        this.run();
 
       },
 
       data (){
         return {
-          textValue: ""
+          textValue: "",
+          orderInfo: {},
+          starNum: 0
         }
 
       },
       methods: {
         submit () {
-          console.log( "确定" );
-        }
+          let self = this;
+          /*
+          * {
+              "order": "201901251125020007",  # 订单id
+              "text": "sbdbbdbdffbdfbdfbdfb",  # 评论内容
+              "star": 5  # 评论星级
+            }
+          * */
+          if ( !self.textValue.trim() ) {
+            AlertModule.show( {
+              title  : '提示',
+              content: "请填写评价内容"
+            } );
+            return;
+          }
+
+          let evaluateData = {
+            order: self.orderInfo[ "order_id" ],
+            text: self.textValue,
+            star: self.starNum
+
+          }
+          global.globalVal.hotelOrder.postOrderEvalute( evaluateData )
+            .then( res => {
+              if( res.order !== self.orderInfo[ "order_id" ] ) {
+                AlertModule.show( {
+                  title  : '提示',
+                  content: "订单错误",
+                } );
+                return;
+              }
+
+              AlertModule.show( {
+                title  : '提示',
+                content: "评论成功!",
+                onHide () {
+                  //返回订单页面
+                  self.$emit( "showOrder", "order" );
+                }
+              } );
+            })
+            .catch( err => {
+              AlertModule.show( {
+                title  : '提示',
+                content: err
+              } );
+              return;
+
+            })
+        },
+
+        run () {
+          let bool;
+          let self = this;
+          let stars = document.getElementsByClassName("cc");
+          for ( let i = 0; i < stars.length; i++ ) {
+            stars[i].index   = i;
+            stars[i].onclick = function () {
+              //就这么写了吧赶时间, 以后要对这种辣鸡代码0容忍！
+              //手机端不知道是否会出问题0.0
+              //+1的原因是数组下标从0开始
+              self.starNum = this.index + 1;
+
+              if( bool === this.index ) {
+                let bg = stars[ this.index ].style.background;
+
+                if( bg === "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat" )
+                {
+                  stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星2.png\") center center / contain no-repeat";
+                  stars[ this.index ].style.backgroundSize = "contain";
+                }
+                else
+                {
+                  stars[ this.index ].style.background     = "url(\"./../../../static/imgs/星1.png\") center center / contain no-repeat";
+                  stars[ this.index ].style.backgroundSize = "contain";
+                  //如果是实心的星，那么直接等于下标索引
+                  self.starNum = this.index;
+                }
+                return;
+              }
+
+              for ( let j = 0; j < this.index + 1; j++ ) {
+                stars[j].style.background     = "url(./../../../static/imgs/星2.png) no-repeat center center";
+                stars[j].style.backgroundSize = "contain";
+              }
+
+              for ( let j = stars.length - 1; j > this.index ; j-- ) {
+                stars[j].style.background     = "url(./../../../static/imgs/星1.png) no-repeat center center";
+                stars[j].style.backgroundSize = "contain";
+              }
+
+              bool = this.index;
+
+            }
+          }
+
+          //获取该订单信息
+
+          let orderInfo = global.globalVal.hotelOrder.getOrderInfoTemp();
+
+          if( !orderInfo ) {
+            AlertModule.show( {
+              title  : '提示',
+              content: "不存在该订单信息",
+              onHide () {
+                self.$emit( "showHotel", "order" );
+                return;
+              }
+            } );
+            return;
+          }
+
+          /*
+          * btn1: Object
+            btn2: Object
+            chineseStatus: "已取消"
+            date: "12月1日-12月2日 共-1晚"
+            end_time: "2018-12-02"
+            hotel_name: (...)
+            image: (...)
+            order_id: (...)
+            room_name: (...)
+            start_time: (...)
+            status: (...)
+            total_amount: (...)
+            type: (...)
+          * */
+          self.orderInfo = orderInfo;
+
+          //需要获取到房间的type
+
+        },
+
+        colorRgb( color ) {
+          return global.globalVal.formatDate.colorRgb( color );
+        },
       }
     }
 </script>

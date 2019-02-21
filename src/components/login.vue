@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="center">
-      <div class="top_logo flex_center">
+      <div class="top_logo flex_center" @click="goBack">
         <img class="logo" src="./../../static/imgs/logo.png" alt="">
       </div>
 
@@ -88,6 +88,11 @@
       }
     },
     methods   : {
+
+      goBack () {
+        window.history.length > 1 ? self.$router.go( -1 ) : self.$router.push( '/' )
+
+      },
 
       clickLogin() {
         let self = this;

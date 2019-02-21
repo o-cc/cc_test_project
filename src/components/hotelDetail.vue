@@ -535,7 +535,7 @@
       },
 
       formatDate() {
-        return this.dateTimeValue.length + "晚";
+        return this.dateTimeValue.length - 1 + "晚";
       },
 
       dateChange() {
@@ -551,7 +551,7 @@
         let firstDate = new Date( self.dateTimeValue[ 0 ] );
         let lastDate  = new Date( self.dateTimeValue[ self.dateTimeValue.length - 1 ] );
 
-        if( ( firstDate - lastDate )/1000/60/60/24 !== self.dateTimeValue.length -1 ) {
+        if( ( lastDate - firstDate )/1000/60/60/24 !== self.dateTimeValue.length -1 ) {
           AlertModule.show( {
             title  : '提示',
             content: "系统暂时不允许隔天预定",
@@ -601,7 +601,7 @@
       goOrder() {
         let self = this;
 
-        if( window.localStorage.getItem( "token" ) ) {
+        if( !window.localStorage.getItem( "token" ) ) {
           AlertModule.show( {
             title  : '提示',
             content: "请先登录",

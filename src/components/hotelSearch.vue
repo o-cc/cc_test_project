@@ -78,77 +78,27 @@
 
         <div class="recommend_hotel">
 
-          <div class="recommend_item">
-              <div class="item_img">
+          <div class="recommend_item" @click="gohotelDetail" v-for="(item, index) in recommend" :key="item.id">
+              <div class="item_img" :style="{backgroundImage: item.image}">
                 <div class="img_price">
-                  $499
+                  {{ item.low_price }}
                 </div>
               </div>
 
               <div class="recommend_bom">
                 <div class="item_title">
-                    <p style="font-size: .4rem;">考拉四季阳光</p>
+                    <p style="font-size: .4rem;">{{ item.name }}</p>
                 </div>
                 <div class="item_address">
-                    <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
+                    <p style="color: #bfbec6;">{{ item.place }}•<span style="color: #eeb730;">{{ item.comm_score }}分</span></p>
                 </div>
               </div>
 
           </div>
-          <div class="recommend_item">
-            <div class="item_img">
-              <div class="img_price">
-                $499
-              </div>
-            </div>
 
-            <div class="recommend_bom">
-              <div class="item_title">
-                <p style="font-size: .4rem;">考拉四季阳光</p>
-              </div>
-              <div class="item_address">
-                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
-              </div>
-            </div>
-
-          </div>
-          <div class="recommend_item">
-            <div class="item_img">
-              <div class="img_price">
-                $499
-              </div>
-            </div>
-
-            <div class="recommend_bom">
-              <div class="item_title">
-                <p style="font-size: .4rem;">考拉四季阳光</p>
-              </div>
-              <div class="item_address">
-                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
-              </div>
-            </div>
-
-          </div>
-          <div class="recommend_item">
-            <div class="item_img">
-              <div class="img_price">
-                $499
-              </div>
-            </div>
-
-            <div class="recommend_bom">
-              <div class="item_title">
-                <p style="font-size: .4rem;">考拉四季阳光</p>
-              </div>
-              <div class="item_address">
-                <p style="color: #bfbec6;">广东北海道•<span style="color: #eeb730;">5.0分</span></p>
-              </div>
-            </div>
-
-          </div>
         </div>
 
-        <div class="recommend_change">
+        <div class="recommend_change" @click="changeHotel">
             <p>换一批</p>
         </div>
 
@@ -222,8 +172,10 @@
         totalDay: "请选择",
 
         searchValue: "",
-        city: "",
-        startDate: ""
+        city       : "",
+        startDate  : "",
+        recommend  : [],
+        allHotel   : []
       }
     },
     methods   : {
@@ -239,6 +191,64 @@
         global.globalVal.searchPage.searchPageSingleOne.setSearchPageIndexVueObj( self );
         self._initSwiper();
         self.pickerDataFn();
+
+        //获取推荐酒店 后台没有提供接口，获取所有酒店列表随机生成  给你推荐个广州
+        global.globalVal.hotelInfo.getHotelInfo( "广州", "", function ( err, res ) {
+
+          if ( err ) {
+            console.log( err );
+            return;
+          }
+
+          /*
+          * {
+
+              "id": 1,
+              "name": "万达嘉华酒店",
+              "image": "http://127.0.0.1/images/ix.jpg",
+              "place": "广州市增城增城广场南",
+              "types": [
+                {
+                  "name": "速定",
+                  "color": "red"
+                },
+                {
+                  "name": "七天可退",
+                  "color": "green"
+                },
+                {
+                  "name": "超干净",
+                  "color": null
+                }
+              ],
+              "low_price": "150.00",
+              "comm_score": 5,
+              "total_comm": 3
+            }
+          * */
+          self.allHotel = res;
+          //默认显示前4个  点击换一批 再随机生成
+          let len = res.length > 4? 4: res.length;
+          for( let i = 0; i< len; i++ ) {
+            self.recommend.push( res[i] );
+          }
+
+        } );
+      },
+
+      changeHotel (){
+        //随意生成0-酒店列表长度之间的整数
+        let self = this;
+        //self.recommend = [];
+        let len = self.allHotel.length;
+        //let randomNum = parseInt( (Math.random() * len) );
+
+        //len > 4? 4: len;
+        //for ( let i = 0; i < len.length; i++ ) {
+        //
+        //  self.recommend.push( res[i] );
+        //}
+
       },
 
       _initSwiper() {

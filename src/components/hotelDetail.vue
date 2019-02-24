@@ -321,7 +321,6 @@
               } );
               return;
             }
-            console.log( res );
             self.hotelInfo = res;
             global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelDetailInfo = res;
             self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;

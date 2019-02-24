@@ -18,11 +18,8 @@ function getFavoriteHotelLists () {
             return resolve( data );
       } )
       .catch( err => {
-        if( !err.response.data.detail ) {
-          return reject( "获取列表失败" );
-        }
 
-        return reject( err.response.data.detail );
+        return reject( err.response.data );
       } )
   } )
 };

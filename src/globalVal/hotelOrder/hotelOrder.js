@@ -15,11 +15,8 @@ function getOrderInfoByRoomId ( roomId ) {
 
       })
       .catch( err => {
-        if( !err.response.data.detail ) {
-          return reject( "无法提交订单" );
-        }
 
-        return reject( err.response.data.detail );
+        return reject( err.response.data );
 
       })
 
@@ -47,11 +44,11 @@ function postOrder ( data ) {
 
     })
       .catch( err => {
-        if( !err.response.data.detail ) {
+        if( !err.response.data.stayInfos ) {
           return reject( "订单交易失败" );
         }
 
-        return reject( err.response.data.detail );
+        return reject( err.response.data.stayInfos );
 
       })
 
@@ -89,11 +86,8 @@ function getAllOrder ( status ) {
 
       } )
       .catch( err => {
-        if( !err.response.data.detail ) {
-          return reject( "无法获取订单" );
-        }
 
-        return reject( err.response.data.detail );
+        return reject( err.response.data );
 
 
       })
@@ -123,10 +117,6 @@ function postOrderEvalute ( data ) {
         return resolve( res.data );
       })
       .catch( err => {
-        if( !err.response.data.detail ) {
-
-          return reject( "无法评价" );
-        }
         return reject( err.response.data );
       })
 

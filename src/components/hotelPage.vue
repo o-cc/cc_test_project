@@ -59,7 +59,7 @@
         <!-- 酒店页面组件 -->
         <showHotel v-if="comp.showHotel"></showHotel>
         <!-- 个人中心 -->
-        <userInfo @showHotel="showHotel" v-if="comp.userDetail"></userInfo>
+        <userInfo @userInfo="userInfoFn" v-if="comp.userDetail"></userInfo>
 
         <!-- 我的收藏 -->
         <favorite  @showHotel="showHotel" v-if="comp.myFavorite"></favorite>
@@ -113,7 +113,7 @@
         userInfo : {
           userName : "未登录",
           phone    : "",
-          headerImg: "./../../static/imgs/Koala.jpg"
+          headerImg: "./../../static/imgs/user.png"
         },
         homeTitle: "酒店",
 
@@ -137,6 +137,14 @@
       showHotel() {
         let self = this;
         self.showComp( "showHotel" );
+      },
+
+      userInfoFn ( userInfo ) {
+        let self = this;
+        self.showComp( "showHotel" );
+        self.userInfo.phone     = userInfo.mobile;
+        self.userInfo.userName  = userInfo.nickname;
+        self.userInfo.headerImg = userInfo.user_pic;
       },
 
       _initSwiper() {
@@ -202,7 +210,6 @@
       },
 
       showComp( showcomp ) {
-        console.log( showcomp );
         let self = this;
         for ( let i in self.comp ) {
           if ( i === showcomp ) {

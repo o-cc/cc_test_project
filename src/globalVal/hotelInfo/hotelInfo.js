@@ -20,11 +20,7 @@ function getHotelInfo( city, input, callback ) {
     } )
     .catch( err => {
 
-      if( !err.response.data.detail ) {
-        return callback( "获取酒店失败", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
     } )
 
 };
@@ -41,12 +37,7 @@ function getHotelDetailInfoById( id, callback ) {
       return callback( null, data );
     } )
     .catch( err => {
-
-      if( !err.response.data.detail ) {
-        return callback( "获取酒店信息失败", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
     } )
 
 };
@@ -95,12 +86,7 @@ function getFavoriteHotelIds( callback ) {
 
     } )
     .catch( function ( err ) {
-
-      if( !err.response.data.detail ) {
-        return callback( "无法获取收藏", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
     } )
 
 };
@@ -122,11 +108,7 @@ function postCancelFavorite( hotelId, callback ) {
     } )
     .catch( function ( err ) {
 
-      if( !err.response.data.detail ) {
-        return callback( "无法取消收藏", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
     } )
 
 };
@@ -154,6 +136,15 @@ function getHotelPageVueObj() {
 function setHotelPageVueObj( obj ) {
   hotelPageVueObj = obj;
 };
+let showHotelVueObj = null;
+function getShowHotelVueObj () {
+  return showHotelVueObj;
+};
+
+function setShowHotelVueObj ( obj ) {
+  showHotelVueObj = obj;
+};
+
 
 //hotel的临时变量 可变的 这里保存hotelId 因为酒店详细页面导入了
 const hotelTempInfo = {
@@ -170,7 +161,10 @@ export default {
     setHotelInfo,
     setHotelPageVueObj,
     getHotelPageVueObj,
-    hotelTempInfo
+    hotelTempInfo,
+
+    getShowHotelVueObj,
+    setShowHotelVueObj
   },
 
   getHotelInfo,

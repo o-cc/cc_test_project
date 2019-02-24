@@ -367,6 +367,7 @@
             title  : '提示',
             content: "系统暂时不允许隔天预定",
           } );
+          self.dateTimeValue = [];
           return;
         }
 

@@ -37,11 +37,7 @@ userInfo.getUserInfo = function ( callback ) {
 
     } )
     .catch( err => {
-      if( !err.response.data.detail ) {
-        return callback( "获取用户信息失败", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
 
     } )
 };
@@ -86,11 +82,8 @@ userInfo.putUserInfo = function ( username, phone, userPic, gender, callback ) {
 
     } )
     .catch( err => {
-      if( !err.response.data.detail ) {
-        return callback( "注册失败", null );
-      }
 
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
 
     } )
 };

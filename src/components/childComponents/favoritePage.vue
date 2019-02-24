@@ -53,41 +53,7 @@
     data() {
       return {
         searchValue: "",
-        hotelDetailInfo: [
-          {
-            "id"        : 1,
-            "name"      : "万达嘉华酒店",
-            "image"     : "http://127.0.0.1/images/ix.jpg",
-            "place"     : "广州市增城增城广场南",
-            "types"     : [
-              {
-                "name" : "速定",
-                "color": "red"
-              },
-              {
-                "name" : "七天可退",
-                "color": "green"
-              },
-              {
-                "name" : "超干净",
-                "color": null
-              }
-            ],
-            "low_price" : "150.00",
-            "comm_score": 5,
-            "total_comm": 3
-          },
-          {
-            "id"        : 2,
-            "name"      : "太阳城酒店",
-            "image"     : "http://127.0.0.1/images/ix_6DQawxB.jpg",
-            "place"     : "广州市增城增城广场南",
-            "types"     : [],
-            "low_price" : "150.00",
-            "comm_score": 0,
-            "total_comm": 0
-          }
-        ],
+        hotelDetailInfo: [],
 
         redHeat: true,
 
@@ -110,11 +76,18 @@
       },
 
       searchSubmit() {
-        console.log( "按了提交" );
+        this.searchBlur();
       },
 
       searchBlur() {
-        console.log( "失去焦点" );
+        let self      = this;
+        let showHotel = global.globalVal.hotelInfo.hotelInfoSingleOne.getShowHotelVueObj();
+        showHotel.searchValue = self.searchValue;
+
+        showHotel.getHotelInfo();
+        global.globalVal.hotelInfo.hotelInfoSingleOne.getHotelPageVueObj().homeTitle = "酒店";
+
+        self.$emit( "showHotel", true );
       },
 
       run () {

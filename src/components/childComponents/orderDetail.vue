@@ -454,7 +454,7 @@
         if ( !self.checkPhone( self.phone ) ) {
           return;
         }
-        console.log( self.contactName.length );
+
         if ( self.contactName.length < 1 ) {
           AlertModule.show( {
             title  : '提示',

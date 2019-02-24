@@ -59,7 +59,7 @@
 
         name        : "",
         phone       : "",
-        headImg     : "./../../../static/imgs/Koala.jpg",
+        headImg     : "./../../../static/imgs/user.png",
         headImgValue: "",
 
         headImg1: null
@@ -95,7 +95,8 @@
             title  : '提示',
             content: "修改成功",
             onHide () {
-              self.$emit( "showHotel", "showHotel" );
+
+              self.$emit( "userInfo", res );
             }
           } );
 

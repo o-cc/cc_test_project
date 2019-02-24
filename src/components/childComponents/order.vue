@@ -167,7 +167,6 @@
             }
 
             let tempObj = res;
-            console.log( tempObj );
 
             for( let i = 0; i < tempObj.length; i++ ) {
 
@@ -253,6 +252,7 @@
         self.firstTabBtn  = true;
         self.secondTabBtn = false;
         self.lastTabBtn   = false;
+        self.getOrderInfoByStatus();
 
       },
 

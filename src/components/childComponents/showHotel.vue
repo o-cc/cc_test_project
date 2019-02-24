@@ -146,6 +146,8 @@
       run() {
         let self = this;
 
+        global.globalVal.hotelInfo.hotelInfoSingleOne.setShowHotelVueObj( self );
+
         let date       = new Date();
         let month      = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
         self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
@@ -314,48 +316,6 @@
       },
 
       pickerDataFn() {
-
-        let timeData = [
-          {
-            name  : '中国',
-            value : 'china',
-            parent: '0' // 为一级时可以不写 parent，但是此时允许为数字 0、空字符串或者字符串 '0'
-          }, {
-            name  : '美国',
-            value : 'USA',
-            parent: '0'
-          }, {
-            name  : '广东',
-            value : '广东',
-            parent: 'china'
-          }, {
-            name  : '广西',
-            value : 'china002',
-            parent: 'china'
-          }, {
-            name  : '美国001',
-            value : 'usa001',
-            parent: 'USA'
-          }, {
-            name  : '美国002',
-            value : 'usa002',
-            parent: 'USA'
-          }, {
-            name  : '广西001',
-            value : '广西001',
-            parent: 'china002'
-          }, {
-            name  : '美国001_001',
-            value : '美国001_001',
-            parent: 'usa001'
-          }, {
-            name  : '美国002_001',
-            value : '美国002_001',
-            parent: 'usa002'
-          }
-        ];
-
-        this.pickerTimeData = timeData;
         this.pickerData     = ChinaAddressV4Data;
 
       },

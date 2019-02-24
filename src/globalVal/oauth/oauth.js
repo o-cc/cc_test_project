@@ -31,11 +31,7 @@ function userLogin( username, password, callback ) {
 
   } )
     .catch( function ( err ) {
-      if( !err.response.data.detail ) {
-        return callback( "登录失败", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
 
     } )
 
@@ -61,11 +57,7 @@ function checkUserNameIsSingleOne( username, callback ) {
     } )
     .catch( function ( err ) {
 
-      if( !err.response.data.detail ) {
-        return callback( "无法验证用户名", null );
-      }
-
-      return callback( err.response.data.detail, null );
+      return callback( err.response.data, null );
 
     } )
 };
@@ -93,12 +85,7 @@ function userRegister ( username, password, password2, callback ) {
     })
     .catch( function ( err ) {
 
-      if( !err.response.data.detail ) {
-        return callback( "注册失败", null );
-      }
-
-      return callback( err.response.data.detail, null );
-
+      return callback( err.response.data, null );
     })
 
 };

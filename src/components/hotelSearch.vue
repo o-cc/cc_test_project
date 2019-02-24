@@ -78,7 +78,7 @@
 
         <div class="recommend_hotel">
 
-          <div class="recommend_item" @click="gohotelDetail" v-for="(item, index) in recommend" :key="item.id">
+          <div class="recommend_item" @click="goDetail( item )" v-for="(item, index) in recommend" :key="item.id">
               <div class="item_img" :style="{backgroundImage: item.image}">
                 <div class="img_price">
                   {{ item.low_price }}
@@ -239,16 +239,51 @@
       changeHotel (){
         //随意生成0-酒店列表长度之间的整数
         let self = this;
-        //self.recommend = [];
-        let len = self.allHotel.length;
-        //let randomNum = parseInt( (Math.random() * len) );
+        self.recommend = [];
+        let allHotel  = self.allHotel;
+        //需求是点击生成id不一样的四个酒店 从酒店中拿4个
+        let tempArray = [];
+        //len > 4? 4: len;  尽量不要O(n平方) 诶水平有限 暂时没想到怎么优化这块算法
+        for ( let i = 0; i < allHotel.length; i++ ) {
+          //假设都循环完了，但是随机的数一直都是1 所以只有1个长度的显示
+          let randomNum = parseInt( (Math.random() * allHotel.length) );
 
-        //len > 4? 4: len;
-        //for ( let i = 0; i < len.length; i++ ) {
-        //
-        //  self.recommend.push( res[i] );
-        //}
+          if ( tempArray.length < 1 ) {
+            tempArray.push( allHotel[ randomNum ] );
+            continue;
+          }
 
+          for ( let j = 0; j < tempArray.length; j++ ) {
+
+            if ( Number( tempArray[ j ].id ) !== Number( allHotel[ randomNum ].id ) ) {
+              //说明已经不存在相同
+              tempArray.push( allHotel[ randomNum ] );
+            }
+
+          }
+
+          if ( tempArray.length > 4 ) {
+            break;
+          }
+
+        }
+
+        self.recommend = tempArray;
+
+      },
+
+      goDetail( hotelInfo ) {
+
+        let self = this;
+        if ( !hotelInfo.id ) {
+          AlertModule.show( {
+            title  : '提示',
+            content: "没有该酒店",
+          } );
+          return;
+        }
+        global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId = hotelInfo.id;
+        self.$router.push( '/hotelDetail' );
       },
 
       _initSwiper() {
@@ -369,8 +404,9 @@
           } );
           return;
         }
+        let city = self.pickerValue[ 0 ];
 
-        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue, self.searchValue, function ( err, res ) {
+        global.globalVal.hotelInfo.getHotelInfo( city.slice( 0, city.length -1 ), self.searchValue, function ( err, res ) {
 
           if( err ){
             return;

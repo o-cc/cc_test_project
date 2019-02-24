@@ -25,7 +25,7 @@
         <div class="hotel_info">
 
           <div class="hotel_item">
-            <!--<p class="price">{{ hotelInfo.price }}</p>-->
+            <p class="price">{{ hotelInfo.price }}</p>
 
             <div class="hotel_introduce">
               <p class="hotel_name">{{ hotelInfo.name }}</p>
@@ -68,7 +68,6 @@
           <div class="discuss_title">
             近期热评
           </div>
-
           <div class="discuss_item" v-if="showDefailDiscuss(index)" v-for="(item, index) in hotelInfo.comments">
 
             <div class="discuss_head_img">
@@ -93,7 +92,7 @@
           </div>
           <div class="show_all_discuss" v-if="allDiscuss" @click="showAllDiscuss">
             <div>
-              全部{{ hotelInfo.comments.length }}条评论
+              全部{{ comments }}条评论
             </div>
 
           </div>
@@ -283,6 +282,7 @@
         let self = this;
         self._initSwiper();
         self.hotelId = global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelId;
+
         if ( !self.hotelId ) {
           AlertModule.show( {
             title  : '提示',
@@ -321,7 +321,7 @@
               } );
               return;
             }
-
+            console.log( res );
             self.hotelInfo = res;
             global.globalVal.hotelInfo.hotelInfoSingleOne.hotelTempInfo.hotelDetailInfo = res;
             self.allDiscuss = res[ "comments" ].length > 3 ? 1 : 0;
@@ -448,6 +448,7 @@
       },
 
       formatDate() {
+
         return this.dateTimeValue.length - 1 + "晚";
       },
 
@@ -550,6 +551,24 @@
       colorRgb( color ) {
         return global.globalVal.formatDate.colorRgb( color );
       },
+    },
+
+
+    computed: {
+      comments: function () {
+
+
+        let len = 0;
+        try {
+          len = this.hotelInfo.comments.length;
+
+        }catch ( e ) {
+          len = 0;
+        }
+        return len;
+
+      }
+
     }
   }
 </script>

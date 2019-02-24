@@ -403,7 +403,9 @@
 
       getHotelInfo() {
         let self = this;
-        global.globalVal.hotelInfo.getHotelInfo( self.pickerValue[ 0 ], self.searchValue, function ( err, res ) {
+        let city = self.pickerValue[0];
+
+        global.globalVal.hotelInfo.getHotelInfo( city.slice( 0, city.length-1 ), self.searchValue, function ( err, res ) {
 
           if ( err ) {
             console.log( err );

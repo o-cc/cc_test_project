@@ -183,6 +183,15 @@
             color: #fff;
         }
 
+        .menu_title{
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #4fd2c2;
+        }
+
         .all_component {
             width: 100%;
             height: 100%;
@@ -192,6 +201,7 @@
         .slide_content {
             width: 100%;
             height: 100%;
+            background-color: #f5f5f5;
         }
 
         .home_center {
@@ -209,7 +219,16 @@
             width: 45%;
             height: 15rem;
             margin-bottom: 2rem;
-            background-color: #f90;
+            background-color: #fff;
+        }
+
+        .home_item  div{
+           text-align: left;
+        }
+
+
+        .item_title {
+
         }
 
         .slide_content2 {
@@ -235,8 +254,6 @@
             height: 100%;
             background-color: #d3a4fc;
         }
-
-
 
     </style>
 
@@ -297,12 +314,23 @@
                         <div class="bar"></div>
                         <div class="bar"></div>
                     </div>
+                    <div class="menu_title">
+                        <p>wiating for you</p>
+                    </div>
                     <div class="all_component">
                         <div id="home" class="slide_content">
                             <div class="home_center">
 
                                 <div class="home_item">
-
+                                    <div class="item_title">
+                                        大家好我是渣渣辉
+                                    </div>
+                                    <div class="item_content">
+                                        是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                    </div>
+                                    <div class="item_dull">
+                                        999
+                                    </div>
                                 </div>
                                 <div class="home_item">
 
@@ -344,6 +372,19 @@
 <script src="js/jquery-weui.min.js"></script>
 <!--<script src="js/globalUrl.js"></script>-->
 <script src="js/swiper.min.js"></script>
+<script src="js/wangEditor.min.js"></script>
+
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    // 或者 var editor = new E( document.getElementById('editor') )
+    //editor.create();
+    //$(".w-e-toolbar").html("");
+    //console.log( editor.txt.html() );
+
+
+</script>
+
 <script>
     var menuButton = document.querySelector('.menu-button');
     var swiper = new Swiper('.swiper-container', {
@@ -377,10 +418,6 @@
 
     $( function () {
         //全局属性
-        let allValue = {
-            menu_flag: false
-        };
-
     })
 </script>
 

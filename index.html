@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="css/weui.min.css">
     <link rel="stylesheet" href="css/jquery-weui.min.css">
     <link rel="stylesheet" href="css/globalCss.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
     <!--<link rel="stylesheet" href="css/index.css">-->
-
+    <!-- 特效样式 -->
     <style>
 
         html, body {
@@ -18,187 +19,370 @@
             margin: 0;
         }
 
-        .box, .welcome {
+        .box, .homepage, .swiper-container {
             width: 100%;
             height: 100%;
         }
 
-        .first {
-            display: none;
-            -webkit-animation: hide 3s 3s;
-            -o-animation: hide 3s 3s;
-            animation: hide 3s 3s;
-            animation-fill-mode: forwards;
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
         }
+        .menu {
+            min-width: 100px;
+            width: 70%;
+            max-width: 320px;
 
-
-        .second {
-            display: none;
+            background-color: #4fd2c2;
+            color: #fff;
         }
-
-
-        .top_img {
+        .content {
             width: 100%;
-            height: 45%;
         }
-        
-        .welcome_cont, .login_inp {
-            width: 100%;
-            height: 55%;
+
+        .menu-button {
+            position: absolute;
+            top: 0px; left: 0px;
+
+            padding: 10px;
+
+            cursor: pointer;
+
+            -webkit-transition: .3s;
+            transition: .3s;
+
             background-color: #4fd2c2;
 
+            /*margin: 14px;
+            border-radius: 5px;*/
+        }
+        .menu-button .bar:nth-of-type(1) {
+            margin-top: 0px;
+        }
+        .menu-button .bar:nth-of-type(3) {
+            margin-bottom: 0px;
         }
 
-        .welcome_cont p {
-            color: #fff;
-            font-size: 2rem;
-            text-align: center;
-        }
+        .bar {
+            position: relative;
+            display: block;
 
-        @keyframes hide {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                height: 0;
-            }
-            
-        }
+            width: 50px;
+            height: 5px;
 
-        .login_inp {
+            margin: 10px auto;
             background-color: #fff;
+
+            border-radius: 10px;
+
+            -webkit-transition: .3s;
+            transition: .3s;
         }
 
-        .login_center {
-            width: 80%;
-
+        .menu-button:hover .bar:nth-of-type(1) {
+            -webkit-transform: translateY(1.5px) rotate(-4.5deg);
+            -ms-transform: translateY(1.5px) rotate(-4.5deg);
+            transform: translateY(1.5px) rotate(-4.5deg);
+        }
+        .menu-button:hover .bar:nth-of-type(2) {
+            opacity: .9;
+        }
+        .menu-button:hover .bar:nth-of-type(3) {
+            -webkit-transform: translateY(-1.5px) rotate(4.5deg);
+            -ms-transform: translateY(-1.5px) rotate(4.5deg);
+            transform: translateY(-1.5px) rotate(4.5deg);
         }
 
-        .login_item {
+        .cross .bar:nth-of-type(1) {
+            -webkit-transform: translateY(15px) rotate(-45deg);
+            -ms-transform: translateY(15px) rotate(-45deg);
+            transform: translateY(15px) rotate(-45deg);
+        }
+        .cross .bar:nth-of-type(2) {
+            opacity: 0;
+        }
+        .cross .bar:nth-of-type(3) {
+            -webkit-transform: translateY(-15px) rotate(45deg);
+            -ms-transform: translateY(-15px) rotate(45deg);
+            transform: translateY(-15px) rotate(45deg);
+        }
+        .cross:hover .bar:nth-of-type(1) {
+            -webkit-transform: translateY(13.5px) rotate(-40.5deg);
+            -ms-transform: translateY(13.5px) rotate(-40.5deg);
+            transform: translateY(13.5px) rotate(-40.5deg);
+        }
+        .cross:hover .bar:nth-of-type(2) {
+            opacity: .1;
+        }
+        .cross:hover .bar:nth-of-type(3) {
+            -webkit-transform: translateY(-13.5px) rotate(40.5deg);
+            -ms-transform: translateY(-13.5px) rotate(40.5deg);
+            transform: translateY(-13.5px) rotate(40.5deg);
+        }
+
+    </style>
+
+    <style>
+
+        .menu_center {
             width: 100%;
-            height: 6rem;
-            margin-bottom: 1rem;
+            height: 100%;
+            flex-direction: column;
+        }
+        .top_menu {
+            width: 100%;
+            height: 30%;
+
+        }
+
+        .head_img {
+            padding: 1rem 1.5rem;
+            background-color: #fff;
+            border-radius: 50%;
+            color: #000;
+        }
+
+        .persion_info {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /*background-color: #ff9130;*/
-        }
-        
-        .login_item p {
-            font-size: 1.4rem;
-            color: #818182;
+            align-items: flex-start;
+            text-align: left;
+            font-size: 1.3rem;
+            margin-left: 1rem;
         }
 
-        .login_item input {
-            border: 0;
-            outline: none;
+        .bom_menu {
             width: 100%;
-            height: 3rem;
-            border-bottom: 1px solid #ddd;
-            font-size: 1.2rem;
-            color: #454544;
+            height: 70%;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
-        .login_btn {
+        .bom_menu div {
             width: 100%;
-            height: 80%;
-            background-color: rgba(9, 187, 7, 0.83);
-            border: 0;
-            outline: none;
-            margin: 2rem auto 0;
-            font-size: 2rem;
+            height: 12%;
+        }
+
+        .bom_menu div a {
             color: #fff;
-            border-radius: 5px;
         }
+
+        .all_component {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide_content {
+            width: 100%;
+            height: 100%;
+        }
+
+        .home_center {
+            width: 95%;
+            margin: 55px auto 0;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+
+        .home_item {
+            width: 45%;
+            height: 15rem;
+            margin-bottom: 2rem;
+            background-color: #f90;
+        }
+
+        .slide_content2 {
+            width: 100%;
+            height: 100%;
+            background-color: #f20;
+        }
+
+        .slide_content3 {
+            width: 100%;
+            height: 100%;
+            background-color: #f90;
+        }
+
+        .slide_content4 {
+            width: 100%;
+            height: 100%;
+            background-color: #250;
+        }
+
+        .slide_content5 {
+            width: 100%;
+            height: 100%;
+            background-color: #d3a4fc;
+        }
+
 
 
     </style>
+
+
 </head>
 <body>
 
 <div class="box" style="overflow: hidden">
-    <!-- 开机显示欢迎界面 5s后显示首页 使用css控制 -->
-    <div class="welcome first">
-        <div class="top_img center_flex">
-            <i style="font-size: 12rem;" class="weui-icon-waiting weui-icon_msg"></i>
-        </div>
+    <!--首页 默认加载所有的东西-->
+    <div class="homepage">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide menu">
 
-        <div class="welcome_cont center_flex">
-            <p>
-                从明天起,做一个幸福的人~
-            </p>
-        </div>
+                    <div class="menu_center center_flex">
 
-    </div>
+                        <div class="top_menu center_flex">
+                            <div>
+                                 <div class="head_img">胖</div>
+                            </div>
+                            <div class="persion_info">
+                                <p>胖虎西西</p>
+                                <p>359835703@qq.com</p>
+                            </div>
 
-    <div class="welcome second">
-        <div class="top_img center_flex">
-            <i style="font-size: 12rem;" class="weui-icon-success weui-icon_msg"></i>
-        </div>
+                        </div>
 
-        <div class="login_inp center_flex">
-            <div class="login_center">
+                        <div class="bom_menu center_flex">
+                            <div>
+                                <a href="#home">首页</a>
+                            </div>
+                            <div>
+                                <a href="#memo">备忘录</a>
+                            </div>
+                            <div>
+                                <a href="#notes">记事本</a>
+                            </div>
+                            <div>
+                                <a href="#plan">计划表</a>
+                            </div>
+                            <div>
+                                <a href="#bill">记账本</a>
+                            </div>
+                            <div>
+                                <a href="#signout">退出</a>
+                            </div>
 
-                <div class="login_item">
-                    <p>用户名</p>
-                    <input type="text" placeholder="QQ/邮箱/手机号码">
+                        </div>
+                    </div>
+
+
+
                 </div>
-                <div class="login_item">
-                    <p>密码</p>
-                    <input type="password" placeholder="请输入密码">
-                </div>
-                <div class="login_item" style="height: 7rem;">
-                    <button class="login_btn">sign in </button>
-                </div>
-                <div class="login_item">
-                    <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a href="#register">注册一个</a></p>
+
+                <div class="swiper-slide content">
+                    <div class="menu-button">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="all_component">
+                        <div id="home" class="slide_content">
+                            <div class="home_center">
+
+                                <div class="home_item">
+
+                                </div>
+                                <div class="home_item">
+
+                                </div>
+                                <div class="home_item">
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div id="memo" class="slide_content2">
+
+                        </div>
+                        <div id="notes" class="slide_content3">
+
+                        </div>
+                        <div id="plan" class="slide_content4">
+
+                        </div>
+                        <div id="bill" class="slide_content5">
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="welcome third">
-        <div class="top_img center_flex" style="height: 35%;">
-            <i style="font-size: 12rem;" class="weui-icon-info weui-icon_msg"></i>
-        </div>
 
-        <div class="login_inp center_flex" style="height: 65%;">
-            <div class="login_center">
 
-                <div class="login_item">
-                    <p>全名</p>
-                    <input type="text" placeholder="请输入全名">
-                </div>
-                <div class="login_item">
-                    <p>email</p>
-                    <input type="email" placeholder="请输入邮箱">
-                </div>
-                <div class="login_item">
-                    <p>密码</p>
-                    <input type="password" placeholder="请输入密码">
-                </div>
-                <div class="login_item">
-                    <p>确认密码</p>
-                    <input type="password" placeholder="请输入密码">
-                </div>
-                <div class="login_item" style="height: 7rem;">
-                    <button class="login_btn" style="background-color:#10aeff;"> register </button>
-                </div>
-                <div class="login_item" style="height: 5rem;">
-                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a href="#register">登录一个</a></p>
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
 
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-weui.min.js"></script>
-<script src="js/globalUrl.js"></script>
-<!--<script src="js/allMeeting.js"></script>-->
+<!--<script src="js/globalUrl.js"></script>-->
+<script src="js/swiper.min.js"></script>
+<script>
+    var menuButton = document.querySelector('.menu-button');
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 'auto',
+        initialSlide: 1,
+        resistanceRatio: 0,
+        slideToClickedSlide: true,
+        on: {
+            init: function () {
+                var slider = this;
+                menuButton.addEventListener('click', function () {
+                    if (slider.activeIndex === 0) {
+                        slider.slideNext();
+                    } else {
+                        slider.slidePrev();
+                    }
+                }, true);
+            },
+            slideChange: function () {
+                var slider = this;
+                if (slider.activeIndex === 0) {
+                    menuButton.classList.add('cross');
+                } else {
+                    menuButton.classList.remove('cross');
+                }
+            },
+        }
+    });
+</script>
+<script>
+
+    $( function () {
+        //全局属性
+        let allValue = {
+            menu_flag: false
+        };
+
+    })
+</script>
+
 </body>
 </html>

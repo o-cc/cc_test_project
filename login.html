@@ -24,15 +24,19 @@
         }
 
         .first {
-            display: none;
-            -webkit-animation: hide 3s 3s;
-            -o-animation: hide 3s 3s;
-            animation: hide 3s 3s;
+            /*display: block;*/
+            -webkit-animation: hide 3s 2s;
+            -o-animation: hide 3s 2s;
+            animation: hide 3s 2s;
             animation-fill-mode: forwards;
         }
 
 
         .second {
+            /*display: none;*/
+        }
+
+        .third {
             display: none;
         }
 
@@ -113,6 +117,86 @@
         }
 
 
+        .register {
+            height: 7rem;
+        }
+
+
+        .bom_p {
+            height: 4rem;
+        }
+
+        /*当界面是小于ipad尺寸*/
+        .icon_font {
+            font-size: 15rem;
+        }
+        
+        @media screen and (min-width: 768px) {
+            .box {
+                width: 768px;
+                margin: 0 auto;
+            }
+
+            .login_inp {
+                /*overfl!**!ow: scroll;*/
+            }
+
+            .login_item {
+                height: 4.5rem;
+            }
+
+            .register {
+                height: 6rem;
+            }
+
+            .bom_p {
+                height: 1rem;
+            }
+
+            /*当界面是大于ipad尺寸*/
+            .icon_font {
+                font-size: 9rem;
+            }
+
+
+        }
+
+        /*iphone se一下的尺寸*/
+        @media screen and (max-width: 320px) {
+            /*.box {*/
+                /*width: 768px;*/
+                /*margin: 0 auto;*/
+            /*}*/
+
+            /*.login_inp {*/
+                /*overflow: scroll;*/
+            /*}*/
+
+            .login_item {
+                width: 100%;
+                height: 5rem;
+                margin-bottom: 1rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                /*background-color: #ff9130;*/
+            }
+
+            .bom_p {
+                height: 1rem;
+            }
+
+            .register {
+                height: 6rem;
+            }
+
+            .icon_font {
+                font-size: 12rem;
+            }
+
+        }
+
+
     </style>
 </head>
 <body>
@@ -121,7 +205,7 @@
     <!-- 开机显示欢迎界面 5s后显示首页 使用css控制 -->
     <div class="welcome first">
         <div class="top_img center_flex">
-            <i style="font-size: 12rem;" class="weui-icon-waiting weui-icon_msg"></i>
+            <i class="weui-icon-waiting weui-icon_msg icon_font"></i>
         </div>
 
         <div class="welcome_cont center_flex">
@@ -134,7 +218,7 @@
 
     <div class="welcome second">
         <div class="top_img center_flex">
-            <i style="font-size: 12rem;" class="weui-icon-success weui-icon_msg"></i>
+            <i class="weui-icon-success weui-icon_msg icon_font"></i>
         </div>
 
         <div class="login_inp center_flex">
@@ -152,7 +236,7 @@
                     <button class="login_btn">sign in </button>
                 </div>
                 <div class="login_item">
-                    <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a href="#register">注册一个</a></p>
+                    <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a id="register" href="#register">注册一个</a></p>
                 </div>
             </div>
         </div>
@@ -160,11 +244,11 @@
     </div>
 
     <div class="welcome third">
-        <div class="top_img center_flex" style="height: 35%;">
-            <i style="font-size: 12rem;" class="weui-icon-info weui-icon_msg"></i>
+        <div class="top_img center_flex" style="height: 30%;">
+            <i class="weui-icon-info weui-icon_msg icon_font"></i>
         </div>
 
-        <div class="login_inp center_flex" style="height: 65%;">
+        <div class="login_inp center_flex" style="height: 70%;">
             <div class="login_center">
 
                 <div class="login_item">
@@ -183,11 +267,11 @@
                     <p>确认密码</p>
                     <input type="password" placeholder="请输入密码">
                 </div>
-                <div class="login_item" style="height: 7rem;">
+                <div class="login_item register">
                     <button class="login_btn" style="background-color:#10aeff;"> register </button>
                 </div>
-                <div class="login_item" style="height: 5rem;">
-                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a href="#register">登录一个</a></p>
+                <div class="login_item bom_p">
+                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a id="login" href="#login">登录一个</a></p>
                 </div>
             </div>
         </div>
@@ -199,6 +283,24 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-weui.min.js"></script>
 <script src="js/globalUrl.js"></script>
-<!--<script src="js/allMeeting.js"></script>-->
+<script src="js/login.js"></script>
+
+<script>
+$( function () {
+
+    $("#register").click(function () {
+        $(".second").hide(1000);
+        $(".third").show(100);
+    });
+
+    $("#login").click(function () {
+        $(".third").hide(1000);
+        $(".second").show(1000);
+    });
+
+})
+
+</script>
+
 </body>
 </html>

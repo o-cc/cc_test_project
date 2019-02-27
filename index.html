@@ -67,7 +67,7 @@
             transition: .3s;
 
             background-color: #4fd2c2;
-
+            z-index: 1;
             /*margin: 14px;
             border-radius: 5px;*/
         }
@@ -190,6 +190,7 @@
             transform: translateX(-50%);
             font-size: 1.5rem;
             color: #4fd2c2;
+            z-index: 1;
         }
 
         .all_component {
@@ -202,24 +203,35 @@
             width: 100%;
             height: 100%;
             background-color: #f5f5f5;
+            position: relative;
+        }
+
+        .home_top_placeholder{
+            width: 100%;
+            height: 55px;
+            background-color: #fff;
+            z-index: -1;
         }
 
         .home_center {
-            width: 95%;
-            margin: 55px auto 0;
-
+            width: 90%;
+            max-height: 100%;
+            margin: 0px auto;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             flex-wrap: wrap;
-            padding: 10px;
+            padding-top: 15px;
+            overflow: scroll;
         }
 
         .home_item {
-            width: 45%;
-            height: 15rem;
+            width: 42%;
+            height: 12rem;
             margin-bottom: 2rem;
             background-color: #fff;
+            position: relative;
+            padding: 10px;
         }
 
         .home_item  div{
@@ -227,9 +239,45 @@
         }
 
 
-        .item_title {
+        .home_item .item_title h5 {
+            text-align: center;
+        }
+
+        .item_content {
+            font-size: 1.2rem;
+        }
+
+        .item_dollar {
+            color: #4fd2c2;
+            font-size: 1.5rem;
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+        }
+
+        .fix {
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        .add_btn {
+            border: 0;
+            background-color: #4fd2c2;
+            border-radius: 50%;
+            color: #fff;
 
         }
+
+        .weui-uploader__input-box:after, .weui-uploader__input-box:before {
+            background-color: #fff!important;
+        }
+
+        .alert_action {
+            font-size: 1.2rem;
+        }
+
 
         .slide_content2 {
             width: 100%;
@@ -319,29 +367,100 @@
                     </div>
                     <div class="all_component">
                         <div id="home" class="slide_content">
+                            <div class="home_top_placeholder"></div>
                             <div class="home_center">
 
                                 <div class="home_item">
                                     <div class="item_title">
-                                        大家好我是渣渣辉
+                                        <h5>大渣好我是渣渣辉</h5>
                                     </div>
                                     <div class="item_content">
-                                        是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
                                     </div>
-                                    <div class="item_dull">
-                                        999
+                                    <div class="item_dollar">
+                                        ￥999
                                     </div>
                                 </div>
                                 <div class="home_item">
-
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                    <div class="item_dollar">
+                                        ￥999
+                                    </div>
                                 </div>
                                 <div class="home_item">
-
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                    <div class="item_dollar">
+                                        ￥999
+                                    </div>
+                                </div>
+                                <div class="home_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                    <div class="item_dollar">
+                                        ￥999
+                                    </div>
+                                </div>
+                                <div class="home_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                    <div class="item_dollar">
+                                        ￥999
+                                    </div>
+                                </div>
+                                <div class="home_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                    <div class="item_dollar">
+                                        ￥999
+                                    </div>
                                 </div>
 
                             </div>
+                            <div class="fix">
+                                <div class="weui-uploader__input-box add_btn">
 
-
+                                </div>
+                            </div>
                         </div>
                         <div id="memo" class="slide_content2">
 
@@ -418,6 +537,45 @@
 
     $( function () {
         //全局属性
+        $(".fix").click( function () {
+
+            $.actions( {
+                actions:
+                    [
+                        {
+                            text   : "添加备忘",
+                            className: "alert_action",
+                            onClick: function () {
+                                //do something
+                            }
+                        },
+                        {
+                            text   : "记事本",
+                            className: "alert_action",
+                            onClick: function () {
+                                //do something
+                            }
+                        },
+                        {
+                            text   : "准备记账",
+                            className: "alert_action",
+                            onClick: function () {
+                                //do something
+                            }
+                        },
+                        {
+                            text   : "添加计划",
+                            className: "alert_action",
+                            onClick: function () {
+                                //do something
+                            }
+                        }
+                    ]
+            } );
+
+        })
+
+
     })
 </script>
 

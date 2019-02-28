@@ -199,7 +199,7 @@
             overflow: hidden;
         }
 
-        .slide_content {
+        .slide_content, .slide_content2, .slide_content3, .slide_content4, .slide_content5 {
             width: 100%;
             height: 100%;
             background-color: #f5f5f5;
@@ -215,7 +215,7 @@
 
         .home_center {
             width: 90%;
-            max-height: 100%;
+            max-height: 95%;
             margin: 0px auto;
             display: flex;
             justify-content: space-between;
@@ -225,7 +225,7 @@
             overflow: scroll;
         }
 
-        .home_item {
+        .home_item, .memo_item, .memo_add {
             width: 42%;
             height: 12rem;
             margin-bottom: 2rem;
@@ -259,7 +259,7 @@
             position: absolute;
             bottom: 0%;
             left: 50%;
-            transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-15%);
         }
 
         .add_btn {
@@ -279,28 +279,53 @@
         }
 
 
-        .slide_content2 {
-            width: 100%;
-            height: 100%;
-            background-color: #f20;
+        /*  memo 开始*/
+        .memo_item, .memo_add {
+            height: 10rem;
         }
 
-        .slide_content3 {
-            width: 100%;
-            height: 100%;
-            background-color: #f90;
+        .memo_add::after, .memo_add::before {
+            content: " ";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            background-color: #ccc;
         }
 
-        .slide_content4 {
-            width: 100%;
-            height: 100%;
-            background-color: #250;
+        .memo_add::after {
+            width: 2px;
+            height: 80px;
+
         }
 
-        .slide_content5 {
+        .memo_add::before {
+            width: 80px;
+            height: 2px;
+        }
+
+
+        .memo_input {
             width: 100%;
             height: 100%;
-            background-color: #d3a4fc;
+        }
+
+        .input_content {
+            background-color: #fff;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .text {
+            border: 1px solid #ccc;
+        }
+
+        .controll_audio {
+            width: 100%;
         }
 
     </style>
@@ -363,69 +388,13 @@
                         <div class="bar"></div>
                     </div>
                     <div class="menu_title">
-                        <p>wiating for you</p>
+                        <p>waiting for you</p>
                     </div>
                     <div class="all_component">
-                        <div id="home" class="slide_content">
+                        <div id="home" class="slide_content" style="display: none">
                             <div class="home_top_placeholder"></div>
                             <div class="home_center">
-
-                                <div class="home_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                    <div class="item_dollar">
-                                        ￥999
-                                    </div>
-                                </div>
-                                <div class="home_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                    <div class="item_dollar">
-                                        ￥999
-                                    </div>
-                                </div>
-                                <div class="home_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                    <div class="item_dollar">
-                                        ￥999
-                                    </div>
-                                </div>
-                                <div class="home_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                    <div class="item_dollar">
-                                        ￥999
-                                    </div>
-                                </div>
+                                <!-- 首页所有便签 -->
                                 <div class="home_item">
                                     <div class="item_title">
                                         <h5>大渣好我是渣渣辉</h5>
@@ -456,15 +425,72 @@
                                 </div>
 
                             </div>
+                            <!--添加-->
                             <div class="fix">
-                                <div class="weui-uploader__input-box add_btn">
-
-                                </div>
+                                <div class="weui-uploader__input-box add_btn"></div>
                             </div>
                         </div>
+
                         <div id="memo" class="slide_content2">
 
+                            <div class="home_top_placeholder"></div>
+                            <div style="display: none" class="home_center">
+                                <!-- 首页所有便签 -->
+                                <div class="memo_add"></div>
+
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="memo_input">
+
+                                <div class="weui-cells">
+                                    <div class="weui-cell">
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="text" placeholder="请输入标题">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input_content">
+                                    <!--注意 这里改了eidtor的源码！默认为300 改成了400的高度0.0-->
+                                    <div id="editor" class="text">
+
+                                    </div>
+                                </div>
+
+                                <div class="controll_audio">
+                                    <div class="weui-cell weui-cell_switch">
+                                        <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">是否声音提示</div>
+                                        <div class="weui-cell__ft">
+                                            <input class="weui-switch" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
+
                         <div id="notes" class="slide_content3">
 
                         </div>
@@ -474,6 +500,7 @@
                         <div id="bill" class="slide_content5">
 
                         </div>
+
                     </div>
 
                 </div>
@@ -494,12 +521,11 @@
 <script src="js/wangEditor.min.js"></script>
 
 <script type="text/javascript">
-    var E = window.wangEditor
-    var editor = new E('#editor')
-    // 或者 var editor = new E( document.getElementById('editor') )
-    //editor.create();
-    //$(".w-e-toolbar").html("");
-    //console.log( editor.txt.html() );
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+
+    editor.create();
+    $(".w-e-toolbar").html("");
 
 
 </script>
@@ -536,7 +562,7 @@
 <script>
 
     $( function () {
-        //全局属性
+
         $(".fix").click( function () {
 
             $.actions( {
@@ -573,6 +599,33 @@
                     ]
             } );
 
+        })
+
+        //长按事件
+        var timeOutEvent = null;
+        $(".memo_item").on({
+            touchstart: function(e) {
+                // 长按事件触发
+                timeOutEvent = setTimeout(function() {
+                    timeOutEvent = 0;
+                    console.log('你长按了');
+                }, 1000);
+                //长按400毫秒
+                // e.preventDefault();
+            },
+            touchmove: function() {
+                clearTimeout(timeOutEvent);
+                timeOutEvent = 0;
+            },
+            touchend: function() {
+                clearTimeout(timeOutEvent);
+                if (timeOutEvent != 0) {
+                    // 点击事件
+                    // location.href = '/a/live-rooms.html';
+                    console.log('你点击了');
+                }
+                return false;
+            }
         })
 
 

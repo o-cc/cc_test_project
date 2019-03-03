@@ -19,7 +19,9 @@
             margin: 0;
         }
 
-        *{ touch-action: none; }
+        * {
+            touch-action: none;
+        }
 
         .box, .homepage, .swiper-container {
             width: 100%;
@@ -45,6 +47,7 @@
             -webkit-align-items: center;
             align-items: center;
         }
+
         .menu {
             min-width: 100px;
             width: 70%;
@@ -53,13 +56,15 @@
             background-color: #4fd2c2;
             color: #fff;
         }
+
         .content {
             width: 100%;
         }
 
         .menu-button {
             position: absolute;
-            top: 0px; left: 0px;
+            top: 0px;
+            left: 0px;
 
             padding: 10px;
 
@@ -73,9 +78,11 @@
             /*margin: 14px;
             border-radius: 5px;*/
         }
+
         .menu-button .bar:nth-of-type(1) {
             margin-top: 0px;
         }
+
         .menu-button .bar:nth-of-type(3) {
             margin-bottom: 0px;
         }
@@ -101,9 +108,11 @@
             -ms-transform: translateY(1.5px) rotate(-4.5deg);
             transform: translateY(1.5px) rotate(-4.5deg);
         }
+
         .menu-button:hover .bar:nth-of-type(2) {
             opacity: .9;
         }
+
         .menu-button:hover .bar:nth-of-type(3) {
             -webkit-transform: translateY(-1.5px) rotate(4.5deg);
             -ms-transform: translateY(-1.5px) rotate(4.5deg);
@@ -115,22 +124,27 @@
             -ms-transform: translateY(15px) rotate(-45deg);
             transform: translateY(15px) rotate(-45deg);
         }
+
         .cross .bar:nth-of-type(2) {
             opacity: 0;
         }
+
         .cross .bar:nth-of-type(3) {
             -webkit-transform: translateY(-15px) rotate(45deg);
             -ms-transform: translateY(-15px) rotate(45deg);
             transform: translateY(-15px) rotate(45deg);
         }
+
         .cross:hover .bar:nth-of-type(1) {
             -webkit-transform: translateY(13.5px) rotate(-40.5deg);
             -ms-transform: translateY(13.5px) rotate(-40.5deg);
             transform: translateY(13.5px) rotate(-40.5deg);
         }
+
         .cross:hover .bar:nth-of-type(2) {
             opacity: .1;
         }
+
         .cross:hover .bar:nth-of-type(3) {
             -webkit-transform: translateY(-13.5px) rotate(40.5deg);
             -ms-transform: translateY(-13.5px) rotate(40.5deg);
@@ -146,6 +160,7 @@
             height: 100%;
             flex-direction: column;
         }
+
         .top_menu {
             width: 100%;
             height: 30%;
@@ -185,7 +200,7 @@
             color: #fff;
         }
 
-        .menu_title{
+        .menu_title {
             position: absolute;
             top: 18px;
             left: 50%;
@@ -208,7 +223,13 @@
             position: relative;
         }
 
-        .home_top_placeholder{
+
+        .slide_content2, .slide_content3{
+            height: 220%;
+        }
+
+
+        .home_top_placeholder {
             width: 100%;
             height: 55px;
             background-color: #fff;
@@ -236,10 +257,9 @@
             padding: 10px;
         }
 
-        .home_item  div{
-           text-align: left;
+        .home_item div {
+            text-align: left;
         }
-
 
         .home_item .item_title h5 {
             text-align: center;
@@ -273,17 +293,22 @@
         }
 
         .weui-uploader__input-box:after, .weui-uploader__input-box:before {
-            background-color: #fff!important;
+            background-color: #fff !important;
         }
 
         .alert_action {
             font-size: 1.2rem;
         }
 
-
         /*  memo 开始*/
         .memo_item, .memo_add {
             height: 10rem;
+        }
+
+        .memo_add a {
+            display: inline-block;
+            height: 100%;
+            width: 100%;
         }
 
         .memo_add::after, .memo_add::before {
@@ -310,7 +335,6 @@
             height: 2px;
         }
 
-
         .memo_input {
             width: 100%;
             height: 100%;
@@ -324,14 +348,16 @@
 
         .text {
             border: 1px solid #ccc;
+            height: 400px;
         }
 
         .controll_audio {
             width: 100%;
         }
 
-        .controll_date{
+        .controll_date {
             width: 100%;
+            display: none;
             position: relative;
         }
 
@@ -341,6 +367,53 @@
             top: 50%;
             transform: translateY(-50%);
         }
+
+        .save_meno {
+            margin-top: 1rem;
+        }
+
+        .save_btn {
+            background-color: #4fd2c2;
+            color: #fff;
+            border: none;
+            width: 60%;
+        }
+        /*备忘录的输入框做适配*/
+        @media screen and (max-width: 375px) {
+
+
+            .slide_content2{
+                height: 250%;
+            }
+
+            .text {
+                height: 320px;
+            }
+
+        }
+        @media screen and (max-width: 320px) {
+
+            .slide_content2{
+                height: 250%;
+            }
+
+            .text {
+                height: 250px;
+            }
+
+        }
+        @media screen and (min-height: 812px) {
+
+            .slide_content2{
+                height: 250%;
+            }
+
+            .text {
+                height: 450px;
+            }
+
+        }
+
 
     </style>
 
@@ -359,7 +432,7 @@
 
                         <div class="top_menu center_flex">
                             <div>
-                                 <div class="head_img">胖</div>
+                                <div class="head_img">胖</div>
                             </div>
                             <div class="persion_info">
                                 <p>胖虎西西</p>
@@ -391,8 +464,6 @@
                         </div>
                     </div>
 
-
-
                 </div>
 
                 <div class="swiper-slide content">
@@ -405,7 +476,7 @@
                         <p>waiting for you</p>
                     </div>
                     <div class="all_component">
-                        <div id="home" class="slide_content" style="display: none">
+                        <div id="home" class="slide_content">
                             <div class="home_top_placeholder"></div>
                             <div class="home_center">
                                 <!-- 首页所有便签 -->
@@ -448,9 +519,11 @@
                         <div id="memo" class="slide_content2">
 
                             <div class="home_top_placeholder"></div>
-                            <div style="display: none" class="home_center">
+                            <div style="margin-bottom: 110%" class="home_center">
                                 <!-- 首页所有便签 -->
-                                <div class="memo_add"></div>
+                                <div class="memo_add">
+                                    <a href="#memo_input"></a>
+                                </div>
 
                                 <div class="memo_item">
                                     <div class="item_title">
@@ -476,7 +549,8 @@
                                 </div>
 
                             </div>
-                            <div class="memo_input">
+                            <div class="memo_input" id="memo_input">
+                                <div class="home_top_placeholder"></div>
 
                                 <div class="weui-cells">
                                     <div class="weui-cell">
@@ -487,7 +561,7 @@
                                 </div>
 
                                 <div class="input_content">
-                                    <!--注意 这里改了eidtor的源码！默认为300 改成了400的高度0.0-->
+                                    <!--注意 这里改了eidtor的源码！默认为300 改成了100%的高度0.0-->
                                     <div id="editor" class="text">
 
                                     </div>
@@ -495,19 +569,23 @@
 
                                 <div class="controll_audio">
                                     <div class="weui-cell weui-cell_switch">
-                                        <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">是否声音提示</div>
+                                        <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">是否声音提示
+                                        </div>
                                         <div class="weui-cell__ft">
-                                            <input class="weui-switch" type="checkbox">
+                                            <input class="weui-switch audio_click" type="checkbox">
                                         </div>
                                     </div>
 
                                     <div class="controll_date">
                                         <div class="weui-cell weui-cell_switch">
-                                            <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">请选择时间</div>
+                                            <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">
+                                                请设置声音提示时间
+                                            </div>
                                             <div class="weui-cell__ft">
                                                 <!--<input type="text" id='datetime-picker'/>-->
                                                 <div class="weui-cell__bd">
-                                                    <input class="weui-input" id="datetime-picker" placeholder="请选择时间" type="text">
+                                                    <input class="weui-input" style="text-align: center" id="datetime-picker" placeholder="请选择时间"
+                                                           type="text">
                                                 </div>
                                             </div>
                                         </div>
@@ -515,13 +593,74 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="save_meno">
+                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_btn">保存</a>
+                                    </div>
+
                                 </div>
 
                             </div>
                         </div>
 
                         <div id="notes" class="slide_content3">
+                            <div class="home_top_placeholder"></div>
+                            <div class="home_center">
+                                <!-- 首页所有便签 -->
+                                <div class="memo_add">
+                                    <a href="#node_input"></a>
+                                </div>
 
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="memo_input" id="node_input">
+                                <div class="home_top_placeholder"></div>
+
+                                <div class="weui-cells">
+                                    <div class="weui-cell">
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="text" placeholder="请输入备忘标题">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="controll_audio">
+                                    <div class="weui-cell weui-cell_switch">
+                                        <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">是否声音提示
+                                        </div>
+                                        <div class="weui-cell__ft">
+                                            <input class="weui-switch audio_click" type="checkbox">
+                                        </div>
+                                    </div>
+
+                                    <div class="save_meno">
+                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_btn">保存</a>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                         <div id="plan" class="slide_content4">
 
@@ -539,7 +678,6 @@
     </div>
 
 
-
 </div>
 
 </div>
@@ -549,154 +687,174 @@
 <script src="js/swiper.min.js"></script>
 <script src="js/wangEditor.min.js"></script>
 
+
+<!--这里是编辑器-->
 <script type="text/javascript">
-    var E = window.wangEditor;
-    var editor = new E('#editor');
+    var E      = window.wangEditor;
+    var editor = new E( '#editor' );
 
     editor.create();
-    $(".w-e-toolbar").html("");
-
+    $( ".w-e-toolbar" ).html( "" );
 
 </script>
+
+<!--这边备忘录操作选择日期-->
 <script>
     $( function () {
 
+        //点击声音开关
+        $( ".audio_click" ).click( function () {
+
+            if ( $( this ).prop( "checked" ) ) {
+                $( ".controll_date" ).show();
+                return;
+            }
+
+            $( ".controll_date" ).hide();
+
+        } )
+
         let date = new Date();
-        let str = date.getFullYear()+ "-" + (date.getMonth()+1) +"-" + date.getDate();
-        $("#datetime-picker").datetimePicker({
-            min: str,
-            max:  (date.getFullYear() + 1)+ "-" + (date.getMonth()+1) +"-" + date.getDate(),
-            onClose: function (picker) {
+        let str  = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        $( "#datetime-picker" ).datetimePicker( {
+            min    : str,
+            max    : (date.getFullYear() + 1) + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+            onClose: function ( picker ) {
                 //2019-03-01-10-45
-                console.log( picker );
                 let value    = picker.value.join( ":" );
                 let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
 
-                let date = new Date( newValue );
-
+                let date    = new Date( newValue );
                 let nowDate = new Date();
+                if ( nowDate > date ) {
+                    $( "#datetime-picker" ).val( "" );
+                    return;
+                }
 
                 let min   = (date - nowDate) / 1000 / 60;
                 let hours = min / 60;
                 let day   = Math.floor( hours / 24 );
-
-                min   = Math.floor( (min > 60 ? (min / 60 - (min / 60)) * 60 : min) ) + "分";
-                hours = Math.floor( hours > 24 ? (hours / 24 - (hours / 24)) * 24 : hours ) + "时";
-                day   = (day > 1 ? day  + "天": " ");
-                //$( ".after_date" ).html( day + hours + min );
-                $("#datetime-picker").val( day + hours + min +"后响铃" );
+                min       = Math.ceil( min > 60 ? (Math.ceil( min / 60 ) - (min / 60)) * 60 : min ) + "分";
+                hours     = Math.floor( hours > 24 ? (Math.ceil( hours / 24 ) - (hours / 24)) * 24 : hours ) + "时";
+                day       = (day > 1 ? day + "天" : " ");
+                $( "#datetime-picker" ).val( day + hours + min + "后响铃" );
             }
-        });
+        } );
 
-    })
+        //点击保存
+        $(".save_btn").click( function () {
+            //点击保存
+            //是否有声音
 
+           //editor.txt.html()
+           // $( ".audio_click" ).prop( "checked" )
+        })
 
-
+    } )
 
 </script>
+
+<!--weiper特效-->
 <script>
     $( function () {
-        var menuButton = document.querySelector('.menu-button');
-        var swiper = new Swiper('.swiper-container', {
-            slidesPerView: 'auto',
-            initialSlide: 1,
-            resistanceRatio: 0,
+        var menuButton = document.querySelector( '.menu-button' );
+        var swiper     = new Swiper( '.swiper-container', {
+            slidesPerView      : 'auto',
+            initialSlide       : 1,
+            resistanceRatio    : 0,
             slideToClickedSlide: true,
-            on: {
-                init: function () {
+            on                 : {
+                init       : function () {
                     var slider = this;
-                    menuButton.addEventListener('click', function () {
-                        if (slider.activeIndex === 0) {
+                    menuButton.addEventListener( 'click', function () {
+                        if ( slider.activeIndex === 0 ) {
                             slider.slideNext();
                         } else {
                             slider.slidePrev();
                         }
-                    }, true);
+                    }, true );
                 },
                 slideChange: function () {
                     var slider = this;
-                    if (slider.activeIndex === 0) {
-                        menuButton.classList.add('cross');
+                    if ( slider.activeIndex === 0 ) {
+                        menuButton.classList.add( 'cross' );
                     } else {
-                        menuButton.classList.remove('cross');
+                        menuButton.classList.remove( 'cross' );
                     }
                 },
             }
-        });
-    })
+        } );
+    } )
 
 </script>
 <script>
 
     $( function () {
-
-        $(".fix").click( function () {
-
+        <!--首页添加按钮-->
+        $( ".fix" ).click( function () {
             $.actions( {
                 actions:
                     [
                         {
-                            text   : "添加备忘",
+                            text     : "添加备忘",
                             className: "alert_action",
-                            onClick: function () {
+                            onClick  : function () {
                                 //do something
                             }
                         },
                         {
-                            text   : "记事本",
+                            text     : "记事本",
                             className: "alert_action",
-                            onClick: function () {
+                            onClick  : function () {
                                 //do something
                             }
                         },
                         {
-                            text   : "准备记账",
+                            text     : "准备记账",
                             className: "alert_action",
-                            onClick: function () {
+                            onClick  : function () {
                                 //do something
                             }
                         },
                         {
-                            text   : "添加计划",
+                            text     : "添加计划",
                             className: "alert_action",
-                            onClick: function () {
+                            onClick  : function () {
                                 //do something
                             }
                         }
                     ]
             } );
-
-        })
+        } )
 
         //长按事件
         var timeOutEvent = null;
-        $(".memo_item").on({
-            touchstart: function(e) {
+        $( ".memo_item" ).on( {
+            touchstart: function ( e ) {
                 // 长按事件触发
-                timeOutEvent = setTimeout(function() {
+                timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
-                    console.log('你长按了');
-                }, 1000);
+                    console.log( '你长按了' );
+                }, 1000 );
                 //长按400毫秒
                 // e.preventDefault();
             },
-            touchmove: function() {
-                clearTimeout(timeOutEvent);
+            touchmove : function () {
+                clearTimeout( timeOutEvent );
                 timeOutEvent = 0;
             },
-            touchend: function() {
-                clearTimeout(timeOutEvent);
-                if (timeOutEvent != 0) {
+            touchend  : function () {
+                clearTimeout( timeOutEvent );
+                if ( timeOutEvent != 0 ) {
                     // 点击事件
                     // location.href = '/a/live-rooms.html';
-                    console.log('你点击了');
+                    console.log( '你点击了' );
                 }
                 return false;
             }
-        })
+        } )
 
-
-    })
+    } )
 </script>
 
 </body>

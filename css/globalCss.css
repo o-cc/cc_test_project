@@ -12,5 +12,14 @@ html{font-size:10px}
     display: flex;
     justify-content: center;
     align-items: center;
+}
 
+.hide {
+    display: none !important;
+}
+.show{
+    display: block;
+}
+.flex {
+    display: flex;
 }

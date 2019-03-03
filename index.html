@@ -347,8 +347,11 @@
         }
 
         .text {
-            border: 1px solid #ccc;
             height: 400px;
+        }
+
+        .editor_notes {
+            height: 500px;
         }
 
         .controll_audio {
@@ -372,7 +375,7 @@
             margin-top: 1rem;
         }
 
-        .save_btn {
+        .save_btn, .save_notes_btn {
             background-color: #4fd2c2;
             color: #fff;
             border: none;
@@ -382,7 +385,7 @@
         @media screen and (max-width: 375px) {
 
 
-            .slide_content2{
+            .slide_content2, .slide_content3{
                 height: 250%;
             }
 
@@ -390,10 +393,14 @@
                 height: 320px;
             }
 
+            .editor_notes {
+                height: 400px;
+            }
+
         }
         @media screen and (max-width: 320px) {
 
-            .slide_content2{
+            .slide_content2, .slide_content3{
                 height: 250%;
             }
 
@@ -401,17 +408,24 @@
                 height: 250px;
             }
 
+            .editor_notes {
+                height: 350px;
+            }
+
         }
         @media screen and (min-height: 812px) {
 
-            .slide_content2{
+            .slide_content2, .slide_content3{
                 height: 250%;
             }
 
-            .text {
+            .text{
                 height: 450px;
             }
 
+            .editor_notes {
+                height: 500px;
+            }
         }
 
 
@@ -605,7 +619,68 @@
 
                         <div id="notes" class="slide_content3">
                             <div class="home_top_placeholder"></div>
-                            <div class="home_center">
+                            <div style="margin-bottom: 110%" class="home_center">
+                                <!-- 首页所有便签 -->
+                                <div class="memo_add">
+                                    <a href="#note_input"></a>
+                                </div>
+
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="memo_item">
+                                    <div class="item_title">
+                                        <h5>大渣好我是渣渣辉</h5>
+                                    </div>
+                                    <div class="item_content">
+                                        <p>
+                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
+                                            这是你没玩过的全新版本
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="memo_input" id="note_input">
+                                <div class="home_top_placeholder"></div>
+
+                                <div class="weui-cells">
+                                    <div class="weui-cell">
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="text" placeholder="请输入记事标题">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input_content">
+                                    <!--注意 这里改了eidtor的源码！默认为300 改成了100%的高度0.0-->
+                                    <div id="editor_notes" class="editor_notes">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="controll_audio">
+
+                                    <div class="save_meno">
+                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_notes_btn">保存</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="plan" class="slide_content4">
+                            <div class="home_top_placeholder"></div>
+                            <div style="margin-bottom: 110%" class="home_center">
                                 <!-- 首页所有便签 -->
                                 <div class="memo_add">
                                     <a href="#node_input"></a>
@@ -641,29 +716,27 @@
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input" type="text" placeholder="请输入备忘标题">
+                                            <input class="weui-input" type="text" placeholder="请输入记事标题">
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="controll_audio">
-                                    <div class="weui-cell weui-cell_switch">
-                                        <div class="weui-cell__bd" style="font-size: 1.2rem;text-align: left">是否声音提示
-                                        </div>
-                                        <div class="weui-cell__ft">
-                                            <input class="weui-switch audio_click" type="checkbox">
-                                        </div>
+                                <div class="input_content">
+                                    <!--注意 这里改了eidtor的源码！默认为300 改成了100%的高度0.0-->
+                                    <div id="editor_plan" class="editor_notes">
+
                                     </div>
+                                </div>
+
+
+                                <div class="controll_audio">
 
                                     <div class="save_meno">
-                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_btn">保存</a>
+                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_notes_btn">保存</a>
                                     </div>
 
                                 </div>
                             </div>
-                        </div>
-                        <div id="plan" class="slide_content4">
-
                         </div>
                         <div id="bill" class="slide_content5">
 
@@ -692,65 +765,11 @@
 <script type="text/javascript">
     var E      = window.wangEditor;
     var editor = new E( '#editor' );
+    var editor1 = new E( '#editor_notes' );
 
     editor.create();
+    editor1.create();
     $( ".w-e-toolbar" ).html( "" );
-
-</script>
-
-<!--这边备忘录操作选择日期-->
-<script>
-    $( function () {
-
-        //点击声音开关
-        $( ".audio_click" ).click( function () {
-
-            if ( $( this ).prop( "checked" ) ) {
-                $( ".controll_date" ).show();
-                return;
-            }
-
-            $( ".controll_date" ).hide();
-
-        } )
-
-        let date = new Date();
-        let str  = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-        $( "#datetime-picker" ).datetimePicker( {
-            min    : str,
-            max    : (date.getFullYear() + 1) + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-            onClose: function ( picker ) {
-                //2019-03-01-10-45
-                let value    = picker.value.join( ":" );
-                let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
-
-                let date    = new Date( newValue );
-                let nowDate = new Date();
-                if ( nowDate > date ) {
-                    $( "#datetime-picker" ).val( "" );
-                    return;
-                }
-
-                let min   = (date - nowDate) / 1000 / 60;
-                let hours = min / 60;
-                let day   = Math.floor( hours / 24 );
-                min       = Math.ceil( min > 60 ? (Math.ceil( min / 60 ) - (min / 60)) * 60 : min ) + "分";
-                hours     = Math.floor( hours > 24 ? (Math.ceil( hours / 24 ) - (hours / 24)) * 24 : hours ) + "时";
-                day       = (day > 1 ? day + "天" : " ");
-                $( "#datetime-picker" ).val( day + hours + min + "后响铃" );
-            }
-        } );
-
-        //点击保存
-        $(".save_btn").click( function () {
-            //点击保存
-            //是否有声音
-
-           //editor.txt.html()
-           // $( ".audio_click" ).prop( "checked" )
-        })
-
-    } )
 
 </script>
 
@@ -787,10 +806,10 @@
     } )
 
 </script>
-<script>
 
+<!--首页添加-->
+<script>
     $( function () {
-        <!--首页添加按钮-->
         $( ".fix" ).click( function () {
             $.actions( {
                 actions:
@@ -855,6 +874,69 @@
         } )
 
     } )
+</script>
+
+<!--这边备忘录操作选择日期-->
+<script>
+    $( function () {
+
+        //点击声音开关
+        $( ".audio_click" ).click( function () {
+
+            if ( $( this ).prop( "checked" ) ) {
+                $( ".controll_date" ).show();
+                return;
+            }
+
+            $( ".controll_date" ).hide();
+
+        } )
+
+        let date = new Date();
+        let str  = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        $( "#datetime-picker" ).datetimePicker( {
+            min    : str,
+            max    : (date.getFullYear() + 1) + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+            onClose: function ( picker ) {
+                //2019-03-01-10-45
+                let value    = picker.value.join( ":" );
+                let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
+
+                let date    = new Date( newValue );
+                let nowDate = new Date();
+                if ( nowDate > date ) {
+                    $( "#datetime-picker" ).val( "" );
+                    return;
+                }
+
+                let min   = (date - nowDate) / 1000 / 60;
+                let hours = min / 60;
+                let day   = Math.floor( hours / 24 );
+                min       = Math.ceil( min > 60 ? (Math.ceil( min / 60 ) - (min / 60)) * 60 : min ) + "分";
+                hours     = Math.floor( hours > 24 ? (Math.ceil( hours / 24 ) - (hours / 24)) * 24 : hours ) + "时";
+                day       = (day > 1 ? day + "天" : " ");
+                $( "#datetime-picker" ).val( day + hours + min + "后响铃" );
+            }
+        } );
+
+        //点击保存
+        $(".save_btn").click( function () {
+            //点击保存
+            //是否有声音
+
+           //editor.txt.html()
+           // $( ".audio_click" ).prop( "checked" )
+        })
+
+    } )
+
+</script>
+<script>
+    $(".save_notes_btn").click( function () {
+
+
+    } )
+
 </script>
 
 </body>

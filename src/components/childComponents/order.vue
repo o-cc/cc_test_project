@@ -177,9 +177,10 @@
                   tempObj[ i ][ "type" ] = global.globalVal.globalTips.orderStatusTips[ j ];
                   tempObj[ i ][ "btn1" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn1"];
                   tempObj[ i ][ "btn2" ] = global.globalVal.globalTips.orderStatusBtnsTips[ tempObj[ i ][ "status" ] ]["btn2"];
+                  //需要增加一个中文的提示
+                  tempObj[ i ][ "chineseStatus" ] = global.globalVal.globalTips.orderStatusChineseTips[ j ];
+                  break;
                 }
-                //需要增加一个中文的提示
-                tempObj[ i ][ "chineseStatus" ] = global.globalVal.globalTips.orderStatusChineseTips[ j ];
 
               }
               //这里需要处理btn1 btn2 简单写点过程化代码吧...

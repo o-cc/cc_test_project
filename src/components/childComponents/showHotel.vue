@@ -121,7 +121,7 @@
         //红心
         redHeat  : false,
         boo      : false,
-        startDate: "",
+        startDate: '',
 
         favoriteIds: [],
 
@@ -150,8 +150,8 @@
 
         let date       = new Date();
         let month      = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
-        self.startDate = date.getFullYear() + "-" + month + "-" + date.getDate();
-
+        let day        = (date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate());
+        self.startDate = date.getFullYear() + "-" + month + "-" + day;
         //获取城市
         let searchPageObj = global.globalVal.searchPage.searchPageSingleOne.getSearchPageIndexVueObj();
 

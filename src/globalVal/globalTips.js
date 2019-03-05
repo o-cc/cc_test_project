@@ -42,10 +42,10 @@ globalTips.orderStatusBtnsTips = {
     btn1: {
       text: "取消订单", //待入住的话不可以取消 不可以删除 不可以评价
       hide: true,
-      clickEvent: "cancelOrder"
+      clickEvent: "goEvaluate"
     },
     btn2: {
-      text: "删除", //待入住的话不可以取消 不可以删除 不可以评价
+      text: "去评价", //待入住的话不可以取消 不可以删除 不可以评价
       hide: false,
       clickEvent: "deleteOrder"
 

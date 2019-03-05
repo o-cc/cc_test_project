@@ -388,11 +388,11 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            height: 8rem;
+            height: 10%;
         }
 
-        .detailDate {
-
+        .today {
+            font-size: 2rem;
         }
 
         .leftBtn, .rightBtn {
@@ -427,6 +427,32 @@
 
         .week span {
             width: 25px;
+        }
+
+        .plan_center {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: scroll;
+            height: 25%;
+
+        }
+
+        .plan_add {
+            position: relative;
+        }
+
+        .plan_add::after {
+            content: " ";
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .item_time {
+            float: right;
+            font-size: 1rem;
+            line-height: 25px;
         }
 
 
@@ -716,7 +742,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="controll_audio">
 
                                     <div class="save_meno">
@@ -728,55 +753,14 @@
                         </div>
 
                         <div id="plan" class="slide_content4">
-                            <div class="home_top_placeholder"></div>
-                            <div style="margin-bottom: 110%" class="home_center">
-                                <!-- 首页所有便签 -->
-                                <div class="memo_add">
-                                    <a href="#node_input"></a>
-                                </div>
-
-                                <div class="memo_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="memo_item">
-                                    <div class="item_title">
-                                        <h5>大渣好我是渣渣辉</h5>
-                                    </div>
-                                    <div class="item_content">
-                                        <p>
-                                            是兄弟就来砍我，跟我一起，今晚八点，准时开车
-                                            这是你没玩过的全新版本
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
                             <div class="memo_input" id="node_input">
                                 <div class="home_top_placeholder"></div>
 
-                                <!--<div class="weui-cells">-->
-                                    <!--<div class="weui-cell">-->
-                                        <!--<div class="weui-cell__bd">-->
-                                            <!--<input class="weui-input" type="text" placeholder="请输入记事标题">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
                                 <div class="date">
                                     <div class="topNowDate">
-                                        <p class="today">
-
-                                        </p>
+                                        <p class="today"></p>
                                     </div>
                                     <div class="detailDate center_flex">
-
                                         <!--<div class="leftBtn"><</div>-->
                                         <div class="show_all_date">
                                             <p>全部</p>
@@ -806,11 +790,64 @@
                                     </div>
                                 </div>
 
+                                <div class="plan_center">
+                                    <!--这个得重写 显示今天的计划，显示明天的计划。。。-->
+                                    <div class="plan_item">
+                                        <div class="weui-cells weui-cells_checkbox">
+
+                                            <label class="weui-cell weui-check__label" for="s12">
+                                                <div class="weui-cell__hd">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="s12">
+                                                    <i class="weui-icon-checked"></i>
+                                                </div>
+                                                <div class="weui-cell__bd">
+                                                    <p>
+                                                        <span>今晚健身一小时哦</span>
+                                                    <span class="item_time">今晚八点</span>
+                                                    </p>
+
+                                                </div>
+                                            </label>
+                                            <label class="weui-cell weui-check__label" for="11">
+                                                <div class="weui-cell__hd">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="11">
+                                                    <i class="weui-icon-checked"></i>
+                                                </div>
+                                                <div class="weui-cell__bd">
+                                                    <p>
+                                                        <span>今晚健身一小时哦</span>
+                                                    <span class="item_time">今晚八点</span>
+                                                    </p>
+
+                                                </div>
+                                            </label>
+                                            <label class="weui-cell weui-check__label" for="12">
+                                                <div class="weui-cell__hd">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="12">
+                                                    <i class="weui-icon-checked"></i>
+                                                </div>
+                                                <div class="weui-cell__bd">
+                                                    <p>
+                                                        <span>今晚健身一小时哦</span>
+                                                    <span class="item_time">今晚八点</span>
+                                                    </p>
+
+                                                </div>
+                                            </label>
+
+                                        </div>
+
+                                        <div class="plan_add">
+
+                                        </div>
+                                    </div>
+
+                                </div>
                                 <div class="controll_audio">
 
-                                    <div class="save_meno">
-                                        <a href="javascript:;" class="weui-btn weui-btn_plain-default save_notes_btn">保存</a>
-                                    </div>
+                                    <!--<div class="save_meno">-->
+                                        <!--<a href="javascript:;" class="weui-btn weui-btn_plain-default save_notes_btn">保存</a>-->
+                                    <!--</div>-->
 
                                 </div>
                             </div>
@@ -1238,10 +1275,10 @@ n
                     week = "星期一";
                     break;
                 case 2:
-                    week = "星期三";
+                    week = "星期二";
                     break;
                 case 3:
-                    week = "星期日";
+                    week = "星期三";
                     break;
                 case 4:
                     week = "星期四";
@@ -1256,7 +1293,8 @@ n
                     week = "未知";
                     break;
             }
-            let str = "今天是" + year + "年" + month + "月" + day + "日" + week + ""
+            let str = "今天是" + year + "年" + month + "月" + day + "日" + week + "";
+
             return str;
 
         };

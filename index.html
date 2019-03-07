@@ -375,7 +375,7 @@
             margin-top: 1rem;
         }
 
-        .save_btn, .save_notes_btn {
+        .save_btn, .save_notes_btn, .save_plan_btn, .cancel_plan_btn{
             background-color: #4fd2c2;
             color: #fff;
             border: none;
@@ -435,18 +435,8 @@
             flex-direction: column;
             overflow: scroll;
             height: 25%;
-
-        }
-
-        .plan_add {
             position: relative;
-        }
 
-        .plan_add::after {
-            content: " ";
-            position: absolute;
-            top: 0;
-            left: 0;
         }
 
         .item_time {
@@ -454,6 +444,45 @@
             font-size: 1rem;
             line-height: 25px;
         }
+
+        .add_plan {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+
+        .plan_content {
+            width: 100%;
+            margin: 2rem 0;
+            background-color: #fff;
+        }
+
+        .input_plan_btns {
+            margin-top: 1rem;
+        }
+
+        .input_plan_btns>div{
+            width: 50%;
+            height: 100%;
+
+        }
+
+
+
+        .save_plan_btn, .cancel_plan_btn {
+            width: 80%;
+        }
+
+        .datetime-picker, .end-datetime-picker {
+            width: 100%;
+            height: 2rem;
+            border:0;
+            text-align: right;
+            font-size: 1.5rem;
+        }
+
 
 
         /*备忘录的输入框做适配*/
@@ -790,14 +819,13 @@
                                     </div>
                                 </div>
 
-                                <div class="plan_center">
-                                    <!--这个得重写 显示今天的计划，显示明天的计划。。。-->
-                                    <div class="plan_item">
+                                <div class="plan_center" style="margin-bottom: 100%">
+                                    <div>
                                         <div class="weui-cells weui-cells_checkbox">
 
                                             <label class="weui-cell weui-check__label" for="s12">
                                                 <div class="weui-cell__hd">
-                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="s12">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="s12">
                                                     <i class="weui-icon-checked"></i>
                                                 </div>
                                                 <div class="weui-cell__bd">
@@ -810,7 +838,7 @@
                                             </label>
                                             <label class="weui-cell weui-check__label" for="11">
                                                 <div class="weui-cell__hd">
-                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="11">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="11">
                                                     <i class="weui-icon-checked"></i>
                                                 </div>
                                                 <div class="weui-cell__bd">
@@ -823,7 +851,7 @@
                                             </label>
                                             <label class="weui-cell weui-check__label" for="12">
                                                 <div class="weui-cell__hd">
-                                                    <input type="checkbox" name="checkbox1" class="weui-check" id="12">
+                                                    <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="12">
                                                     <i class="weui-icon-checked"></i>
                                                 </div>
                                                 <div class="weui-cell__bd">
@@ -837,17 +865,48 @@
 
                                         </div>
 
-                                        <div class="plan_add">
+                                    </div>
+
+                                    <div class="add_plan">
+                                        <div class="weui-uploader__input-box add_btn">
+                                            <a href="#input_plan" style="display:inline-block;width: 100%;height: 100%;"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input_plan" id="input_plan">
+                                    <div class="home_top_placeholder"></div>
+                                    <div class="plan_content">
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__hd"><label class="weui-label">添加标题</label></div>
+                                            <div class="weui-cell__bd">
+                                                <input class="weui-input" type="text" placeholder="请输入标题">
+                                            </div>
+                                        </div>
+                                        <div class="weui-cell">
+                                        <div class="weui-cell__hd"><label class="weui-label">开始时间</label></div>
+                                        <div class="weui-cell__bd">
+                                            <input type="text" placeholder="请选择开始时间" class='datetime-picker'/>
 
                                         </div>
                                     </div>
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
+                                            <div class="weui-cell__bd">
+                                                <input type="text" placeholder="请选择结束时间" class='end-datetime-picker'/>
 
-                                </div>
-                                <div class="controll_audio">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <!--<div class="save_meno">-->
-                                        <!--<a href="javascript:;" class="weui-btn weui-btn_plain-default save_notes_btn">保存</a>-->
-                                    <!--</div>-->
+                                    <div class="input_plan_btns center_flex">
+                                        <div>
+                                            <a href="#node_input" class="weui-btn weui-btn_plain-default save_plan_btn">取消</a>
+                                        </div>
+
+                                        <div>
+                                            <a href="#node_input" class="weui-btn weui-btn_plain-default cancel_plan_btn">保存</a>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -1322,7 +1381,112 @@ n
         };
 
     })()
+
+    $(".datetime-picker").picker({
+        title: "请选择您的手机",
+        cols: [
+            {
+                values: (function () {
+                    var hours = [];
+                    for (var i=0; i<24; i++){
+                        if( i >= new Date().getHours() ) {
+                            hours.push(i > 9 ? i : '0'+i);
+                        }
+                    }
+                    return hours;
+                })()
+            },
+            {
+                divider: true,  // 这是一个分隔符
+                content: '时'
+            },
+            {
+                values: (function () {
+                    var minutes = [];
+                    for (var i=0; i<59; i++) {
+                        if( i > new Date().getMinutes() ) {
+                            minutes.push(i > 9 ? i : '0'+i);
+                        }
+                    }
+                    return minutes;
+                })()
+            },
+            {
+                divider: true,  // 这是一个分隔符
+                content: '分'
+            }
+        ]
+    });
+    $(".end-datetime-picker").picker({
+        title: "请选择您的手机",
+        cols: [
+            {
+                values: (function () {
+                    var hours = [];
+                    for (var i=0; i<24; i++){
+                        if( i >= new Date().getHours() ) {
+                            hours.push(i > 9 ? i : '0'+i);
+                        }
+                    }
+                    return hours;
+                })()
+            },
+            {
+                divider: true,  // 这是一个分隔符
+                content: '时'
+            },
+            {
+                values: (function () {
+                    var minutes = [];
+                    for (var i=0; i<59; i++) {
+                        if( i > new Date().getMinutes() ) {
+                            minutes.push(i > 9 ? i : '0'+i);
+                        }
+                    }
+                    return minutes;
+                })()
+            },
+            {
+                divider: true,  // 这是一个分隔符
+                content: '分'
+            }
+        ]
+    });
+
+    $(".plan_item").click( function () {
+        let self = this;
+        if( $(self).prop("checked") ) {
+            $.confirm({
+                title: '提示',
+                text: '完成计划啦？',
+                onOK: function () {
+                    //点击确认
+                },
+                onCancel: function () {
+                    $(self).attr("checked",false);
+                }
+            });
+            return;
+        }
+
+        $.confirm({
+            title: '提示',
+            text: '要修改状态吗？',
+            onOK: function () {
+                //点击确认
+            },
+            onCancel: function () {
+                $(self).attr("checked","checked");
+            }
+        });
+
+
+
+    })
+
 </script>
+
 
 </body>
 </html>
+                                                                                                                

@@ -47,14 +47,14 @@
 
                 <div class="login_item">
                     <p>用户名</p>
-                    <input type="text" placeholder="QQ/邮箱/手机号码">
+                    <input type="text" id="username" placeholder="QQ/邮箱/手机号码">
                 </div>
                 <div class="login_item">
                     <p>密码</p>
-                    <input type="password" placeholder="请输入密码">
+                    <input type="password" id="password" placeholder="请输入密码">
                 </div>
                 <div class="login_item" style="height: 7rem;">
-                    <button class="login_btn">sign in</button>
+                    <button class="login_btn sign_in">sign in</button>
                 </div>
                 <div class="login_item">
                     <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a id="register" href="#register">注册一个</a></p>
@@ -74,22 +74,22 @@
 
                 <div class="login_item">
                     <p>全名</p>
-                    <input type="text" placeholder="请输入全名">
+                    <input type="text" class="register_username" placeholder="请输入全名">
                 </div>
                 <div class="login_item">
                     <p>email</p>
-                    <input type="email" placeholder="请输入邮箱">
+                    <input type="email" class="register_email" placeholder="请输入邮箱">
                 </div>
                 <div class="login_item">
                     <p>密码</p>
-                    <input type="password" placeholder="请输入密码">
+                    <input type="password" class="register_password" placeholder="请输入密码">
                 </div>
                 <div class="login_item">
                     <p>确认密码</p>
                     <input type="password" placeholder="请输入密码">
                 </div>
                 <div class="login_item register">
-                    <button class="login_btn" style="background-color:#10aeff;"> register</button>
+                    <button class="login_btn register_btn" style="background-color:#10aeff;"> register</button>
                 </div>
                 <div class="login_item bom_p">
                     <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a id="login" href="#login">登录一个</a></p>
@@ -100,7 +100,6 @@
     </div>
 </div>
 
-</div>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-weui.min.js"></script>
 <script src="js/globalUrl.js"></script>

@@ -1,3 +1,8 @@
-var globalUrl  = {
-    globalUrl: "http://134.175.32.175:5555/api/"
+const baseUrl = "http://127.0.0.1:5000/api/";
+var globalUrl = {
+    httpServerUrl: {
+        signIn  : baseUrl + "authorizations/",
+        register: baseUrl + "users/"
+
+    }
 }

@@ -319,7 +319,7 @@
     width: 80%;
 }
 
-.datetime-picker, .end-datetime-picker {
+.plan_datetime-picker, .plan_end-datetime-picker {
     width: 100%;
     height: 2rem;
     border:0;

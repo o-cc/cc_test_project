@@ -165,8 +165,8 @@ $( function () {
                 if( !err ) {
                     return;
                 }
-
-                $(".forgot_answer_and_question").removeClass( "hide" ).val( question );
+                $( ".forgot" ).removeClass( "hide" );
+                $(".forgot_question").val( question );
                 $( self ).attr( "data-value", "2" );
             } );
             return;
@@ -174,17 +174,35 @@ $( function () {
 
         if( flag === "2" ) {
 
-            $( ".forgot" ).removeClass( "hide" );
-            $( self ).attr( "data-value", "3" );
-            return;
-        }
+            let data = {
+                "username": $( ".forgot_username" ).val().trim(),
+                "password": $( ".forgot_password" ).val().trim(),
+                "repwd"   : $( ".forgot_comfirmpassword" ).val().trim(),
+            };
 
-        if( flag === "3" ) {
+            for( let i in data ) {
+                if( data[ i ].length < 5 ) {
+                    $.alert( {
+                        title: '提示',
+                        text : i+"的长度不能小于5",
+                    } );
+                    return;
+                }
+            }
 
-            //需要跳转到login了
-            $( ".forgot" ).addClass( "hide" );
-            $( self ).attr( "data-value", "1" );
-            window.location.href = "#login";
+            data[ "answer" ] = $( ".forgot_answer" ).val().trim();
+
+            putUserPassword( data, function ( err, res ) {
+
+                if( err ) {
+                    return;
+                }
+
+                //需要跳转到login了
+                $( ".forgot" ).addClass( "hide" );
+                $( self ).attr( "data-value", "1" );
+                window.location.href = "#login";
+            } );
             return;
         }
 
@@ -200,7 +218,10 @@ $( function () {
         $( ".second" ).show( 1000 );
     } );
 
-
+    /*
+        * @params1 [String] 用户名
+          @params2: [Function] 回调函数
+        * */
     function getUserQustion ( username, callback ) {
 
         let data = {
@@ -237,20 +258,23 @@ $( function () {
         } )
 
     }
+
     /*
-    * {
-            "username": "ouzhenxi",
-            "answer"  : "8月3日",
-            "password": "123456",
-            "repwd"   : "123456"
-        };
+    * @params1 [Object] 新密码
+        * {
+                "username": "ouzhenxi",
+                "answer"  : "8月3日",
+                "password": "123456",
+                "repwd"   : "123456"
+            };
+       @params2: [Function] 回调函数
     * */
     function putUserPassword ( newPasswordInfo, callback ) {
 
         let data = newPasswordInfo;
         $.ajax( {
             url: globalUrl.httpServerUrl.password,
-            method: "POST",
+            method: "PUT",
             data: JSON.stringify( data ),
             contentType: "application/json",
             success: function ( res ) {
@@ -263,10 +287,7 @@ $( function () {
 
                     return callback( true, null );
                 }
-                $.alert( {
-                    title: '提示',
-                    text : res["errmsg"],
-                } );
+
                 return callback( null, true );
 
             },

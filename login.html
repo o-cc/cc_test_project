@@ -37,7 +37,7 @@
 
     </div>
 
-    <div class="welcome second">
+    <div class="welcome second" id="login">
         <div class="top_img center_flex">
             <i class="weui-icon-success weui-icon_msg icon_font"></i>
         </div>
@@ -57,7 +57,8 @@
                     <button class="login_btn sign_in">sign in</button>
                 </div>
                 <div class="login_item">
-                    <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a id="register" href="#register">注册一个</a></p>
+                    <p style="font-size: 1rem; text-align: center"> 没有帐号？ <a class="to_register" href="#register">注册一个</a></p>
+                    <p style="font-size: 1rem; text-align: center;margin-top: 1rem;"> 忘记密码了？ <a href="#forget">点我看看呗</a></p>
                 </div>
             </div>
         </div>
@@ -86,22 +87,64 @@
                 </div>
                 <div class="login_item">
                     <p>确认密码</p>
-                    <input type="password" placeholder="请输入密码">
+                    <input type="password" class="register_comfirmpassword" placeholder="请输入密码">
                 </div>
-                <div class="login_item" style="height: 2rem;">
-                    <input type="text" style="border-bottom: none" placeholder="请选择忘记密码问题">
+                <div class="login_item" style="height: 2rem;flex-direction: row">
+                    <input type="text" class="question" style="border-bottom: none;width: 50%;" placeholder="请选择忘记密码问题">
+                    <input type="text" class="answer" style="border-bottom: none;width: 50%;" placeholder="我的回答">
                 </div>
 
                 <div class="login_item register">
                     <button class="login_btn register_btn" style="background-color:#10aeff;"> register</button>
                 </div>
                 <div class="login_item bom_p">
-                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a id="login" href="#login">登录一个</a></p>
+                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a class="to_login" href="#login">登录一个</a></p>
                 </div>
             </div>
         </div>
 
     </div>
+    <div class="welcome" id="forget">
+        <div class="top_img center_flex" style="height: 30%;">
+            <i class="weui-icon-info weui-icon_msg icon_font"></i>
+        </div>
+        <div style="text-align: center">
+            <h2>密码修改</h2>
+        </div>
+
+        <div class="login_inp center_flex" style="height: 70%;">
+            <div class="login_center">
+
+                <div class="login_item">
+                    <p>用户名</p>
+                    <input type="password" class="forgot_password" placeholder="请输入用户名获取问题">
+                </div>
+
+                <div class="login_item forgot_answer_and_question forgot hide" style="height: 2rem;flex-direction: row">
+                    <input type="text" class="forgot_question" disabled style="border-bottom: none;width: 50%;" placeholder="我的问题">
+                    <input type="text" class="forgot_answer" style="border-bottom: none;width: 50%;" placeholder="我的回答">
+                </div>
+
+                <div class="login_item forgot hide">
+                    <p>密码</p>
+                    <input type="password" class="forgot_password" placeholder="请输入密码">
+                </div>
+
+                <div class="login_item forgot hide">
+                    <p>确认密码</p>
+                    <input type="password" class="forgot_comfirmpassword" placeholder="请输入密码">
+                </div>
+                <div class="login_item register">
+                    <button class="login_btn forgot_btn" data-value="1" style="background-color:#10aeff;">确认</button>
+                </div>
+                <div class="login_item bom_p">
+                    <p style="font-size: 1rem; text-align: center"> 已有帐号？ <a href="#login">登录一个</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <script src="js/jquery.min.js"></script>

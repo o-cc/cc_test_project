@@ -10,6 +10,7 @@ $( function () {
                         className: "alert_action",
                         onClick  : function () {
                             //do something
+                            GoHashUrl( "memo" );
                         }
                     },
                     {
@@ -17,13 +18,7 @@ $( function () {
                         className: "alert_action",
                         onClick  : function () {
                             //do something
-                        }
-                    },
-                    {
-                        text     : "准备记账",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
+                            GoHashUrl( "notes" );
                         }
                     },
                     {
@@ -31,12 +26,27 @@ $( function () {
                         className: "alert_action",
                         onClick  : function () {
                             //do something
+                            GoHashUrl( "plan" );
                         }
+                    },
+                    {
+                    text     : "准备记账",
+                    className: "alert_action",
+                    onClick  : function () {
+                        //do something
+                        GoHashUrl( "bill" );
                     }
+                }
                 ]
         } );
-    } )
+    } );
 
+
+    $( ".home_items" )
+
+    function GoHashUrl ( hashValue ) {
+        window.location.href = "#" + hashValue;
+    };
     //长按事件
     var timeOutEvent = null;
     $( ".memo_item" ).on( {

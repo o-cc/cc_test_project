@@ -41,7 +41,7 @@ $( function () {
         } );
     } );
 
-
+    //首页默认显示备忘录 和 收入支出
     $( ".home_items" )
 
     function GoHashUrl ( hashValue ) {

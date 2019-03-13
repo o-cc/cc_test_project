@@ -1,9 +1,7 @@
 
+let billModule = {};
 
-
-let memoModule = {
-
-};
+let memoModule = {};
 /*
 * {
       "errmsg": "请求成功",
@@ -24,7 +22,6 @@ let memoModule = {
       ]
     }
 * */
-
 /*
 * callback( err, memos )
 *
@@ -163,6 +160,7 @@ memoModule.postMemoInfo = function ( changeData, callback ) {
     } )
 
 };
+
 /*
 * param1 memoId [Object] 备忘录id
 * param2 callback [Function] 回调函数
@@ -193,3 +191,28 @@ memoModule.delteMemoInfoById = function ( memoId, callback ) {
 
 };
 
+billModule.getAllBillInfo = function ( callback ) {
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.memo,
+        method: "GET",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "memo" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+
+};

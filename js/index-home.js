@@ -1,6 +1,5 @@
 $( function () {
 
-
     $( ".fix" ).click( function () {
         $.actions( {
             actions:
@@ -30,21 +29,66 @@ $( function () {
                         }
                     },
                     {
-                    text     : "准备记账",
-                    className: "alert_action",
-                    onClick  : function () {
-                        //do something
-                        GoHashUrl( "bill" );
+                        text     : "准备记账",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            GoHashUrl( "bill" );
+                        }
                     }
-                }
                 ]
         } );
     } );
 
-    //首页默认显示备忘录 和 收入支出
-    $( ".home_items" )
+    //首页默认10条 5条备忘录
+    memoModule.getAllMemoInfo( function ( err, res ) {
 
-    function GoHashUrl ( hashValue ) {
+        if ( err ) {
+            $.alert( {
+                title: '提示',
+                text : err,
+            } );
+            return;
+        }
+
+        memoModule.memoInfoIncache = res;
+        let len = res.length;
+        len > 5? 5 : len;
+        for ( let i = 0; i < len; i++ ) {
+
+            let element = res[i];
+            let title   = element[ "title" ];
+            let content = element[ "content" ];
+
+            if ( title.length > 9 ) {
+                title = title.slice( 0, 9 );
+            }
+
+            if ( content.length > 60 ) {
+                content = content.slice( 0, 60 );
+            }
+
+            let str = `
+                    <div class="home_item">
+                        <div class="item_title">
+                            <h5>` + title + `</h5>
+                        </div>
+                        <div class="item_content">
+                            <p>
+                               ` + content + `
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+            $( ".home_items" ).append( str );
+        }
+    } )
+
+    //和5条支出
+
+
+    function GoHashUrl( hashValue ) {
         window.location.href = "#" + hashValue;
     };
     //长按事件

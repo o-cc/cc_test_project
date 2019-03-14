@@ -2,6 +2,12 @@
 let billModule = {};
 
 let memoModule = {};
+function loger( txt ) {
+    $.alert( {
+        title: '提示',
+        text : txt,
+    } );
+};
 /*
 * {
       "errmsg": "请求成功",
@@ -135,7 +141,7 @@ memoModule.putMemoInfoById = function ( memoId, changeData, callback ) {
 * */
 memoModule.postMemoInfo = function ( changeData, callback ) {
 
-    if( !changeData.title || !changeData.content || !changeData[ "is_warn" ] ) {
+    if( !changeData.title || !changeData.content ) {
         return callback( "参数传递错误" + JSON.stringify(changeData), null );
     }
 

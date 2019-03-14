@@ -1,10 +1,9 @@
 
 <!--weiper特效-->
-$( function () {
     //创建编辑器
-    var E       = window.wangEditor;
-    var editor  = new E( '#editor' );
-    var editor1 = new E( '#editor_notes' );
+    const E       = window.wangEditor;
+    const editor  = new E( '#editor' );
+    const editor1 = new E( '#editor_notes' );
     editor.create();
     editor1.create();
     $( ".w-e-toolbar" ).html( "" );
@@ -37,6 +36,5 @@ $( function () {
             },
         }
     } );
-} )
 
 

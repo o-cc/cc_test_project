@@ -51,7 +51,6 @@ $( function () {
             return;
         }
 
-        memoModule.memoInfoIncache = res;
         let len = res.length;
         len > 5? 5 : len;
         for ( let i = 0; i < len; i++ ) {

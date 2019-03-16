@@ -85,12 +85,7 @@ $( function () {
         }
     } )
 
-    //和5条支出
 
-
-    function GoHashUrl( hashValue ) {
-        window.location.href = "#" + hashValue;
-    };
     //长按事件
     var timeOutEvent = null;
     $( ".memo_item" ).on( {

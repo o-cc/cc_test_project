@@ -8,6 +8,11 @@ function loger( txt ) {
         text : txt,
     } );
 };
+
+
+function GoHashUrl( hashValue ) {
+    window.location.href = "#" + hashValue;
+};
 /*
 * {
       "errmsg": "请求成功",

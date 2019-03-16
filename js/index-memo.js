@@ -1,10 +1,11 @@
 $( function () {
 
     let memoInfoIncache = memoModule.memoInfoIncache;
-    memoInfoIncache?memoInfoIncache:"";
-    let len = memoInfoIncache.length;
+    memoInfoIncache     = memoInfoIncache?memoInfoIncache:" ";
+    let len             = memoInfoIncache.length;
 
-    for ( let i = 0; i < len; i++ ) {
+    try {
+        for ( let i = 0; i < len; i++ ) {
 
         let element = memoInfoIncache[i];
         let title   = element[ "title" ];
@@ -33,9 +34,11 @@ $( function () {
 
         $( ".memo_items" ).append( str );
     }
+    }catch ( e ) {
+        console.log( e );
+    }
 
-
-
+    let choseDate = "";
     //点击声音开关
     $( ".audio_click" ).click( function () {
 
@@ -55,10 +58,12 @@ $( function () {
         max    : (date.getFullYear() + 1) + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
         onClose: function ( picker ) {
             //2019-03-01-10-45
+
             let value    = picker.value.join( ":" );
             let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
-
             let date    = new Date( newValue );
+            //设置全局选择的时间 post
+            choseDate   = date;
             let nowDate = new Date();
             if ( nowDate > date ) {
                 $( "#datetime-picker" ).val( "" );
@@ -79,7 +84,6 @@ $( function () {
     $(".save_memo_btn").click( function () {
         //点击保存
         //是否有声音
-
         if( !$(".memo_title").val() ) {
             loger( "请填写备忘录标题" );
             return;
@@ -91,16 +95,20 @@ $( function () {
         }
 
         let boo = $( ".audio_click" ).prop( "checked" );
-
         let changeData = {
             "title"    : $(".memo_title").val(),
             "centent"  : editor.txt.html(),
             "is_warn"  : boo,
-            "warn_time": boo?$("#datetime-picker").val(): "",
+            "warn_time": boo?choseDate: null,
         };
         memoModule.postMemoInfo( changeData, function (err, res) {
+            if( err ) {
+                loger( err );
+                return;
+            }
 
-
+            loger( res );
+            GoHashUrl( "memo" );
         })
     })
 

@@ -50,6 +50,7 @@ memoModule.getAllMemoInfo = function ( callback ) {
             if( res.errno !== "0" ) {
                 return callback( res[ "errmsg" ], null );
             }
+            memoModule.memoInfoIncache = res[ "memo" ];
             return callback( null, res[ "memo" ] );
 
         },

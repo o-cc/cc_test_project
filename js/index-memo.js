@@ -109,6 +109,24 @@ $( function () {
 
             loger( res );
             GoHashUrl( "memo" );
+            //将最新的数据写入到html上
+            let content = editor.txt.html();
+            content.length > 60?content.slice( 0, 60 ): content;
+
+            let str = `
+                    <div class="memo_item">
+                        <div class="item_title">
+                            <h5>`+$(".memo_title").val()+`</h5>
+                        </div>
+                        <div class="item_content">
+                            <p>
+                               `+content+`
+                            </p>
+                        </div>
+                    </div>
+                `;
+            $(".memo_a").after( str );
+
         })
     })
 

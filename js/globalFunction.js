@@ -270,7 +270,11 @@ noteModule.postNoteInfo = function ( noteData, callback ) {
 
 };
 
-
+/*
+* callback( err, note_list )
+*
+* return 一个noteArr数组
+* */
 noteModule.getAllNoteInfo = function ( callback ) {
 
     $.ajax( {
@@ -294,5 +298,108 @@ noteModule.getAllNoteInfo = function ( callback ) {
 
     } )
 
+
+};
+
+
+/*
+* {
+  "errmsg": "请求成功",
+  "errno": "0",
+  "notes": {
+    "addtime": "2019-02-20 14:43:26",
+    "content": "人那个in仍而给您热ingi仍in日恩",
+    "id": 2,
+    "title": "哇哈哈"
+  }
+}
+@param1 noteId [String]
+@param2 callback，回调函数 [ Function]
+* */
+noteModule.getNoteInfoById = function ( noteId, callback ) {
+    $.ajax( {
+        url: globalUrl.httpServerUrl.note + noteId + "/",
+        method: "GET",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "notes" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+};
+
+/*
+* param1 noteId [String] 笔记本id
+* param2 changeData [Object] 修改数据
+* param3 callback [Function] 回调函数
+* */
+noteModule.putNoteInfoById = function ( noteId, changeData, callback ) {
+
+    if( !changeData.title || !changeData.content ) {
+        return callback( "参数传递错误" + JSON.stringify(changeData), null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.note + noteId + "/",
+        method: "PUT",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        data: JSON.stringify( changeData ),
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+};
+
+/*
+* param1 noteId [Object] 笔记本id
+* param2 callback [Function] 回调函数
+* */
+noteModule.delteNoteInfoById = function ( noteId, callback ) {
+
+    if( !noteId ) {
+        return callback( "不存在备忘录id",null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.memo + noteId + "/",
+        method: "DELETE",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+    } )
 
 };

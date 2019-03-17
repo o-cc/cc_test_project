@@ -6,5 +6,6 @@ var globalUrl = {
         password : baseUrl + "passwords/",
         memo     : baseUrl + "memos/",
         note     : baseUrl + "notes/",
+        plan     : baseUrl + "schedules/",
     }
 }

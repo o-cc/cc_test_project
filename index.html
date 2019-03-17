@@ -260,37 +260,11 @@
 
                                 <div class="plan_center" style="margin-bottom: 100%">
                                     <div>
-                                        <div class="weui-cells weui-cells_checkbox">
+                                        <div class="weui-cells weui-cells_checkbox plan_items">
 
                                             <label class="weui-cell weui-check__label" for="s12">
                                                 <div class="weui-cell__hd">
                                                     <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="s12">
-                                                    <i class="weui-icon-checked"></i>
-                                                </div>
-                                                <div class="weui-cell__bd">
-                                                    <p>
-                                                        <span>今晚健身一小时哦</span>
-                                                    <span class="item_time">今晚八点</span>
-                                                    </p>
-
-                                                </div>
-                                            </label>
-                                            <label class="weui-cell weui-check__label" for="11">
-                                                <div class="weui-cell__hd">
-                                                    <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="11">
-                                                    <i class="weui-icon-checked"></i>
-                                                </div>
-                                                <div class="weui-cell__bd">
-                                                    <p>
-                                                        <span>今晚健身一小时哦</span>
-                                                    <span class="item_time">今晚八点</span>
-                                                    </p>
-
-                                                </div>
-                                            </label>
-                                            <label class="weui-cell weui-check__label" for="12">
-                                                <div class="weui-cell__hd">
-                                                    <input type="checkbox" name="checkbox1" class="weui-check plan_item" id="12">
                                                     <i class="weui-icon-checked"></i>
                                                 </div>
                                                 <div class="weui-cell__bd">
@@ -319,15 +293,17 @@
                                         <div class="weui-cell">
                                             <div class="weui-cell__hd"><label class="weui-label">添加标题</label></div>
                                             <div class="weui-cell__bd">
-                                                <input class="weui-input" type="text" placeholder="请输入标题">
+                                                <input class="weui-input plan_title" type="text" placeholder="请输入标题">
                                             </div>
                                         </div>
                                         <div class="weui-cell">
-                                        <div class="weui-cell__hd"><label class="weui-label">开始时间</label></div>
+                                        <div class="weui-cell__hd"><label class="weui-label">是否完成</label></div>
                                         <div class="weui-cell__bd">
-                                            <input type="text" placeholder="请选择开始时间" class='plan_datetime-picker'/>
-
+                                            <div class="weui-cell__ft">
+                                                <input class="weui-switch is_finish" type="checkbox">
+                                            </div>
                                         </div>
+
                                     </div>
                                         <div class="weui-cell">
                                             <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
@@ -340,11 +316,11 @@
 
                                     <div class="input_plan_btns center_flex">
                                         <div>
-                                            <a href="#node_input" class="weui-btn weui-btn_plain-default save_plan_btn">取消</a>
+                                            <a href="#node_input" class="weui-btn weui-btn_plain-default cancel_plan_btn">取消</a>
                                         </div>
 
                                         <div>
-                                            <a href="#node_input" class="weui-btn weui-btn_plain-default cancel_plan_btn">保存</a>
+                                            <a class="weui-btn weui-btn_plain-default save_plan_btn ">保存</a>
                                         </div>
                                     </div>
 

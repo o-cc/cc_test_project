@@ -1,7 +1,7 @@
 $( function () {
 
     (function () {
-        $("#date").calendar();
+        $( "#date" ).calendar();
         //全部按钮
         $( ".show_all_date" ).click( function () {
 
@@ -32,8 +32,7 @@ $( function () {
         //显示本周日期  这里的性能应该可以优化
         for ( let i = 0; i < $( "#weekNum>span" ).length; i++ ) {
 
-            if ( $( "#weekNum>span" ).eq( i ).attr( "data" ) === nowDate.getDay().toString() )
-            {
+            if ( $( "#weekNum>span" ).eq( i ).attr( "data" ) === nowDate.getDay().toString() ) {
                 //和日历的周几对应,并给默认颜色
                 $( "#dateNum>span" ).eq( i ).attr( "month", thisMonth ).html( nowDate.getDate() )
                     .css( "color", "#00ac2f" );
@@ -73,99 +72,205 @@ $( function () {
         //给绑定月份属性
         bindMonthForWeekDay( thisMonth, $( "#dateNum>span" ), monthDays );
 
-        //只需要显示本周的日期就好了 不用麻烦
-        //$( ".rightBtn" ).click( function () {
-        //    //计数器++
-        //    boo++;
-        //
-        //    let weekLastDay = $( "#dateNum > span" ).eq( $( "#weekNum > span" ).length - 1 ).html();
-        //    weekLastDay     = parseInt( weekLastDay );
-        //
-        //    for ( let i = 0; i < $( "#weekNum > span" ).length; i++ ) {
-        //        let weekDayHtml = $( "#dateNum > span" ).eq( i ).html();
-        //        weekDayHtml     = parseInt( weekDayHtml );
-        //
-        //        if ( weekDayHtml >= monthDays ) {
-        //            thisMonth++;
-        //            let nextMonthDays = getMonthdays( year, thisMonth );
-        //            monthDays         = nextMonthDays;
-        //
-        //        }
-        //
-        //        //说明要进入下个月的日期
-        //        if ( weekLastDay >= monthDays ) {
-        //            weekLastDay = 0;
-        //
-        //        }
-        //
-        //        //当前的日期大于这个月的天数  上月的31号  大于下个月的30号
-        //        weekLastDay++;
-        //        $( "#dateNum > span" ).eq( i ).html( weekLastDay );
-        //
-        //        if ( thisMonth > 12 ) {
-        //            thisMonth = 1;
-        //            year      = year + 1;
-        //        }
-        //    }
-        //
-        //    //给每个日期绑定一个month属性
-        //    bindMonthForWeekDay( thisMonth, $( "#dateNum>span" ), monthDays );
-        //
-        //} );
-        //
-        //$( ".leftBtn" ).click( function () {
-        //
-        //    if( boo > 0 ){
-        //
-        //        boo--;
-        //
-        //        let weekFirstDay = $( "#dateNum > span" ).eq( 0 ).html();
-        //        weekFirstDay     = parseInt( weekFirstDay );
-        //        //从最后一个开始赋值
-        //        for ( let i = $( "#weekNum > span" ).length - 1; i >= 0; i-- ) {
-        //
-        //            let weekDayHtml = $( "#dateNum > span" ).eq( i ).html();
-        //            weekDayHtml     = parseInt( weekDayHtml );
-        //
-        //            if ( weekFirstDay <= 1 ) {
-        //                thisMonth--;
-        //                let prevMonthDays = getMonthdays( year, thisMonth );
-        //                monthDays         = prevMonthDays;
-        //
-        //            }
-        //
-        //            if ( thisMonth <= 0 ) {
-        //                thisMonth = 12;
-        //                year      = year - 1;
-        //            }
-        //
-        //            if ( weekFirstDay <= monthDays ) {
-        //                if ( weekFirstDay <= 1 ) {
-        //                    weekFirstDay = getMonthdays( year, thisMonth );
-        //                    $( "#dateNum > span" ).eq( i ).html( weekFirstDay );
-        //                    continue;
-        //                }
-        //
-        //                weekFirstDay--;
-        //                $( "#dateNum > span" ).eq( i ).html( weekFirstDay );
-        //                continue;
-        //            }
-        //        }
-        //
-        //        //给每个日期绑定一个month属性
-        //        bindMonthForWeekDay( thisMonth, $( "#dateNum>span" ), monthDays );
-        //
-        //    }
-        //
-        //} );
+        /*只需要显示本周的日期就好了 不用麻烦
+        $( ".rightBtn" ).click( function () {
+            //计数器++
+            boo++;
 
+            let weekLastDay = $( "#dateNum > span" ).eq( $( "#weekNum > span" ).length - 1 ).html();
+            weekLastDay     = parseInt( weekLastDay );
 
+            for ( let i = 0; i < $( "#weekNum > span" ).length; i++ ) {
+                let weekDayHtml = $( "#dateNum > span" ).eq( i ).html();
+                weekDayHtml     = parseInt( weekDayHtml );
+
+                if ( weekDayHtml >= monthDays ) {
+                    thisMonth++;
+                    let nextMonthDays = getMonthdays( year, thisMonth );
+                    monthDays         = nextMonthDays;
+
+                }
+
+                //说明要进入下个月的日期
+                if ( weekLastDay >= monthDays ) {
+                    weekLastDay = 0;
+
+                }
+
+                //当前的日期大于这个月的天数  上月的31号  大于下个月的30号
+                weekLastDay++;
+                $( "#dateNum > span" ).eq( i ).html( weekLastDay );
+
+                if ( thisMonth > 12 ) {
+                    thisMonth = 1;
+                    year      = year + 1;
+                }
+            }
+
+            //给每个日期绑定一个month属性
+            bindMonthForWeekDay( thisMonth, $( "#dateNum>span" ), monthDays );
+
+        } );
+
+        $( ".leftBtn" ).click( function () {
+
+            if( boo > 0 ){
+
+                boo--;
+
+                let weekFirstDay = $( "#dateNum > span" ).eq( 0 ).html();
+                weekFirstDay     = parseInt( weekFirstDay );
+                //从最后一个开始赋值
+                for ( let i = $( "#weekNum > span" ).length - 1; i >= 0; i-- ) {
+
+                    let weekDayHtml = $( "#dateNum > span" ).eq( i ).html();
+                    weekDayHtml     = parseInt( weekDayHtml );
+
+                    if ( weekFirstDay <= 1 ) {
+                        thisMonth--;
+                        let prevMonthDays = getMonthdays( year, thisMonth );
+                        monthDays         = prevMonthDays;
+
+                    }
+
+                    if ( thisMonth <= 0 ) {
+                        thisMonth = 12;
+                        year      = year - 1;
+                    }
+
+                    if ( weekFirstDay <= monthDays ) {
+                        if ( weekFirstDay <= 1 ) {
+                            weekFirstDay = getMonthdays( year, thisMonth );
+                            $( "#dateNum > span" ).eq( i ).html( weekFirstDay );
+                            continue;
+                        }
+
+                        weekFirstDay--;
+                        $( "#dateNum > span" ).eq( i ).html( weekFirstDay );
+                        continue;
+                    }
+                }
+
+                //给每个日期绑定一个month属性
+                bindMonthForWeekDay( thisMonth, $( "#dateNum>span" ), monthDays );
+
+            }
+
+        } );
+        */
         //选择日期
         $( "#dateNum>span" ).click( function () {
 
             $( this ).css( "color", "#00ac2f" ).siblings().css( "color", "#000" );
+            //year 有个bug 如果这周是2018年最后一周，获取到的年份却是2019年
+            //获取当天的所有计划！
+            let thisDayStr = year + "-" +$(this).attr("month") +"-" + $(this).html();
+            let thisDay    = new Date(thisDayStr);
+
+            let planInfoIncache = planModule.planInfoIncache;
+            planInfoIncache     = planInfoIncache?planInfoIncache:" ";
+            let len             = planInfoIncache.length;
+
+            let str = "";
+            try {
+
+                for ( let i = 0; i < len; i++ ) {
+
+                    let element = planInfoIncache[i];
+                    let content = element[ "content" ];
+                    let wranDay = new Date( element[ "warn_time" ] );
+                    let planId  = element[ "id" ];
+                    //判断是否是今天的日期
+                    if( wranDay.getFullYear() === thisDay.getFullYear()
+                        &&
+                        wranDay.getMonth() === thisDay.getMonth()
+                        &&
+                        wranDay.getDate() === thisDay.getDate()
+                    ) {
+
+                        str += `
+                                   <label class="weui-cell weui-check__label" for=`+planId+`>
+                                        <div class="weui-cell__hd">
+                                            <input type="checkbox" name="checkbox1" data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
+                                            <i class="weui-icon-checked"></i>
+                                        </div>
+                                        <div class="weui-cell__bd">
+                                            <p>
+                                                <span>` +content+ `</span>
+                                            <span class="item_time">`+ wranDay.getHours() +`:`+wranDay.getMinutes() +`</span>
+                                            </p>
+                    
+                                        </div>
+                                    </label>
+                                    `;
+
+                    }
+
+                }
+
+                $( ".plan_items" ).html( str );
+                planItemClick();
+
+            }catch ( e ) {
+                console.log( e );
+            }
 
         } );
+
+        //默认加载今天的计划
+        ( function () {
+
+            let thisDay         = new Date();
+            let planInfoIncache = planModule.planInfoIncache;
+            planInfoIncache     = planInfoIncache?planInfoIncache:" ";
+            let len             = planInfoIncache.length;
+
+            let str = "";
+            try {
+
+                for ( let i = 0; i < len; i++ ) {
+
+                    let element = planInfoIncache[i];
+                    let content = element[ "content" ];
+                    let wranDay = new Date( element[ "warn_time" ] );
+                    let planId  = element[ "id" ];
+                    //判断是否是今天的日期
+                    if( wranDay.getFullYear() === thisDay.getFullYear()
+                        &&
+                        wranDay.getMonth() === thisDay.getMonth()
+                        &&
+                        wranDay.getDate() === thisDay.getDate()
+                    ) {
+
+                        str += `
+                                   <label class="weui-cell weui-check__label" for=`+planId+`>
+                                        <div class="weui-cell__hd">
+                                            <input type="checkbox" name="checkbox1" class="weui-check plan_item" id=`+planId+`>
+                                            <i class="weui-icon-checked"></i>
+                                        </div>
+                                        <div class="weui-cell__bd">
+                                            <p>
+                                                <span>` +content+ `</span>
+                                            <span class="item_time">`+ wranDay.getHours() +`:`+wranDay.getMinutes() +`</span>
+                                            </p>
+                    
+                                        </div>
+                                    </label>
+                                    `;
+
+                    }
+
+                }
+
+                $( ".plan_items" ).html( str );
+                planItemClick();
+
+
+            }catch ( e ) {
+                console.log( e );
+            }
+
+        })()
 
 
         /*给每一周日期绑定对应的月份属性
@@ -266,117 +371,123 @@ $( function () {
             return getWeek;
         };
 
+        function planItemClick () {
+
+            $( ".plan_item" ).click( function () {
+                let self = this;
+                if ( $( self ).prop( "checked" ) ) {
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '完成计划啦？',
+                        onOK    : function () {
+                            //点击确认
+                            let data = {
+                                "content"  : $( self ).val(),
+                                "is_finish": $( self ).prop( "checked" ),
+                                "warn_time": $( self ).attr( "data-time" )
+                            };
+                            planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                                if( err ) {
+                                    loger( err );
+                                    $( self ).attr( "checked", "checked" );
+                                    return;
+                                }
+
+                                loger( err );
+                            })
+                        },
+                        onCancel: function () {
+                            $( self ).attr( "checked", false );
+                        }
+                    } );
+                    return;
+                }
+
+                $.confirm( {
+                    title   : '提示',
+                    text    : '要修改状态吗？',
+                    onOK    : function () {
+                        //点击确认修改状态
+                        let data = {
+                            "content"  : $( self ).val(),
+                            "is_finish": $( self ).prop( "checked" ),
+                            "warn_time": $( self ).attr( "data-time" )
+                        };
+                        planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                            if( err ) {
+                                loger( err );
+                                $( self ).attr( "checked", "checked" );
+                                return;
+                            }
+
+                            loger( err );
+                        })
+                    },
+                    onCancel: function () {
+                        $( self ).attr( "checked", "checked" );
+                    }
+                } );
+            } )
+
+        }
+
+
     })()
 
-    $(".plan_datetime-picker").picker({
-        title: "请选择开始时间",
-        cols: [
-            {
-                values: (function () {
-                    var hours = [];
-                    for (var i=0; i<24; i++){
-                        if( i >= new Date().getHours() ) {
-                            hours.push(i > 9 ? i : '0'+i);
-                        }
-                    }
-                    return hours;
-                })()
-            },
-            {
-                divider: true,  // 这是一个分隔符
-                content: '时'
-            },
-            {
-                values: (function () {
-                    var minutes = [];
-                    for (var i=0; i<59; i++) {
-                        if( i > new Date().getMinutes() ) {
-                            minutes.push(i > 9 ? i : '0'+i);
-                        }
-                    }
-                    return minutes;
-                })()
-            },
-            {
-                divider: true,  // 这是一个分隔符
-                content: '分'
-            }
-        ],
-        onClose : function( value ) {
-            //value type is array
-            $(".plan_datetime-picker").val( value.value.join(":") );
-        }
-    });
+    let choseDate = "";
+    let date      = new Date();
+    let str       = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
-    $(".plan_end-datetime-picker").picker({
-        title: "请选择结束时间",
-        cols: [
-            {
-                values: (function () {
-                    var hours = [];
-                    for (var i=0; i<24; i++){
-                        if( i >= new Date().getHours() ) {
-                            hours.push(i > 9 ? i : '0'+i);
-                        }
-                    }
-                    return hours;
-                })()
-            },
-            {
-                divider: true,  // 这是一个分隔符
-                content: '时'
-            },
-            {
-                values: (function () {
-                    var minutes = [];
-                    for (var i=0; i<59; i++) {
-                        if( i > new Date().getMinutes() ) {
-                            minutes.push(i > 9 ? i : '0'+i);
-                        }
-                    }
-                    return minutes;
-                })()
-            },
-            {
-                divider: true,  // 这是一个分隔符
-                content: '分'
+    $( ".plan_end-datetime-picker" ).datetimePicker( {
+        min    : str,
+        max    : (date.getFullYear() + 1) + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+        onClose: function ( picker ) {
+            //2019-03-01-10-45
+            let value    = picker.value.join( ":" );
+            let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
+            let date     = new Date( newValue );
+            //设置全局选择的时间 post
+            choseDate    = date;
+            let nowDate  = new Date();
+            if ( nowDate > date ) {
+                $( ".plan_end-datetime-picker" ).val( "" );
+                return;
             }
-        ],
-        onClose : function( value ) {
-            //value type is array
-            $(".plan_end-datetime-picker").val( value.value.join(":") );
-        }
-    });
 
-    $(".plan_item").click( function () {
-        let self = this;
-        if( $(self).prop("checked") ) {
-            $.confirm({
-                title: '提示',
-                text: '完成计划啦？',
-                onOK: function () {
-                    //点击确认
-                },
-                onCancel: function () {
-                    $(self).attr("checked",false);
-                }
-            });
+            let min   = (date - nowDate) / 1000 / 60;
+            let hours = min / 60;
+            let day   = Math.floor( hours / 24 );
+            min       = Math.ceil( min > 60 ? (Math.ceil( min / 60 ) - (min / 60)) * 60 : min ) + "分";
+            hours     = Math.floor( hours > 24 ? (Math.ceil( hours / 24 ) - (hours / 24)) * 24 : hours ) + "时";
+            day       = (day > 1 ? day + "天" : " ");
+            $( ".plan_end-datetime-picker" ).val( day + hours + min + "后响铃" );
+        }
+    } );
+
+    $( ".save_plan_btn" ).click( function () {
+
+        if( $(".plan_title").val().length < 1 ) {
+            loger( "请输入计划" );
             return;
         }
+        let data = {
+            "content"  : $( ".plan_title" ).val(),
+            "is_finish": $( ".is_finish" ).prop( "checked" ),
+            "warn_time": choseDate
+        };
+        planModule.postPlanInfo( data, function ( err, res ) {
 
-        $.confirm({
-            title: '提示',
-            text: '要修改状态吗？',
-            onOK: function () {
-                //点击确认
-            },
-            onCancel: function () {
-                $(self).attr("checked","checked");
+            if( err ) {
+                loger( err );
+                return;
             }
-        });
 
+            loger( res );
+            //写入新计划
+            GoHashUrl( "node_input" );
 
+        } )
 
-    })
+    } )
 
-})
+} )

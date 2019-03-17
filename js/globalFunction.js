@@ -6,6 +6,10 @@ const noteModule = {
 const memoModule = {
     memoInfoIncache : ""
 };
+const planModule = {
+    planInfoIncache : ""
+};
+
 function loger( txt ) {
     $.alert( {
         title: '提示',
@@ -403,3 +407,177 @@ noteModule.delteNoteInfoById = function ( noteId, callback ) {
     } )
 
 };
+
+
+/*
+* param1 planData [Object] 添加备忘录内容
+{
+    "content": "wefgwefwe",  # 必须
+    "is_finish": false,  # 必须 布尔类型
+    "warn_time": "2019-3-1 12:50:00"  # 必须
+}
+* param2 callback [Function] 回调函数
+* */
+planModule.postPlanInfo = function ( planData, callback ) {
+
+    if( !planData.content || !planData.warn_time ) {
+        return callback( "参数传递错误" + JSON.stringify(planData), null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.plan,
+        method: "POST",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        data: JSON.stringify( planData ),
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+    } )
+
+};
+
+/*
+* callback( err, planList )
+*
+* return 一个noteArr数组
+* */
+planModule.getAllPlanInfo = function ( callback ) {
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.plan,
+        method: "GET",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            planModule.planInfoIncache = res[ "schedules" ];
+            return callback( null, res[ "schedules" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+
+};
+
+
+/*
+* {
+  "errmsg": "请求成功",
+  "errno": "0",
+  "notes": {
+    "addtime": "2019-02-20 14:43:26",
+    "content": "人那个in仍而给您热ingi仍in日恩",
+    "id": 2,
+    "title": "哇哈哈"
+  }
+}
+@param1 planId [String]
+@param2 callback，回调函数 [ Function]
+* */
+planModule.getPlanInfoById = function ( planId, callback ) {
+    $.ajax( {
+        url: globalUrl.httpServerUrl.plan + planId + "/",
+        method: "GET",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "schedule" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+};
+
+/*
+* param1 planId [String] 计划id
+* param2 changeData [Object] 修改数据
+* param3 callback [Function] 回调函数
+* */
+planModule.putPlanInfoById = function ( planId, changeData, callback ) {
+
+    if( !changeData.title || !changeData.content ) {
+        return callback( "参数传递错误" + JSON.stringify(changeData), null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.plan + planId + "/",
+        method: "PUT",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        data: JSON.stringify( changeData ),
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+};
+
+/*
+* param1 planId [Object] 计划id
+* param2 callback [Function] 回调函数
+* */
+planModule.deltePlanInfoById = function ( planId, callback ) {
+
+    if( !planId ) {
+        return callback( "不存在备忘录id",null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.plan + planId + "/",
+        method: "DELETE",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+    } )
+
+};
+
+

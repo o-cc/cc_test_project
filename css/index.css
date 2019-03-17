@@ -219,7 +219,7 @@
     margin-top: 1rem;
 }
 
-.save_btn, .save_notes_btn, .save_plan_btn, .cancel_plan_btn{
+.save_btn, .save_notes_btn, .save_plan_btn, .cancel_plan_btn, .save_bill_btn, .save_bill_btn_out{
     background-color: #4fd2c2;
     color: #fff;
     border: none;

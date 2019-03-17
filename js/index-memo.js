@@ -107,8 +107,6 @@ $( function () {
                 return;
             }
 
-            loger( res );
-            GoHashUrl( "memo" );
             //将最新的数据写入到html上
             let content = editor.txt.html();
             content.length > 60?content.slice( 0, 60 ): content;
@@ -126,6 +124,9 @@ $( function () {
                     </div>
                 `;
             $(".memo_a").after( str );
+
+            loger( res );
+            GoHashUrl( "memo" );
 
         })
     })

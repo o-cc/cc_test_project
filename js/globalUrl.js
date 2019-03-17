@@ -5,5 +5,6 @@ var globalUrl = {
         register : baseUrl + "users/",
         password : baseUrl + "passwords/",
         memo     : baseUrl + "memos/",
+        note     : baseUrl + "notes/",
     }
 }

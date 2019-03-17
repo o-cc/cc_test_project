@@ -1,7 +1,11 @@
 
-let billModule = {};
-
-let memoModule = {};
+const billModule = {};
+const noteModule = {
+    noteInfoIncache : ""
+};
+const memoModule = {
+    memoInfoIncache : ""
+};
 function loger( txt ) {
     $.alert( {
         title: '提示',
@@ -217,6 +221,70 @@ billModule.getAllBillInfo = function ( callback ) {
                 return callback( res[ "errmsg" ], null );
             }
             return callback( null, res[ "memo" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+
+    } )
+
+
+};
+
+
+/*
+* param1 noteData [Object] 添加备忘录内容
+{
+    "title":"哇efwef侮辱人格我哈",  # 必须参数
+    "content":"人那个iwgwrgr问过我如果n日恩"  # 必须参数
+}
+* param2 callback [Function] 回调函数
+* */
+noteModule.postNoteInfo = function ( noteData, callback ) {
+
+    if( !noteData.title || !noteData.content ) {
+        return callback( "参数传递错误" + JSON.stringify(noteData), null );
+    }
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.note,
+        method: "POST",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        data: JSON.stringify( noteData ),
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            return callback( null, res[ "errmsg" ] );
+
+        },
+        error: function ( err ) {
+
+            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        }
+    } )
+
+};
+
+
+noteModule.getAllNoteInfo = function ( callback ) {
+
+    $.ajax( {
+        url: globalUrl.httpServerUrl.note,
+        method: "GET",
+        headers: {
+            "Authorization" : window.localStorage.getItem("token")
+        },
+        success: function ( res ) {
+            if( res.errno !== "0" ) {
+                return callback( res[ "errmsg" ], null );
+            }
+            noteModule.noteInfoIncache = res[ "notes_list" ];
+            return callback( null, res[ "notes_list" ] );
 
         },
         error: function ( err ) {

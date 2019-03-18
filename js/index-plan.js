@@ -1,5 +1,6 @@
 $( function () {
 
+    let choseDay = "";
     (function () {
         $( "#date" ).calendar();
         //全部按钮
@@ -163,8 +164,10 @@ $( function () {
 
             $( this ).css( "color", "#00ac2f" ).siblings().css( "color", "#000" );
             //year 有个bug 如果这周是2018年最后一周，获取到的年份却是2019年
-            //获取当天的所有计划！
+
             let thisDayStr = year + "-" +$(this).attr("month") +"-" + $(this).html();
+            //全局表示选择的日期
+            choseDay       = thisDayStr;
             let thisDay    = new Date(thisDayStr);
 
             let planInfoIncache = planModule.planInfoIncache;
@@ -188,24 +191,19 @@ $( function () {
                         wranDay.getDate() === thisDay.getDate()
                     ) {
 
-                        str += `
-                                   <label class="weui-cell weui-check__label" for=`+planId+`>
-                                        <div class="weui-cell__hd">
-                                            <input type="checkbox" name="checkbox1" data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
-                                            <i class="weui-icon-checked"></i>
-                                        </div>
-                                        <div class="weui-cell__bd">
-                                            <p>
-                                                <span>` +content+ `</span>
-                                            <span class="item_time">`+ wranDay.getHours() +`:`+wranDay.getMinutes() +`</span>
-                                            </p>
-                    
-                                        </div>
-                                    </label>
-                                    `;
-
+                        str += ` <label class="weui-cell weui-check__label" for=`+planId+`>
+                                    <div class="weui-cell__hd">
+                                        <input type="checkbox" name="checkbox1" data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
+                                        <i class="weui-icon-checked"></i>
+                                    </div>
+                                    <div class="weui-cell__bd">
+                                        <p>
+                                            <span>` +content+ `</span>
+                                        <span class="item_time">`+ wranDay.getHours() +`:`+wranDay.getMinutes() +`</span>
+                                        </p>
+                                    </div>
+                                </label>`;
                     }
-
                 }
 
                 $( ".plan_items" ).html( str );
@@ -371,67 +369,6 @@ $( function () {
             return getWeek;
         };
 
-        function planItemClick () {
-
-            $( ".plan_item" ).click( function () {
-                let self = this;
-                if ( $( self ).prop( "checked" ) ) {
-                    $.confirm( {
-                        title   : '提示',
-                        text    : '完成计划啦？',
-                        onOK    : function () {
-                            //点击确认
-                            let data = {
-                                "content"  : $( self ).val(),
-                                "is_finish": $( self ).prop( "checked" ),
-                                "warn_time": $( self ).attr( "data-time" )
-                            };
-                            planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
-                                if( err ) {
-                                    loger( err );
-                                    $( self ).attr( "checked", "checked" );
-                                    return;
-                                }
-
-                                loger( err );
-                            })
-                        },
-                        onCancel: function () {
-                            $( self ).attr( "checked", false );
-                        }
-                    } );
-                    return;
-                }
-
-                $.confirm( {
-                    title   : '提示',
-                    text    : '要修改状态吗？',
-                    onOK    : function () {
-                        //点击确认修改状态
-                        let data = {
-                            "content"  : $( self ).val(),
-                            "is_finish": $( self ).prop( "checked" ),
-                            "warn_time": $( self ).attr( "data-time" )
-                        };
-                        planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
-                            if( err ) {
-                                loger( err );
-                                $( self ).attr( "checked", "checked" );
-                                return;
-                            }
-
-                            loger( err );
-                        })
-                    },
-                    onCancel: function () {
-                        $( self ).attr( "checked", "checked" );
-                    }
-                } );
-            } )
-
-        }
-
-
     })()
 
     let choseDate = "";
@@ -481,13 +418,131 @@ $( function () {
                 loger( err );
                 return;
             }
-
             loger( res );
-            //写入新计划
+            //完了之后需要重新更新一个下module_incache,并且更新当天的计划 有点蛋疼。。
+            planModule.getAllPlanInfo( function ( err, res ) {
+                if( err ) {
+                    loger(err);
+                    return;
+                }
+
+                //我得知道今天是第几天 又要设置一个全局变量？妈诶
+                let thisDay         = new Date( choseDay );
+                let planInfoIncache = planModule.planInfoIncache;
+                planInfoIncache     = planInfoIncache?planInfoIncache:" ";
+                let len             = planInfoIncache.length;
+
+                let str = "";
+                try {
+
+                    for ( let i = 0; i < len; i++ ) {
+
+                        let element = planInfoIncache[i];
+                        let content = element[ "content" ];
+                        let wranDay = new Date( element[ "warn_time" ] );
+                        let planId  = element[ "id" ];
+                        //判断是否是今天的日期
+                        if( wranDay.getFullYear() === thisDay.getFullYear()
+                            &&
+                            wranDay.getMonth() === thisDay.getMonth()
+                            &&
+                            wranDay.getDate() === thisDay.getDate()
+                        ) {
+
+                            str += `
+                                   <label class="weui-cell weui-check__label" for=`+planId+`>
+                                        <div class="weui-cell__hd">
+                                            <input type="checkbox" name="checkbox1" class="weui-check plan_item" id=`+planId+`>
+                                            <i class="weui-icon-checked"></i>
+                                        </div>
+                                        <div class="weui-cell__bd">
+                                            <p>
+                                                <span>` +content+ `</span>
+                                            <span class="item_time">`+ wranDay.getHours() +`:`+wranDay.getMinutes() +`</span>
+                                            </p>
+                                        </div>
+                                    </label>
+                                    `;
+
+                        }
+
+                    }
+
+                    $( ".plan_items" ).html( str );
+                    planItemClick();
+
+
+                }catch ( e ) {
+                    console.log( e );
+                }
+
+
+            } )
             GoHashUrl( "node_input" );
 
         } )
 
     } )
+
+    function planItemClick () {
+
+        $( ".plan_item" ).click( function () {
+            let self = this;
+            if ( $( self ).prop( "checked" ) ) {
+                $.confirm( {
+                    title   : '提示',
+                    text    : '完成计划啦？',
+                    onOK    : function () {
+                        //点击确认
+                        let data = {
+                            "content"  : $( self ).val(),
+                            "is_finish": $( self ).prop( "checked" ),
+                            "warn_time": $( self ).attr( "data-time" )
+                        };
+                        planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                            if( err ) {
+                                loger( err );
+                                $( self ).attr( "checked", "checked" );
+                                return;
+                            }
+
+                            loger( err );
+                        })
+                    },
+                    onCancel: function () {
+                        $( self ).attr( "checked", false );
+                    }
+                } );
+                return;
+            }
+
+            $.confirm( {
+                title   : '提示',
+                text    : '要修改状态吗？',
+                onOK    : function () {
+                    //点击确认修改状态
+                    let data = {
+                        "content"  : $( self ).val(),
+                        "is_finish": $( self ).prop( "checked" ),
+                        "warn_time": $( self ).attr( "data-time" )
+                    };
+                    planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                        if( err ) {
+                            loger( err );
+                            $( self ).attr( "checked", "checked" );
+                            return;
+                        }
+
+                        loger( err );
+                    })
+                },
+                onCancel: function () {
+                    $( self ).attr( "checked", "checked" );
+                }
+            } );
+        } )
+
+    }
+
 
 } )

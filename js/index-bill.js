@@ -28,6 +28,35 @@ $( function () {
     } )
 
 
+    billModule.getAllBillAccount()
+        .then( res =>{
+            //所有的账户的数组，需要显示所有的账户的info?
+            if( res.length <= 0 ) {
+                return;
+            }
+
+            res.forEach( ( value, key ) => {
+                /*
+                *  {
+                      "add_time": "2019-02-25 14:53:24",  # 添加时间
+                      "account_id": "123456789123456781",   # 账户id
+                      "name": "中国银行",  # 银行名称
+                      "remarks": "wwfwef",  # 备注
+                      "total_money": 6000  # 余额
+                    },
+                * */
+                if( key < 5 ) {
+                    //请求获得到收入和支出的
+                }
+
+                //显示所有的账户
+
+            })
+
+        })
+        .catch( err => {
+
+        })
     //这个是点击nav切换class
     $( ".nav_flag" ).eq(0).click( function () {
         $(this).addClass("weui_bar__item_on").siblings("div").eq(0).removeClass("weui_bar__item_on");
@@ -37,6 +66,75 @@ $( function () {
         $(this).addClass("weui_bar__item_on").siblings("div").eq(0).removeClass("weui_bar__item_on");
     });
 
+    //应该是一个action
+    $( ".bill_add" ).click( function () {
+
+        $.actions( {
+            actions:
+                [
+                    {
+                        text     : "我的账户",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            GoHashUrl( "bill_account" );
+                        }
+                    },
+                    {
+                        text     : "添加收入",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            GoHashUrl( "bill_input" );
+                        }
+                    },
+                    {
+                        text     : "添加支出",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            GoHashUrl( "bill_output" );
+                        }
+                    }
+                ]
+        } );
+    } )
+
+    $( ".my_account" ).click( function () {
+        let self = this;
+        //获取到所有账户。
+        $.actions( {
+            actions:
+                [
+                    {
+                        text     : "我的账户",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            $(self).val( this.text );
+                        }
+                    },
+                    {
+                        text     : "添加收入",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            $(self).val( this.text );
+
+                        }
+                    },
+                    {
+                        text     : "添加支出",
+                        className: "alert_action",
+                        onClick  : function () {
+                            //do something
+                            $(self).val( this.text );
+
+                        }
+                    }
+                ]
+        } );
+    } )
 
     $("#bill_type").click( function () {
         let self = this;

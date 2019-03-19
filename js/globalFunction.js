@@ -1,5 +1,7 @@
 
-const billModule = {};
+const billModule = {
+    billAccountIncache : "",
+};
 const noteModule = {
     noteInfoIncache : ""
 };
@@ -211,29 +213,35 @@ memoModule.delteMemoInfoById = function ( memoId, callback ) {
 
 };
 
-billModule.getAllBillInfo = function ( callback ) {
+billModule.getAllBillIncomeInfo = function ( accountId ) {
 
-    $.ajax( {
-        url: globalUrl.httpServerUrl.memo,
-        method: "GET",
-        headers: {
-            "Authorization" : window.localStorage.getItem("token")
-        },
+    let pre = new Promise( (resolve, reject) => {
 
-        success: function ( res ) {
-            if( res.errno !== "0" ) {
-                return callback( res[ "errmsg" ], null );
+        $.ajax( {
+            url: globalUrl.httpServerUrl.income + accountId + "/",
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "records" ] );
+
+            },
+            error: function ( err ) {
+
+                return reject( "返回" + err.status + "信息为:" + err.responseText, null );
             }
-            return callback( null, res[ "memo" ] );
 
-        },
-        error: function ( err ) {
+        } )
 
-            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
-        }
 
-    } )
+    });
 
+    return pre;
 
 };
 
@@ -581,3 +589,181 @@ planModule.deltePlanInfoById = function ( planId, callback ) {
 };
 
 
+
+/*添加账户
+* param1 accountData [Object] 账户数据
+    * {
+        "account_id": "123456789123456781",  # 账户 必须
+        "name": "中国银行",  # 银行名称 必须
+        "total_money": 6000,  # 余额 必须
+        "remarks": "wwfwef"  # 备注 非必须
+    }*
+* */
+billModule.postBillAccount = function ( accountData ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountData[ "account_id" ] || !accountData[ "name" ] || !accountData[ "total_money" ] ) {
+
+            return reject( "参数有误: "+ JSON.stringify( accountData ) );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.accounts,
+            method: "POST",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            data: JSON.stringify( accountData ),
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};
+
+/* 查询账户列表
+* */
+billModule.getAllBillAccount = function () {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.accounts,
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                billModule.billAccountIncache = res[ "accounts" ];
+                return resolve( res[ "accounts" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};
+
+/*查询某个账户信息
+* param1 accountId [String] 账户Id
+* */
+billModule.getBillAccountById = function ( accountId ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountId ) {
+            return reject( "不存在accountId : "+ accountId );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.accounts + accountId +"/",
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "account" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};
+
+
+/*修改某个账户信息
+* param1 accountData [ Object ] 账户修改的数据
+* */
+billModule.putBillAccountById = function ( accountData ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountData[ "account_id" ] || !accountData[ "name" ] || !accountData[ "total_money" ] ) {
+
+            return reject( "参数有误: "+ JSON.stringify( accountData ) );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.accounts + accountData[ "account_id" ] + "/",
+            method: "PUT",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            data: JSON.stringify( accountData ),
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};
+
+/*修改某个账户信息
+* param1 accountId [ String ] 账户Id
+* */
+billModule.deleteBillAccountById = function ( accountId ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountId ) {
+
+            return reject( "参数有误: "+ accountId );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.accounts + accountId + "/",
+            method: "DELETE",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};

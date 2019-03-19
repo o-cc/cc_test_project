@@ -183,6 +183,7 @@ $( function () {
                     let content = element[ "content" ];
                     let wranDay = new Date( element[ "warn_time" ] );
                     let planId  = element[ "id" ];
+                    let is_finish  = element[ "is_finish" ]?"checked":"";
                     //判断是否是今天的日期
                     if( wranDay.getFullYear() === thisDay.getFullYear()
                         &&
@@ -193,7 +194,7 @@ $( function () {
 
                         str += ` <label class="weui-cell weui-check__label" for=`+planId+`>
                                     <div class="weui-cell__hd">
-                                        <input type="checkbox" name="checkbox1" data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
+                                        <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
                                         <i class="weui-icon-checked"></i>
                                     </div>
                                     <div class="weui-cell__bd">
@@ -232,6 +233,7 @@ $( function () {
                     let content = element[ "content" ];
                     let wranDay = new Date( element[ "warn_time" ] );
                     let planId  = element[ "id" ];
+                    let is_finish  = element[ "is_finish" ]?"checked":"";
                     //判断是否是今天的日期
                     if( wranDay.getFullYear() === thisDay.getFullYear()
                         &&
@@ -243,7 +245,7 @@ $( function () {
                         str += `
                                    <label class="weui-cell weui-check__label" for=`+planId+`>
                                         <div class="weui-cell__hd">
-                                            <input type="checkbox" name="checkbox1" class="weui-check plan_item" id=`+planId+`>
+                                            <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
                                             <i class="weui-icon-checked"></i>
                                         </div>
                                         <div class="weui-cell__bd">

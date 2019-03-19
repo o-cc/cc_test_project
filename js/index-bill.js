@@ -47,9 +47,46 @@ $( function () {
                 * */
                 if( key < 5 ) {
                     //请求获得到收入和支出的
+                    billModule.getBillAccountById( value[ "account_id" ] )
+                        .then( res => {
+                            /*
+                            * {
+                                  "errmsg": "请求成功",
+                                  "errno": "0",
+                                  "records": [
+                                    {
+                                      "id": 2,
+                                      "money": 600,
+                                      "remarks": "",
+                                      "type": "收入"
+                                    }
+                                  ]
+                                }
+                            * */
+
+                        })
+                        .catch( err => {
+                            loger( err );
+
+                        })
                 }
 
                 //显示所有的账户
+                let str = `
+                            <div class="bill_account_item">
+                                <div class="bill_item_center">
+                                    <p><span style="font-size: 2rem">中国银行</span></p>
+                                    <p class="account_id">
+                                        <span>账户:</span>
+                                        <span>12312312312312321</span>
+                                    </p>
+                                    <p><span style="color: #ccc">我是备注</span></p>
+                                    <p><span style="font-size: 2rem; color: #4fd2c2;">0.00</span></p>
+                                </div>
+                            </div>
+                            `;
+
+                $( ".bill_account_items" ).append( str );
 
             })
 

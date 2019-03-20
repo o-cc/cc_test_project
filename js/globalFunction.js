@@ -55,7 +55,6 @@ memoModule.getAllMemoInfo = function ( callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
-
         success: function ( res ) {
             if( res.errno !== "0" ) {
                 return callback( res[ "errmsg" ], null );
@@ -167,6 +166,7 @@ memoModule.postMemoInfo = function ( changeData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( changeData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {
@@ -234,6 +234,7 @@ noteModule.postNoteInfo = function ( noteData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( noteData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {
@@ -337,6 +338,7 @@ noteModule.putNoteInfoById = function ( noteId, changeData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( changeData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {
@@ -406,6 +408,7 @@ planModule.postPlanInfo = function ( planData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( planData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {
@@ -509,6 +512,7 @@ planModule.putPlanInfoById = function ( planId, changeData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( changeData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {
@@ -582,6 +586,7 @@ billModule.postBillAccount = function ( accountData ) {
             headers: {
                 "Authorization" : window.localStorage.getItem("token")
             },
+            contentType: 'application/json',
             data: JSON.stringify( accountData ),
             success: function ( res ) {
 
@@ -683,6 +688,7 @@ billModule.putBillAccountById = function ( accountData ) {
             headers: {
                 "Authorization" : window.localStorage.getItem("token")
             },
+            contentType: 'application/json',
             data: JSON.stringify( accountData ),
             success: function ( res ) {
 

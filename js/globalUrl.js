@@ -9,5 +9,6 @@ var globalUrl = {
         plan     : baseUrl + "schedules/",
         accounts : baseUrl + "accounts/",
         income   : baseUrl + "income/",
+        expenses : baseUrl + "expenses/",
     }
 }

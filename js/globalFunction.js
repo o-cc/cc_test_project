@@ -213,38 +213,6 @@ memoModule.delteMemoInfoById = function ( memoId, callback ) {
 
 };
 
-billModule.getAllBillIncomeInfo = function ( accountId ) {
-
-    let pre = new Promise( (resolve, reject) => {
-
-        $.ajax( {
-            url: globalUrl.httpServerUrl.income + accountId + "/",
-            method: "GET",
-            headers: {
-                "Authorization" : window.localStorage.getItem("token")
-            },
-
-            success: function ( res ) {
-                if( res.errno !== "0" ) {
-                    return reject( res[ "errmsg" ] );
-                }
-                return resolve( res[ "records" ] );
-
-            },
-            error: function ( err ) {
-
-                return reject( "返回" + err.status + "信息为:" + err.responseText, null );
-            }
-
-        } )
-
-
-    });
-
-    return pre;
-
-};
-
 
 /*
 * param1 noteData [Object] 添加备忘录内容
@@ -588,7 +556,7 @@ planModule.deltePlanInfoById = function ( planId, callback ) {
 
 };
 
-
+//billModule
 
 /*添加账户
 * param1 accountData [Object] 账户数据
@@ -766,4 +734,73 @@ billModule.deleteBillAccountById = function ( accountId ) {
     });
 
     return pre;
+};
+
+/* 根据帐号id查询收入列表
+@param1 accountId 帐号id
+* */
+billModule.getBillIncomeInfoByAccountId = function ( accountId ) {
+
+    let pre = new Promise( (resolve, reject) => {
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.income + accountId + "/",
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+
+                billModule.billIncomeInfoIncache = res[ "records" ];
+                return resolve( res[ "records" ] );
+
+            },
+            error: function ( err ) {
+
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+
+        } )
+
+
+    });
+
+    return pre;
+
+};
+
+/* 查询收入列表
+* */
+billModule.getBillExpensesInfoByAccountId = function ( accountId ) {
+
+    let pre = new Promise( (resolve, reject) => {
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.expenses + accountId + "/",
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                billModule.billExpensesInfoIncache = res[ "records" ];
+                return resolve( res[ "records" ] );
+
+            },
+            error: function ( err ) {
+
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+
+        } )
+    });
+
+    return pre;
+
 };

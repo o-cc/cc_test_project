@@ -1,31 +1,35 @@
 
 $( function () {
     //这个是长按触发事件 事件的定义应该在数据添加之后
-    var timeOutEvent = null;
-    $( ".bill_item" ).on( {
-        touchstart: function ( e ) {
-            // 长按事件触发
-            timeOutEvent = setTimeout( function () {
+    function billItemEvent () {
+
+        var timeOutEvent = null;
+        $( ".bill_item" ).on( {
+            touchstart: function ( e ) {
+                // 长按事件触发
+                timeOutEvent = setTimeout( function () {
+                    timeOutEvent = 0;
+                    console.log( '你长按了' );
+                }, 1000 );
+                //长按400毫秒
+                // e.preventDefault();
+            },
+            touchmove : function () {
+                clearTimeout( timeOutEvent );
                 timeOutEvent = 0;
-                console.log( '你长按了' );
-            }, 1000 );
-            //长按400毫秒
-            // e.preventDefault();
-        },
-        touchmove : function () {
-            clearTimeout( timeOutEvent );
-            timeOutEvent = 0;
-        },
-        touchend  : function () {
-            clearTimeout( timeOutEvent );
-            if ( timeOutEvent != 0 ) {
-                // 点击事件
-                // location.href = '/a/live-rooms.html';
-                console.log( '你点击了' );
+            },
+            touchend  : function () {
+                clearTimeout( timeOutEvent );
+                if ( timeOutEvent != 0 ) {
+                    // 点击事件
+                    // location.href = '/a/live-rooms.html';
+                    console.log( '你点击了' );
+                }
+                return false;
             }
-            return false;
-        }
-    } )
+        } )
+
+    };
 
 
     billModule.getAllBillAccount()
@@ -45,43 +49,62 @@ $( function () {
                       "total_money": 6000  # 余额
                     },
                 * */
-                if( key < 5 ) {
                     //请求获得到收入和支出的
-                    billModule.getBillAccountById( value[ "account_id" ] )
-                        .then( res => {
-                            /*
-                            * {
-                                  "errmsg": "请求成功",
-                                  "errno": "0",
-                                  "records": [
-                                    {
-                                      "id": 2,
-                                      "money": 600,
-                                      "remarks": "",
-                                      "type": "收入"
-                                    }
-                                  ]
+                Promise.all([
+                    billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] ),
+                    billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] ) ])
+                    .then( dataArr => {
+                        /*
+                        * {
+                              "errmsg": "请求成功",
+                              "errno": "0",
+                              "records": [
+                                {
+                                  "id": 2,
+                                  "money": 600,
+                                  "remarks": "",
+                                  "type": "收入"
                                 }
-                            * */
+                              ]
+                            }
+                        * */
+                        dataArr[1].forEach( (value, key) => {
+                          //默认写入收入信息
+                            let str = `
+                                    <div class="bill_item">
+                                        <div class="item_content">
+                                            <p>
+                                                `+ value[ "remarks" ]+`
+                                            </p>
+                                        </div>
+                                        <div class="item_dollar">
+                                           ￥ `+ value[ "money" ]+`
+                                        </div>
+                                    </div>
+                            `;
+                            $( ".bill_content" ).append( str );
 
-                        })
-                        .catch( err => {
-                            loger( err );
+                        } )
+                        billItemEvent();
 
-                        })
-                }
+                    })
+                    .catch( err => {
+                        loger( err );
+
+                    })
+
 
                 //显示所有的账户
                 let str = `
                             <div class="bill_account_item">
                                 <div class="bill_item_center">
-                                    <p><span style="font-size: 2rem">中国银行</span></p>
+                                    <p><span style="font-size: 2rem">`+value[ "name" ]+`</span></p>
                                     <p class="account_id">
-                                        <span>账户:</span>
-                                        <span>12312312312312321</span>
+                                        <span>账户id:</span>
+                                        <span>`+value[ "account_id" ]+`</span>
                                     </p>
-                                    <p><span style="color: #ccc">我是备注</span></p>
-                                    <p><span style="font-size: 2rem; color: #4fd2c2;">0.00</span></p>
+                                    <p><span style="color: #ccc">`+ value[ "remarks" ] +`</span></p>
+                                    <p><span style="font-size: 2rem; color: #4fd2c2;"> `+ value[ "total_money" ] +` </span></p>
                                 </div>
                             </div>
                             `;
@@ -90,17 +113,62 @@ $( function () {
 
             })
 
+            billItemEvent();
+
+
         })
         .catch( err => {
-
+            loger( err );
         })
     //这个是点击nav切换class
-    $( ".nav_flag" ).eq(0).click( function () {
-        $(this).addClass("weui_bar__item_on").siblings("div").eq(0).removeClass("weui_bar__item_on");
-    });
+    $( ".nav_flag" ).eq( 0 ).click( function () {
+
+        $( this ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
+        let str = "";
+        billModule.billIncomeInfoIncache.forEach( ( value, key ) => {
+            //默认写入收入信息
+            str += `<div class="bill_item">
+                        <div class="item_title">
+                            <h5> `+ value[ "type" ] +`</h5>
+                        </div>
+                        <div class="item_content">
+                            <p>
+                                ` + value[ "remarks" ] + `
+                            </p>
+                        </div>
+                        <div class="item_dollar">
+                           ￥ ` + value[ "money" ] + `
+                        </div>
+                    </div>`;
+        } )
+        $( ".bill_content" ).html( str );
+        billItemEvent();
+
+    } );
 
     $( ".nav_flag" ).eq(1).click( function () {
+
         $(this).addClass("weui_bar__item_on").siblings("div").eq(0).removeClass("weui_bar__item_on");
+        let str = "";
+        billModule.billExpensesInfoIncache.forEach( ( value, key ) => {
+            //默认写入收入信息
+            str += `<div class="bill_item">
+                        <div class="item_title">
+                            <h5> `+ value[ "type" ] +`</h5>
+                        </div>
+                        <div class="item_content">
+                            <p>
+                                ` + value[ "remarks" ] + `
+                            </p>
+                        </div>
+                        <div class="item_dollar">
+                           ￥ ` + value[ "money" ] + `
+                        </div>
+                    </div>`;
+        } )
+        $( ".bill_content" ).html( str );
+        billItemEvent();
+
     });
 
     //应该是一个action
@@ -174,6 +242,62 @@ $( function () {
     } )
 
     $("#bill_type").click( function () {
+        let self = this;
+        $.actions({
+            actions: [
+                {
+                    text: "个人日常消费",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+                    }
+                },
+                {
+                    text: "装修",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+
+                    }
+                },
+                {
+                    text: "旅游",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+
+                    }
+                },
+                {
+                    text: "教育",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+
+                    }
+                },
+                {
+                    text: "医疗",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+
+                    }
+                },
+                {
+                    text: "散布爱心",
+                    onClick: function() {
+                        //do something
+                        $(self).val( this.text );
+
+                    }
+                }
+            ]
+        });
+
+    });
+
+    $("#output_type").click( function () {
         let self = this;
         $.actions({
             actions: [

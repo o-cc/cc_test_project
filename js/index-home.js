@@ -44,10 +44,7 @@ $( function () {
     memoModule.getAllMemoInfo( function ( err, res ) {
 
         if ( err ) {
-            $.alert( {
-                title: '提示',
-                text : err,
-            } );
+            loger( err );
             return;
         }
 

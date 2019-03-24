@@ -59,8 +59,8 @@ memoModule.getAllMemoInfo = function ( callback ) {
             if( res.errno !== "0" ) {
                 return callback( res[ "errmsg" ], null );
             }
-            memoModule.memoInfoIncache = res[ "memo" ];
-            return callback( null, res[ "memo" ] );
+            memoModule.memoInfoIncache = res[ "memos" ];
+            return callback( null, res[ "memos" ] );
 
         },
         error: function ( err ) {
@@ -98,7 +98,7 @@ memoModule.getMemoInfoById = function ( memoId, callback ) {
             if( res.errno !== "0" ) {
                 return callback( res[ "errmsg" ], null );
             }
-            return callback( null, res[ "memo" ] );
+            return callback( null, res[ "memos" ] );
 
         },
         error: function ( err ) {

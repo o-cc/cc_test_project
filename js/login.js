@@ -6,8 +6,8 @@ $( function () {
         let username = $( "#username" ).val().trim(),
             password = $( "#password" ).val().trim();
 
-        if ( username.length < 5 ) {
-            $.alert( "用户名长度不能小于5" );
+        if ( username.length < 3 ) {
+            $.alert( "用户名长度不能小于3" );
             return;
         }
 
@@ -22,7 +22,7 @@ $( function () {
         };
 
         $.ajax( {
-            url        : globalUrl.httpServerUrl + "authorizations/",
+            url        : globalUrl.httpServerUrl.signIn,
             method     : "POST",
             data       : JSON.stringify( data ),
             contentType: "application/json",
@@ -123,7 +123,7 @@ $( function () {
         }
 
         $.ajax( {
-            url        : globalUrl.httpServerUrl + "authorizations/",
+            url        : globalUrl.httpServerUrl.register,
             method     : "POST",
             data       : JSON.stringify( data ),
             contentType: "application/json",
@@ -136,9 +136,15 @@ $( function () {
                     } );
                     return;
                 }
+                $.alert( {
+                    title: '提示',
+                    text : "注册成功，请登录",
+                    onOK: function () {
 
-                window.localStorage.setItem( "token", "JWT " + res[ "token" ] )
-                window.location.href = "./index.html";
+                        window.location.href = "./login.html";
+                    }
+                } );
+
             },
             error      : function ( err ) {
                 console.log( JSON.stringify( err ) );
@@ -160,11 +166,12 @@ $( function () {
 
         if( flag === "1" ) {
 
-            getUserQustion( function ( err, question ) {
+            getUserQustion( $( ".forgot_username" ).val() , function ( err, question ) {
 
-                if( !err ) {
+                if( err ) {
                     return;
                 }
+
                 $( ".forgot" ).removeClass( "hide" );
                 $(".forgot_question").val( question );
                 $( self ).attr( "data-value", "2" );
@@ -181,7 +188,7 @@ $( function () {
             };
 
             for( let i in data ) {
-                if( data[ i ].length < 5 ) {
+                if( data[ i ].length < 3 ) {
                     $.alert( {
                         title: '提示',
                         text : i+"的长度不能小于5",
@@ -199,6 +206,7 @@ $( function () {
                 }
 
                 //需要跳转到login了
+                loger( "修改成功" );
                 $( ".forgot" ).addClass( "hide" );
                 $( self ).attr( "data-value", "1" );
                 window.location.href = "#login";
@@ -227,6 +235,7 @@ $( function () {
         let data = {
             "username": username
         };
+
         $.ajax( {
             url: globalUrl.httpServerUrl.password,
             method: "POST",

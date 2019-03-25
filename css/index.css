@@ -144,6 +144,10 @@
     font-size: 1.2rem;
 }
 
+.memo_items {
+    max-height: 38%;
+}
+
 /*  memo 开始*/
 .memo_item, .memo_add {
     height: 10rem;

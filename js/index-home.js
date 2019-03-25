@@ -51,24 +51,24 @@ $( function () {
     ])
         .then( data => {
             let memoInfo = data[ 0 ];
+            try {
+                let len = memoInfo.length;
+                len > 5? 5 : len;
+                for ( let i = 0; i < len; i++ ) {
 
-            let len = memoInfo.length;
-            len > 5? 5 : len;
-            for ( let i = 0; i < len; i++ ) {
+                    let element = memoInfo[i];
+                    let title   = element[ "title" ];
+                    let content = element[ "content" ] ? element[ "content" ] : " ";
 
-                let element = res[i];
-                let title   = element[ "title" ];
-                let content = element[ "content" ];
+                    if ( title.length > 9 ) {
+                        title = title.slice( 0, 9 );
+                    }
 
-                if ( title.length > 9 ) {
-                    title = title.slice( 0, 9 );
-                }
+                    if ( content.length > 60 ) {
+                        content = content.slice( 0, 60 );
+                    }
 
-                if ( content.length > 60 ) {
-                    content = content.slice( 0, 60 );
-                }
-
-                let str = `
+                    let str = `
                     <div class="home_item">
                         <div class="item_title">
                             <h5>` + title + `</h5>
@@ -81,42 +81,46 @@ $( function () {
                     </div>
                 `;
 
-                $( ".home_items" ).append( str );
+                    $( ".home_items" ).append( str );
+                }
+
+
+                //长按事件
+                var timeOutEvent = null;
+                $( ".home_item" ).on( {
+                    touchstart: function ( e ) {
+                        // 长按事件触发
+                        timeOutEvent = setTimeout( function () {
+                            timeOutEvent = 0;
+                            console.log( '你长按了' );
+                        }, 1000 );
+                        //长按400毫秒
+                        // e.preventDefault();
+                    },
+                    touchmove : function () {
+                        clearTimeout( timeOutEvent );
+                        timeOutEvent = 0;
+                    },
+                    touchend  : function () {
+                        clearTimeout( timeOutEvent );
+                        if ( timeOutEvent != 0 ) {
+                            // 点击事件
+                            // location.href = '/a/live-rooms.html';
+                            console.log( '你点击了' );
+                        }
+                        return false;
+                    }
+                } )
+
+                //加载各个页面
+                memoModlueFile();
+                noteModuleFile();
+                planModuleFile();
+                billModuleFile();
+            }catch ( e ) {
+                console.log( e );
             }
 
-
-            //长按事件
-            var timeOutEvent = null;
-            $( ".home_item" ).on( {
-                touchstart: function ( e ) {
-                    // 长按事件触发
-                    timeOutEvent = setTimeout( function () {
-                        timeOutEvent = 0;
-                        console.log( '你长按了' );
-                    }, 1000 );
-                    //长按400毫秒
-                    // e.preventDefault();
-                },
-                touchmove : function () {
-                    clearTimeout( timeOutEvent );
-                    timeOutEvent = 0;
-                },
-                touchend  : function () {
-                    clearTimeout( timeOutEvent );
-                    if ( timeOutEvent != 0 ) {
-                        // 点击事件
-                        // location.href = '/a/live-rooms.html';
-                        console.log( '你点击了' );
-                    }
-                    return false;
-                }
-            } )
-
-            //加载各个页面
-            memoModlueFile();
-            noteModuleFile();
-            planModuleFile();
-            billModuleFile();
         } )
         .catch( err => {
             loger( err );

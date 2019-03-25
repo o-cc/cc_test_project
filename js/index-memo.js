@@ -4,12 +4,13 @@ function memoModlueFile(){
     let memoInfoIncache = memoModule.memoInfoIncache;
     memoInfoIncache     = memoInfoIncache?memoInfoIncache:" ";
     let len             = memoInfoIncache.length;
+
     try {
         for ( let i = 0; i < len; i++ ) {
 
         let element = memoInfoIncache[i];
         let title   = element[ "title" ];
-        let content = element[ "content" ];
+        let content = element[ "content" ] ? element[ "content" ] : "";
 
         if ( title.length > 9 ) {
             title = title.slice( 0, 9 );
@@ -34,6 +35,37 @@ function memoModlueFile(){
 
         $( ".memo_items" ).append( str );
     }
+
+        //长按事件
+        var timeOutEvent = null;
+        $( ".memo_item" ).on( {
+            touchstart: function ( e ) {
+                // 长按事件触发
+                timeOutEvent = setTimeout( function () {
+                    timeOutEvent = 0;
+                    console.log( '你长按了' );
+                }, 1000 );
+                //长按400毫秒
+                 e.preventDefault();
+            },
+            touchmove : function () {
+                clearTimeout( timeOutEvent );
+                timeOutEvent = 0;
+            },
+            touchend  : function () {
+                clearTimeout( timeOutEvent );
+                if ( timeOutEvent != 0 ) {
+                    // 点击事件
+                    //显示到记事本
+                    $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
+                    editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                    GoHashUrl( "memo_input" );
+                }
+                return false;
+            }
+        } )
+
+
     }catch ( e ) {
         console.log( e );
     }
@@ -63,7 +95,7 @@ function memoModlueFile(){
             let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
             let date    = new Date( newValue );
             //设置全局选择的时间 post
-            choseDate   = date;
+            choseDate   = newValue;
             let nowDate = new Date();
             if ( nowDate > date ) {
                 $( "#datetime-picker" ).val( "" );
@@ -93,44 +125,51 @@ function memoModlueFile(){
             loger( "请填写内容" );
             return;
         }
-
-        let boo = $( ".audio_click" ).prop( "checked" );
+        choseDate += ":00";
+        let boo = $( ".audio_click" ).prop( "checked" )?true:false;
         let changeData = {
             "title"    : $(".memo_title").val(),
-            "centent"  : editor.txt.html(),
+            "content"  : editor.txt.html(),
             "is_warn"  : boo,
             "warn_time": boo?choseDate: null,
         };
-        memoModule.postMemoInfo( changeData, function (err, res) {
-            if( err ) {
+
+        if( !boo ) {
+            delete changeData[ "warn_time" ]
+        }
+        memoModule.postMemoInfo( changeData )
+            .then( res => {
+
+                //将最新的数据写入到html上
+                let content = editor.txt.html();
+                content.length > 60 ? content.slice( 0, 60 ) : content;
+
+                let str = `
+                        <div class="memo_item">
+                            <div class="item_title">
+                                <h5>` + $( ".memo_title" ).val() + `</h5>
+                            </div>
+                            <div class="item_content">
+                                <p>
+                                   ` + content + `
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                $( ".memo_a" ).after( str );
+
+                loger( res );
+                $( ".memo_title" ).val( "" );
+                editor.txt.html( "" );
+                GoHashUrl( "memo" );
+
+            } )
+            .catch( err => {
+
                 loger( err );
-                return;
-            }
+            } )
 
-            //将最新的数据写入到html上
-            let content = editor.txt.html();
-            content.length > 60?content.slice( 0, 60 ): content;
-
-            let str = `
-                    <div class="memo_item">
-                        <div class="item_title">
-                            <h5>`+$(".memo_title").val()+`</h5>
-                        </div>
-                        <div class="item_content">
-                            <p>
-                               `+content+`
-                            </p>
-                        </div>
-                    </div>
-                `;
-            $(".memo_a").after( str );
-
-            loger( res );
-            GoHashUrl( "memo" );
-
-        })
-    })
-
+    } )
 
 };
 

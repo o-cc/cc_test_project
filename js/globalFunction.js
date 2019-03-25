@@ -161,33 +161,39 @@ memoModule.putMemoInfoById = function ( memoId, changeData, callback ) {
 }
 * param2 callback [Function] 回调函数
 * */
-memoModule.postMemoInfo = function ( changeData, callback ) {
+memoModule.postMemoInfo = function ( changeData ) {
 
-    if( !changeData.title || !changeData.content ) {
-        return callback( "参数传递错误" + JSON.stringify(changeData), null );
-    }
+    let pre = new Promise( (resolve, reject) => {
 
-    $.ajax( {
-        url: globalUrl.httpServerUrl.memo,
-        method: "POST",
-        headers: {
-            "Authorization" : window.localStorage.getItem("token")
-        },
-        contentType: 'application/json',
-        data: JSON.stringify( changeData ),
-        success: function ( res ) {
-            if( res.errno !== "0" ) {
-                return callback( res[ "errmsg" ], null );
-            }
-            return callback( null, res[ "errmsg" ] );
 
-        },
-        error: function ( err ) {
-
-            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+        if( !changeData.title || !changeData.content ) {
+            return reject( "参数传递错误" + JSON.stringify(changeData) );
         }
-    } )
 
+        $.ajax( {
+            url: globalUrl.httpServerUrl.memo,
+            method: "POST",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            contentType: 'application/json',
+            data: JSON.stringify( changeData ),
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+
+    })
+
+    return pre;
 };
 
 /*

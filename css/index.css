@@ -83,7 +83,7 @@
 .home_center {
     width: 90%;
     max-height: 95%;
-    margin: 0px auto;
+    margin: 0px auto 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -403,6 +403,14 @@
     .editor_notes {
         height: 400px;
     }
+
+}
+@media screen and (max-width: 414px) {
+
+
+   .home_center {
+       margin-bottom: 48%;
+   }
 
 }
 @media screen and (max-width: 320px) {

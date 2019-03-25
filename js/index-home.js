@@ -47,16 +47,21 @@ $( function () {
 
     //首页默认10条 5条备忘录
     Promise.all([
-        memoModule.getAllMemoInfo()
+        memoModule.getAllMemoInfo(),
+        noteModule.getAllNoteInfo()
     ])
         .then( data => {
             let memoInfo = data[ 0 ];
+            let noteInfo = data[ 1 ];
+            console.log( memoInfo );
             try {
                 let len = memoInfo.length;
-                len > 5? 5 : len;
+                len     = len > 5? 5 : len;
+
                 for ( let i = 0; i < len; i++ ) {
 
                     let element = memoInfo[i];
+
                     let title   = element[ "title" ];
                     let content = element[ "content" ] ? element[ "content" ] : " ";
 
@@ -69,7 +74,40 @@ $( function () {
                     }
 
                     let str = `
-                    <div class="home_item">
+                    <div class="home_item" data-type="memo">
+                        <div class="item_title">
+                            <h5>` + title + `</h5>
+                        </div>
+                        <div class="item_content">
+                            <p>
+                               ` + content + `
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+                    $( ".home_items" ).append( str );
+                }
+
+                let noteInfoLen = noteInfo.length;
+                noteInfoLen     = noteInfoLen > 5? 5 : noteInfoLen;
+                for ( let i = 0; i < noteInfoLen; i++ ) {
+
+                    let element = noteInfo[i];
+
+                    let title   = element[ "titile" ];
+                    let content = element[ "content" ] ? element[ "content" ] : " ";
+
+                    if ( title.length > 9 ) {
+                        title = title.slice( 0, 9 );
+                    }
+
+                    if ( content.length > 60 ) {
+                        content = content.slice( 0, 60 );
+                    }
+
+                    let str = `
+                    <div class="home_item" data-type="note">
                         <div class="item_title">
                             <h5>` + title + `</h5>
                         </div>
@@ -106,7 +144,19 @@ $( function () {
                         if ( timeOutEvent != 0 ) {
                             // 点击事件
                             // location.href = '/a/live-rooms.html';
-                            console.log( '你点击了' );
+                            let moduleType = $( this ).attr( "data-type" );
+                            if( moduleType === "memo" ) {
+                                $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
+                                editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                                GoHashUrl( "memo_input" );
+                            }
+
+                            if( moduleType === "note" ) {
+                                $(".note_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
+                                editor1.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                                GoHashUrl( "note_input" );
+                            }
+
                         }
                         return false;
                     }

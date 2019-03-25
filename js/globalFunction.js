@@ -269,28 +269,33 @@ noteModule.postNoteInfo = function ( noteData, callback ) {
 *
 * return 一个noteArr数组
 * */
-noteModule.getAllNoteInfo = function ( callback ) {
+noteModule.getAllNoteInfo = function () {
 
-    $.ajax( {
-        url: globalUrl.httpServerUrl.note,
-        method: "GET",
-        headers: {
-            "Authorization" : window.localStorage.getItem("token")
-        },
-        success: function ( res ) {
-            if( res.errno !== "0" ) {
-                return callback( res[ "errmsg" ], null );
+    let pre = new Promise( ( resolve, reject ) => {
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.note,
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                noteModule.noteInfoIncache = res[ "notes_list" ];
+                return resolve( res[ "notes_list" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
             }
-            noteModule.noteInfoIncache = res[ "notes_list" ];
-            return callback( null, res[ "notes_list" ] );
 
-        },
-        error: function ( err ) {
-
-            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
-        }
+        } )
 
     } )
+
+    return pre;
 
 
 };

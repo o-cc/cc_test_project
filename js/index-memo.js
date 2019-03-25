@@ -57,7 +57,7 @@ function memoModlueFile(){
                 if ( timeOutEvent != 0 ) {
                     // 点击事件
                     //显示到记事本
-                    $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
+                    $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
                     editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
                     GoHashUrl( "memo_input" );
                 }

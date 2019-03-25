@@ -8,8 +8,8 @@ function noteModuleFile () {
         for ( let i = 0; i < len; i++ ) {
 
             let element = noteInfoIncache[i];
-            let title   = element[ "title" ];
-            let content = element[ "content" ];
+            let title   = element[ "titile" ];
+            let content = element[ "content" ] ? element[ "content" ] : " ";
 
             if ( title.length > 9 ) {
                 title = title.slice( 0, 9 );
@@ -55,7 +55,7 @@ function noteModuleFile () {
 
         let changeData = {
             "title"    : $(".note_title").val(),
-            "centent"  : editor1.txt.html(),
+            "content"  : editor1.txt.html(),
 
         };
         noteModule.postNoteInfo( changeData, function (err, res) {
@@ -82,7 +82,7 @@ function noteModuleFile () {
                 `;
             $(".note_add").after( str );
             loger( res );
-            GoHashUrl( "note" );
+            GoHashUrl( "notes" );
 
         })
     })

@@ -1,4 +1,4 @@
-$( function () {
+function noteModuleFile () {
 
     let noteInfoIncache = noteModule.noteInfoIncache;
     noteInfoIncache     = noteInfoIncache?noteInfoIncache:" ";
@@ -87,4 +87,6 @@ $( function () {
         })
     })
 
-})
+};
+
+export { noteModuleFile }

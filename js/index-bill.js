@@ -1,5 +1,5 @@
 
-$( function () {
+function billModuleFile () {
     //这个是长按触发事件 事件的定义应该在数据添加之后
     function billItemEvent () {
 
@@ -353,4 +353,6 @@ $( function () {
 
     })
 
-} )
+}
+
+export { billModuleFile }

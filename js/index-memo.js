@@ -1,9 +1,9 @@
-$( function () {
+function memoModlueFile(){
+
 
     let memoInfoIncache = memoModule.memoInfoIncache;
     memoInfoIncache     = memoInfoIncache?memoInfoIncache:" ";
     let len             = memoInfoIncache.length;
-
     try {
         for ( let i = 0; i < len; i++ ) {
 
@@ -132,4 +132,6 @@ $( function () {
     })
 
 
-} )
+};
+
+export { memoModlueFile }

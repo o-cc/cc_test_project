@@ -1,4 +1,4 @@
-$( function () {
+function planModuleFile () {
 
     let choseDay = "";
     (function () {
@@ -547,4 +547,6 @@ $( function () {
     }
 
 
-} )
+};
+
+export { planModuleFile }

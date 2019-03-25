@@ -48,27 +48,34 @@ function GoHashUrl( hashValue ) {
 *
 * return 一个备忘录数组
 * */
-memoModule.getAllMemoInfo = function ( callback ) {
-    $.ajax( {
-        url: globalUrl.httpServerUrl.memo,
-        method: "GET",
-        headers: {
-            "Authorization" : window.localStorage.getItem("token")
-        },
-        success: function ( res ) {
-            if( res.errno !== "0" ) {
-                return callback( res[ "errmsg" ], null );
-            }
-            memoModule.memoInfoIncache = res[ "memos" ];
-            return callback( null, res[ "memos" ] );
+memoModule.getAllMemoInfo = function () {
+   let pre = new Promise( (resolve, reject ) => {
 
-        },
-        error: function ( err ) {
+       $.ajax( {
+           url: globalUrl.httpServerUrl.memo,
+           method: "GET",
+           headers: {
+               "Authorization" : window.localStorage.getItem("token")
+           },
+           success: function ( res ) {
+               if( res.errno !== "0" ) {
+                   return reject( res[ "errmsg" ] );
+               }
+               memoModule.memoInfoIncache = res[ "memos" ];
+               return resolve( res[ "memos" ] );
 
-            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
-        }
+           },
+           error: function ( err ) {
 
-    } )
+               return reject( "返回" + err.status + "信息为:" + err.responseText );
+           }
+
+       } )
+
+
+   })
+
+    return pre;
 
 };
 

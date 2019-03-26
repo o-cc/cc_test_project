@@ -3,7 +3,7 @@ function noteModuleFile () {
     let noteInfoIncache = noteModule.noteInfoIncache;
     noteInfoIncache     = noteInfoIncache?noteInfoIncache:" ";
     let len             = noteInfoIncache.length;
-
+    console.log( noteInfoIncache );
     try {
         for ( let i = 0; i < len; i++ ) {
 
@@ -20,7 +20,7 @@ function noteModuleFile () {
             }
 
             let str = `
-                   <div class="memo_item">
+                   <div class="note_item">
                         <div class="item_title">
                             <h5>`+ title +`</h5>
                         </div>
@@ -34,6 +34,15 @@ function noteModuleFile () {
 
             $( ".note_items" ).append( str );
         }
+        if( $( ".note_item" ).length < 6 ) {
+            let len = $( ".note_item" ).length;
+
+            for ( let i = 0; i < 6 - len; i++ ) {
+                $( ".note_items" ).append( "<div class='note_item' style='opacity: 0'></div>" );
+            }
+        }
+
+
     }catch ( e ) {
         console.log( e );
     }

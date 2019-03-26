@@ -36,6 +36,13 @@ function memoModlueFile(){
         $( ".memo_items" ).append( str );
     }
 
+    if( $( ".memo_item" ).length < 6 ) {
+        let len = $( ".memo_item" ).length;
+        for ( let i = 0; i < 6 - len; i++ ) {
+            $( ".memo_items" ).append( "<div class='memo_item' style='opacity: 0'></div>" );
+        }
+    }
+
         //长按事件
         var timeOutEvent = null;
         $( ".memo_item" ).on( {

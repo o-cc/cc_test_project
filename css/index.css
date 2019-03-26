@@ -82,7 +82,7 @@
 
 .home_center {
     width: 90%;
-    max-height: 95%;
+    height: 55rem;
     margin: 0px auto 100%;
     display: flex;
     justify-content: space-between;
@@ -92,8 +92,9 @@
     overflow: scroll;
 }
 
-.home_item, .memo_item, .memo_add, .bill_item {
+.home_item, .memo_item, .note_item, .memo_add, .bill_item {
     width: 42%;
+    height: 10rem;
     margin-bottom: 2rem;
     background-color: #fff;
     position: relative;
@@ -391,7 +392,9 @@
 /*备忘录的输入框做适配*/
 @media screen and (max-width: 375px) {
 
-
+    .home_center {
+        height: 50rem;
+    }
     .slide_content2, .slide_content3, .slide_content4, .slide_content5{
         height: 250%;
     }
@@ -411,6 +414,10 @@
    .home_center {
        margin-bottom: 48%;
    }
+
+    .note_items {
+        margin-bottom: 35%;
+    }
 
 }
 @media screen and (max-width: 320px) {

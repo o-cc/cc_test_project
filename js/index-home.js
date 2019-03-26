@@ -122,6 +122,12 @@ $( function () {
                     $( ".home_items" ).append( str );
                 }
 
+                if( $( ".home_item" ).length < 6 ) {
+                    let len = $( ".home_item" ).length;
+                    for ( let i = 0; i < 6 - len; i++ ) {
+                        $( ".home_items" ).append( "<div class='home_item' style='opacity: 0'></div>" );
+                    }
+                }
 
                 //长按事件
                 var timeOutEvent = null;

@@ -3,7 +3,6 @@ function noteModuleFile () {
     let noteInfoIncache = noteModule.noteInfoIncache;
     noteInfoIncache     = noteInfoIncache?noteInfoIncache:" ";
     let len             = noteInfoIncache.length;
-    console.log( noteInfoIncache );
     try {
         for ( let i = 0; i < len; i++ ) {
 

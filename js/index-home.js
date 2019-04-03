@@ -48,12 +48,12 @@ $( function () {
     //首页默认10条 5条备忘录
     Promise.all([
         memoModule.getAllMemoInfo(),
-        noteModule.getAllNoteInfo()
+        noteModule.getAllNoteInfo(),
+        planModule.getAllPlanInfo()
     ])
         .then( data => {
             let memoInfo = data[ 0 ];
             let noteInfo = data[ 1 ];
-            console.log( memoInfo );
             try {
                 let len = memoInfo.length;
                 len     = len > 5? 5 : len;

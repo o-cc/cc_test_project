@@ -1,12 +1,64 @@
 function planModuleFile () {
 
-    let choseDay = "";
+    let choseDay = new Date();
     (function () {
-        $( "#date" ).calendar();
-        //全部按钮
-        $( ".show_all_date" ).click( function () {
+        $( "#date" ).calendar({
 
-        } );
+            onChange ( p, value, displayValue ) {
+                //console.log( p, value, displayValue );
+                //console.log( value );
+
+                let thisDayStr = value[0];
+                //全局表示选择的日期
+                let thisDay    = new Date( thisDayStr );
+
+                let planInfoIncache = planModule.planInfoIncache;
+                planInfoIncache     = planInfoIncache ? planInfoIncache : " ";
+                let len             = planInfoIncache.length;
+
+                let str = "";
+                try {
+
+                    for ( let i = 0; i < len; i++ ) {
+
+                        let element   = planInfoIncache[ i ];
+                        let content   = element[ "content" ];
+                        let wranDay   = new Date( element[ "warn_time" ] );
+                        let planId    = element[ "id" ];
+                        let is_finish = element[ "is_finish" ] ? "checked" : "";
+                        //判断是否是今天的日期
+                        if ( wranDay.getFullYear() === thisDay.getFullYear()
+                            &&
+                            wranDay.getMonth() === thisDay.getMonth()
+                            &&
+                            wranDay.getDate() === thisDay.getDate()
+                        ) {
+
+                            str += ` <label class="weui-cell weui-check__label" for=` + planId + `>
+                                    <div class="weui-cell__hd">
+                                        <input type="checkbox" name="checkbox1" ` + is_finish + ` data-time=` + element[ "warn_time" ] + ` class="weui-check plan_item" id=` + planId + `>
+                                        <i class="weui-icon-checked"></i>
+                                    </div>
+                                    <div class="weui-cell__bd">
+                                        <p>
+                                            <span>` + content + `</span>
+                                        <span class="item_time">` + wranDay.getHours() + `:` + wranDay.getMinutes() + `</span>
+                                        </p>
+                                    </div>
+                                </label>`;
+                        }
+                    }
+
+                    $( ".plan_items" ).html( str );
+                    planItemClick();
+
+                } catch ( e ) {
+                    console.log( e );
+                }
+
+            }
+
+        });
 
         //定义计数器 控制上一页什么时候不能上翻
         //var boo = 0;
@@ -194,7 +246,7 @@ function planModuleFile () {
 
                         str += ` <label class="weui-cell weui-check__label" for=`+planId+`>
                                     <div class="weui-cell__hd">
-                                        <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
+                                        <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+element["warn_time"]+` class="weui-check plan_item" id=`+planId+`>
                                         <i class="weui-icon-checked"></i>
                                     </div>
                                     <div class="weui-cell__bd">
@@ -226,7 +278,7 @@ function planModuleFile () {
 
             let str = "";
             try {
-
+                //console.log( planInfoIncache );
                 for ( let i = 0; i < len; i++ ) {
 
                     let element = planInfoIncache[i];
@@ -245,7 +297,7 @@ function planModuleFile () {
                         str += `
                                    <label class="weui-cell weui-check__label" for=`+planId+`>
                                         <div class="weui-cell__hd">
-                                            <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+wranDay+` class="weui-check plan_item" id=`+planId+`>
+                                            <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+element[ "warn_time" ]+` class="weui-check plan_item" id=`+planId+`>
                                             <i class="weui-icon-checked"></i>
                                         </div>
                                         <div class="weui-cell__bd">
@@ -386,7 +438,7 @@ function planModuleFile () {
             let newValue = value.replace( /[:]/, "-" ).replace( /[:]/, "-" ).replace( /[:]/, " " );
             let date     = new Date( newValue );
             //设置全局选择的时间 post
-            choseDate    = date;
+            choseDate    = newValue;
             let nowDate  = new Date();
             if ( nowDate > date ) {
                 $( ".plan_end-datetime-picker" ).val( "" );
@@ -409,10 +461,16 @@ function planModuleFile () {
             loger( "请输入计划" );
             return;
         }
+
+        if( !choseDate ) {
+            loger( "请选择时间" );
+            return;
+        }
+
         let data = {
             "content"  : $( ".plan_title" ).val(),
             "is_finish": $( ".is_finish" ).prop( "checked" ),
-            "warn_time": choseDate
+            "warn_time": choseDate + ":00"
         };
         planModule.postPlanInfo( data, function ( err, res ) {
 
@@ -421,14 +479,11 @@ function planModuleFile () {
                 return;
             }
             loger( res );
-            //完了之后需要重新更新一个下module_incache,并且更新当天的计划 有点蛋疼。。
-            planModule.getAllPlanInfo( function ( err, res ) {
-                if( err ) {
-                    loger(err);
-                    return;
-                }
+            //完了之后需要重新更新一个下module_incache,并且更新当天的计划
+            planModule.getAllPlanInfo()
+                .then( res => {
 
-                //我得知道今天是第几天 又要设置一个全局变量？妈诶
+                //我得知道今天是第几天 又要设置一个全局变量？
                 let thisDay         = new Date( choseDay );
                 let planInfoIncache = planModule.planInfoIncache;
                 planInfoIncache     = planInfoIncache?planInfoIncache:" ";
@@ -499,20 +554,20 @@ function planModuleFile () {
                         let data = {
                             "content"  : $( self ).val(),
                             "is_finish": $( self ).prop( "checked" ),
-                            "warn_time": $( self ).attr( "data-time" )
+                            "warn_time": $( self ).attr( "data-time" ) + " 00:00:00"
                         };
-                        planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                        planModule.putPlanInfoById( $( self ).attr( "id" ), data, function ( err, res ) {
                             if( err ) {
                                 loger( err );
-                                $( self ).attr( "checked", "checked" );
+                                $( self ).prop( "checked", "checked" );
                                 return;
                             }
 
-                            loger( err );
+                            loger( res );
                         })
                     },
                     onCancel: function () {
-                        $( self ).attr( "checked", false );
+                        $( self ).prop( "checked", false );
                     }
                 } );
                 return;
@@ -526,20 +581,21 @@ function planModuleFile () {
                     let data = {
                         "content"  : $( self ).val(),
                         "is_finish": $( self ).prop( "checked" ),
-                        "warn_time": $( self ).attr( "data-time" )
+                        "warn_time": $( self ).attr( "data-time" ) + " 00:00:00"
                     };
-                    planModule.putPlanInfoById( $( self.attr( "id" ) ), data, function ( err, res ) {
+                    //console.log( $( self ).attr( "data-time" ) );
+                    planModule.putPlanInfoById( $( self ).attr( "id" ), data, function ( err, res ) {
                         if( err ) {
                             loger( err );
-                            $( self ).attr( "checked", "checked" );
+                            $( self ).prop( "checked", "checked" );
                             return;
                         }
 
-                        loger( err );
+                        loger( res );
                     })
                 },
                 onCancel: function () {
-                    $( self ).attr( "checked", "checked" );
+                    $( self ).prop( "checked", "checked" );
                 }
             } );
         } )

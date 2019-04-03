@@ -448,7 +448,8 @@ planModule.postPlanInfo = function ( planData, callback ) {
 *
 * return 一个noteArr数组
 * */
-planModule.getAllPlanInfo = function ( callback ) {
+planModule.getAllPlanInfo = function () {
+let pre = new Promise( ( resolve, reject ) => {
 
     $.ajax( {
         url: globalUrl.httpServerUrl.plan,
@@ -458,19 +459,23 @@ planModule.getAllPlanInfo = function ( callback ) {
         },
         success: function ( res ) {
             if( res.errno !== "0" ) {
-                return callback( res[ "errmsg" ], null );
+                return reject( res[ "errmsg" ] );
             }
             planModule.planInfoIncache = res[ "schedules" ];
-            return callback( null, res[ "schedules" ] );
+            return resolve( res[ "schedules" ] );
 
         },
         error: function ( err ) {
 
-            return callback( "返回" + err.status + "信息为:" + err.responseText, null );
+            return reject( "返回" + err.status + "信息为:" + err.responseText );
         }
 
     } )
 
+
+} )
+
+    return pre;
 
 };
 
@@ -520,7 +525,7 @@ planModule.getPlanInfoById = function ( planId, callback ) {
 * */
 planModule.putPlanInfoById = function ( planId, changeData, callback ) {
 
-    if( !changeData.title || !changeData.content ) {
+    if( !changeData.content ) {
         return callback( "参数传递错误" + JSON.stringify(changeData), null );
     }
 

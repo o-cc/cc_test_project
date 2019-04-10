@@ -34,7 +34,7 @@ function planModuleFile () {
                             wranDay.getDate() === thisDay.getDate()
                         ) {
 
-                            str += ` <label class="weui-cell weui-check__label" for=` + planId + `>
+                            str += ` <label class="weui-cell weui-check__label plan_label" for=` + planId + `>
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" name="checkbox1" ` + is_finish + ` data-time=` + element[ "warn_time" ] + ` class="weui-check plan_item" id=` + planId + `>
                                         <i class="weui-icon-checked"></i>
@@ -51,6 +51,7 @@ function planModuleFile () {
 
                     $( ".plan_items" ).html( str );
                     planItemClick();
+                    timeoutEvent();
 
                 } catch ( e ) {
                     console.log( e );
@@ -244,7 +245,7 @@ function planModuleFile () {
                         wranDay.getDate() === thisDay.getDate()
                     ) {
 
-                        str += ` <label class="weui-cell weui-check__label" for=`+planId+`>
+                        str += ` <label class="weui-cell weui-check__label plan_label" for=`+planId+`>
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+element["warn_time"]+` class="weui-check plan_item" id=`+planId+`>
                                         <i class="weui-icon-checked"></i>
@@ -261,6 +262,7 @@ function planModuleFile () {
 
                 $( ".plan_items" ).html( str );
                 planItemClick();
+                timeoutEvent();
 
             }catch ( e ) {
                 console.log( e );
@@ -295,7 +297,7 @@ function planModuleFile () {
                     ) {
 
                         str += `
-                                   <label class="weui-cell weui-check__label" for=`+planId+`>
+                                   <label class="weui-cell weui-check__label plan_label" for=`+planId+`>
                                         <div class="weui-cell__hd">
                                             <input type="checkbox" name="checkbox1" `+is_finish+` data-time=`+element[ "warn_time" ]+` class="weui-check plan_item" id=`+planId+`>
                                             <i class="weui-icon-checked"></i>
@@ -316,6 +318,7 @@ function planModuleFile () {
 
                 $( ".plan_items" ).html( str );
                 planItemClick();
+                timeoutEvent();
 
 
             }catch ( e ) {
@@ -507,7 +510,7 @@ function planModuleFile () {
                         ) {
 
                             str += `
-                                   <label class="weui-cell weui-check__label" for=`+planId+`>
+                                   <label class="weui-cell weui-check__label plan_label" for=`+planId+`>
                                         <div class="weui-cell__hd">
                                             <input type="checkbox" name="checkbox1" class="weui-check plan_item" id=`+planId+`>
                                             <i class="weui-icon-checked"></i>
@@ -527,6 +530,7 @@ function planModuleFile () {
 
                     $( ".plan_items" ).html( str );
                     planItemClick();
+                    timeoutEvent();
 
 
                 }catch ( e ) {
@@ -539,7 +543,7 @@ function planModuleFile () {
 
         } )
 
-    } )
+    } );
 
     function planItemClick () {
 
@@ -600,8 +604,57 @@ function planModuleFile () {
             } );
         } )
 
-    }
+    };
 
+    function timeoutEvent () {
+        var timeOutEvent = null;
+        $( ".plan_label" ).on( {
+            touchstart: function ( e ) {
+                // 长按事件触发
+                let self = this;
+                timeOutEvent = setTimeout( function () {
+                    timeOutEvent = 0;
+
+                    //是否需要删除
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '确定删除该计划吗？',
+                        onOK    : function () {
+                            //点击确认
+                            let planId = $( self ).children("div").eq(0).children("input").eq(0).attr( "id" );
+                            planModule.deltePlanInfoById( planId, function ( err, res ) {
+                                if( err ) {
+                                    loger( err );
+                                    return;
+                                }
+
+                                loger( res );
+                                //删除dom
+                                $( self ).remove();
+                            })
+                        }
+                    } );
+
+                }, 1000 );
+                //长按400毫秒
+                // e.preventDefault();
+            },
+            touchmove : function () {
+                clearTimeout( timeOutEvent );
+                timeOutEvent = 0;
+            },
+            touchend  : function () {
+                clearTimeout( timeOutEvent );
+                //if ( timeOutEvent != 0 ) {
+                //    // 点击事件
+                //    // location.href = '/a/live-rooms.html';
+                //
+                //}
+                //return false;
+            }
+        } )
+
+    }
 
 };
 

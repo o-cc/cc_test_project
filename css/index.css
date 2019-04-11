@@ -224,7 +224,7 @@
     margin-top: 1rem;
 }
 
-.save_btn, .save_notes_btn, .save_plan_btn, .cancel_plan_btn, .save_bill_btn, .save_bill_btn_out{
+.save_btn, .save_notes_btn, .save_plan_btn, .cancel_plan_btn, .save_bill_btn, .save_bill_btn_out, .add_bill_btn_accounts, .cancel_bill_btn_accounts, .save_bill_btn_accounts{
     background-color: #4fd2c2;
     color: #fff;
     border: none;
@@ -358,17 +358,20 @@
 }
 
 .bill_account_items {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
     width: 100%;
     margin: 1rem 0;
+    overflow: scroll;
+    height: 30%;
 }
 
 .bill_account_item {
     width: 100%;
     background-color: #fff;
+    margin-top: 1rem;
 
 }
 .bill_item_center {
@@ -387,6 +390,44 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+
+
+.add_bill_account {
+    position: fixed;
+    top: 0;
+    left: auto;
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,.6);
+}
+
+.add_bill_box {
+    width: 80%;
+    background-color: #fff;
+}
+
+.add_bill_box input {
+    height: 70%;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    font-size: 1.3rem;
+}
+
+.add_bill_box p, .add_bill_comprot {
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add_bill_comprot >div {
+    flex: 1;
 }
 
 /*备忘录的输入框做适配*/

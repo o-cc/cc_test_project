@@ -353,6 +353,60 @@ function billModuleFile () {
 
     })
 
+
+    $( ".save_bill_btn_accounts" ).click( function () {
+
+
+        //获取账号信息
+
+        let data = {
+            "account_id" : $( ".account_name" ).val(),
+            "name"       : $( ".bank_name" ).val(),
+            "total_money": $( ".account_over" ).val(),
+            "remarks"    : $( ".account_remark" ).val()
+        };
+        if( !$( ".account_remark" ).val() ) {
+            delete data[ "remarks" ];
+        }
+
+        billModule.postBillAccount( data )
+            .then( res => {
+                loger(res);
+                //隐藏
+
+                //新添加的数据需要写入
+                let str = `
+                            <div class="bill_account_item">
+                                <div class="bill_item_center">
+                                    <p><span style="font-size: 2rem">`+ $( ".bank_name" ).val() +`</span></p>
+                                    <p class="account_id">
+                                        <span>账户:</span>
+                                        <span>` +$( ".account_name" ).val()+ `</span>
+                                    </p>
+                                    <p><span style="color: #ccc">` +$( ".account_remark" ).val()+ `</span></p>
+                                    <p><span style="font-size: 2rem; color: #4fd2c2;">`+$( ".account_over" ).val()+`</span></p>
+                                </div>
+                            </div>
+                `;
+                $( ".bill_account_items" ).append( str );
+
+                $( ".add_bill_account" ).addClass( "hide" );
+
+            } )
+            .catch( err => {
+                loger( err );
+            } )
+
+    } );
+
+
+    $( ".cancel_bill_btn_accounts" ).click( function () {
+        $( ".add_bill_account" ).addClass( "hide" );
+    } );
+
+    $( ".add_bill_btn_accounts" ).click( function () {
+        $( ".add_bill_account" ).removeClass( "hide" );
+    } );
 }
 
 export { billModuleFile }

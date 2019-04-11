@@ -802,7 +802,7 @@ billModule.getBillIncomeInfoByAccountId = function ( accountId ) {
 
 };
 
-/* 查询收入列表
+/* 查询支出列表
 * */
 billModule.getBillExpensesInfoByAccountId = function ( accountId ) {
 
@@ -832,4 +832,47 @@ billModule.getBillExpensesInfoByAccountId = function ( accountId ) {
 
     return pre;
 
+};
+
+/*
+* 添加收入
+*@param1 accountId 账户id
+*@param2 incomeData
+*   {
+*       "money": 800,
+*       "remark": "xx"
+*   }
+* */
+billModule.postBillIncome = function ( accountId, incomeData ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountId || !incomeData[ "money" ] ) {
+
+            return reject( "参数有误: "+ JSON.stringify( incomeData ) );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.income + accountId,
+            method: "POST",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            contentType: 'application/json',
+            data: JSON.stringify( incomeData ),
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
 };

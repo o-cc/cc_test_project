@@ -9,8 +9,8 @@ function billModuleFile () {
                 // 长按事件触发
                 timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
-                    console.log( '你长按了' );
-                }, 1000 );
+                    console.log(     '你长按了' );
+                }, 500 );
                 //长按400毫秒
                 // e.preventDefault();
             },
@@ -31,6 +31,84 @@ function billModuleFile () {
 
     };
 
+    //账户的长按时间
+    let accountPutPostFlag = "post";
+    function billAccountEvent () {
+
+        var timeOutEvent = null;
+        $( ".bill_account_item" ).on( {
+
+            touchstart: function ( e ) {
+
+                let self = this;
+                // 长按事件触发
+                timeOutEvent = setTimeout( function () {
+                    timeOutEvent = 0;
+
+                    //是否需要删除
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '确定删除该账户吗？',
+                        onOK    : function () {
+                            //点击确认
+                            let accountId = $( self ).find( "p.account_id" ).children( "span" )
+                                .eq( 1 ).html();
+                            billModule.deleteBillAccountById( accountId )
+                                .then( res => {
+
+                                loger( res );
+                                //删除dom
+                                $( self ).remove();
+                            })
+                                .catch( err => {
+                                    loger(err)
+
+                                } )
+                        }
+                    } );
+
+                }, 500 );
+                //长按400毫秒
+                // e.preventDefault();
+            },
+            touchmove : function () {
+                clearTimeout( timeOutEvent );
+                timeOutEvent = 0;
+            },
+            touchend  : function () {
+                let self = this;
+                clearTimeout( timeOutEvent );
+                if ( timeOutEvent != 0 ) {
+                    // 点击事件
+                    //修改信息
+                    accountPutPostFlag = "put";
+                    //显示
+
+                    let bankName = $( self ).find( ".bill_item_center" )
+                        .children( "p" ).eq( 0 ).children( "span" ).eq(0).html();
+
+                    let accountId = $( self ).find( "p.account_id" )
+                        .children( "span" ).eq(1).html();
+
+                    let remark = $( self ).find( ".bill_item_center" )
+                        .children( "p" ).eq( 2 ).children( "span" ).eq(0).html();
+
+                    let account_over = $( self ).find( ".bill_item_center" )
+                        .children( "p" ).eq( 3 ).children( "span" ).eq(0).html();
+
+                    $( ".account_name" ).val( accountId );
+                    $( ".bank_name" ).val( bankName );
+                    $( ".account_over" ).val( account_over );
+                    $( ".account_remark" ).val( remark );
+
+                    $( ".add_bill_account" ).removeClass( "hide" );
+
+                }
+                return false;
+            }
+        } )
+
+    };
 
     billModule.getAllBillAccount()
         .then( res =>{
@@ -40,16 +118,7 @@ function billModuleFile () {
             }
 
             res.forEach( ( value, key ) => {
-                /*
-                *  {
-                      "add_time": "2019-02-25 14:53:24",  # 添加时间
-                      "account_id": "123456789123456781",   # 账户id
-                      "name": "中国银行",  # 银行名称
-                      "remarks": "wwfwef",  # 备注
-                      "total_money": 6000  # 余额
-                    },
-                * */
-                    //请求获得到收入和支出的
+
                 Promise.all([
                     billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] ),
                     billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] ) ])
@@ -86,7 +155,6 @@ function billModuleFile () {
 
                         } )
                         billItemEvent();
-
                     })
                     .catch( err => {
                         loger( err );
@@ -110,7 +178,7 @@ function billModuleFile () {
                             `;
 
                 $( ".bill_account_items" ).append( str );
-
+                billAccountEvent();
             })
 
             billItemEvent();
@@ -124,7 +192,13 @@ function billModuleFile () {
     $( ".nav_flag" ).eq( 0 ).click( function () {
 
         $( this ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
-        let str = "";
+        let str = `
+                <div class="add_plan">
+                    <div class="weui-uploader__input-box add_btn">
+                        <a class="bill_add" style="display:inline-block;width: 100%;height: 100%;"></a>
+                    </div>
+                </div>
+                `;
         billModule.billIncomeInfoIncache.forEach( ( value, key ) => {
             //默认写入收入信息
             str += `<div class="bill_item">
@@ -142,14 +216,21 @@ function billModuleFile () {
                     </div>`;
         } )
         $( ".bill_content" ).html( str );
+        billAdd();
         billItemEvent();
 
     } );
 
-    $( ".nav_flag" ).eq(1).click( function () {
+    $( ".nav_flag" ).eq( 1 ).click( function () {
 
         $(this).addClass("weui_bar__item_on").siblings("div").eq(0).removeClass("weui_bar__item_on");
-        let str = "";
+        let str = `
+                <div class="add_plan">
+                    <div class="weui-uploader__input-box add_btn">
+                        <a class="bill_add" style="display:inline-block;width: 100%;height: 100%;"></a>
+                    </div>
+                </div>
+                `;
         billModule.billExpensesInfoIncache.forEach( ( value, key ) => {
             //默认写入收入信息
             str += `<div class="bill_item">
@@ -168,77 +249,91 @@ function billModuleFile () {
         } )
         $( ".bill_content" ).html( str );
         billItemEvent();
+        billAdd();
+
 
     });
 
     //应该是一个action
-    $( ".bill_add" ).click( function () {
+    function billAdd() {
+        $( ".bill_add" ).click( function () {
 
-        $.actions( {
-            actions:
-                [
-                    {
-                        text     : "我的账户",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
-                            GoHashUrl( "bill_account" );
+            $.actions( {
+                actions:
+                    [
+                        {
+                            text     : "我的账户",
+                            className: "alert_action",
+                            onClick  : function () {
+                                //do something
+                                GoHashUrl( "bill_account" );
+                            }
+                        },
+                        {
+                            text     : "添加收入",
+                            className: "alert_action",
+                            onClick  : function () {
+                                //do something
+                                GoHashUrl( "bill_input" );
+                            }
+                        },
+                        {
+                            text     : "添加支出",
+                            className: "alert_action",
+                            onClick  : function () {
+                                //do something
+                                GoHashUrl( "bill_output" );
+                            }
                         }
-                    },
-                    {
-                        text     : "添加收入",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
-                            GoHashUrl( "bill_input" );
-                        }
-                    },
-                    {
-                        text     : "添加支出",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
-                            GoHashUrl( "bill_output" );
-                        }
-                    }
-                ]
-        } );
-    } )
+                    ]
+            } );
+        } )
+    }
+    billAdd();
 
     $( ".my_account" ).click( function () {
         let self = this;
         //获取到所有账户。
-        $.actions( {
-            actions:
-                [
-                    {
-                        text     : "我的账户",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
-                            $(self).val( this.text );
-                        }
-                    },
-                    {
-                        text     : "添加收入",
-                        className: "alert_action",
-                        onClick  : function () {
-                            //do something
-                            $(self).val( this.text );
 
-                        }
-                    },
-                    {
-                        text     : "添加支出",
+        billModule.getAllBillAccount()
+            .then( res =>{
+                //所有的账户的数组，需要显示所有的账户的info?
+                if( res.length <= 0 ) {
+                    return;
+                }
+                let arr =[];
+                res.forEach( ( value, key ) => {
+                    /*
+                    *  {
+                          "add_time": "2019-02-25 14:53:24",  # 添加时间
+                          "account_id": "123456789123456781",   # 账户id
+                          "name": "中国银行",  # 银行名称
+                          "remarks": "wwfwef",  # 备注
+                          "total_money": 6000  # 余额
+                        },
+                    * */
+                    let temp = {
+                        text     : value[ "account_id" ] + " " + value[ "name" ],
                         className: "alert_action",
                         onClick  : function () {
                             //do something
-                            $(self).val( this.text );
-
+                            $(self).val( value[ "account_id" ] );
                         }
-                    }
-                ]
-        } );
+                    };
+                    arr.push( temp );
+                })
+
+                $.actions( {
+                    actions: arr
+                } );
+
+
+            })
+            .catch( err => {
+                loger( err );
+            })
+
+
     } )
 
     $("#bill_type").click( function () {
@@ -354,10 +449,168 @@ function billModuleFile () {
     })
 
 
+    //添加收入
+    $( ".add_bill_income" ).click( function () {
+
+        if( !$( "#bill_type" ).val() || !$( ".income_account" ).val() || !$( ".income_num" ).val() ) {
+            loger( "不允许存在空值" );
+            return;
+        }
+        let incomeData = {
+            "money": Number( $( ".income_num" ).val() ),
+            "remarks": $( "#bill_type" ).val()
+        };
+
+        billModule.postBillIncome( $( ".income_account" ).val().trim(), incomeData )
+            .then( res => {
+                loger( res );
+                //添加到首页上
+                billModule.billAccountIncache.forEach( ( value ) => {
+                Promise.all([
+                    //billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] ),
+                    billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] ) ])
+                    .then( dataArr => {
+                        /*
+                        * {
+                              "errmsg": "请求成功",
+                              "errno": "0",
+                              "records": [
+                                {
+                                  "id": 2,
+                                  "money": 600,
+                                  "remarks": "",
+                                  "type": "收入"
+                                }
+                              ]
+                            }
+                        * */
+                        let str = `
+                                <div class="add_plan">
+                                    <div class="weui-uploader__input-box add_btn">
+                                        <a class="bill_add" style="display:inline-block;width: 100%;height: 100%;"></a>
+                                    </div>
+                                </div>
+                        `;
+
+                        dataArr[0].forEach( (value, key) => {
+                            //写入收入信息
+                           str += `
+                                    <div class="bill_item">
+                                        <div class="item_content">
+                                            <p>
+                                                `+ value[ "remarks" ]+`
+                                            </p>
+                                        </div>
+                                        <div class="item_dollar">
+                                           ￥ `+ value[ "money" ]+`
+                                        </div>
+                                    </div>
+                            `;
+
+                        } )
+
+                        $( ".bill_content" ).html( str );
+                        //tab应该是打开了[收入]
+                        $( ".income_nav" ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
+                        billAdd();
+                        billItemEvent();
+                    })
+                    .catch( err => {
+                        loger( err );
+
+                    })
+                })
+
+            } )
+            .catch( err => {
+                loger( err );
+            } )
+    } );
+
+    $( ".save_bill_btn_out" ).click( function () {
+
+        if( !$( "#bill_type" ).val() || !$( ".income_account" ).val() || !$( ".income_num" ).val() ) {
+            loger( "不允许存在空值" );
+            return;
+        }
+        let incomeData = {
+            "money": Number( $( ".income_num" ).val() ),
+            "remarks": $( "#bill_type" ).val()
+        };
+
+        billModule.postBillIncome( $( ".income_account" ).val(), incomeData )
+            .then( res => {
+                loger( res );
+                //添加到首页上
+                billModule.billAccountIncache.forEach( ( value ) => {
+                    Promise.all([
+                        billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] )
+                        //billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] )
+                        ])
+                        .then( dataArr => {
+                            /*
+                            * {
+                                  "errmsg": "请求成功",
+                                  "errno": "0",
+                                  "records": [
+                                    {
+                                      "id": 2,
+                                      "money": 600,
+                                      "remarks": "",
+                                      "type": "收入"
+                                    }
+                                  ]
+                                }
+                            * */
+                            let str = `
+                                <div class="add_plan">
+                                    <div class="weui-uploader__input-box add_btn">
+                                        <a class="bill_add" style="display:inline-block;width: 100%;height: 100%;"></a>
+                                    </div>
+                                </div>
+                        `;
+
+                            dataArr[0].forEach( (value, key) => {
+                                //写入收入信息
+                                str += `
+                                    <div class="bill_item">
+                                        <div class="item_content">
+                                            <p>
+                                                `+ value[ "remarks" ]+`
+                                            </p>
+                                        </div>
+                                        <div class="item_dollar">
+                                           ￥ `+ value[ "money" ]+`
+                                        </div>
+                                    </div>
+                            `;
+
+                            } )
+
+                            $( ".bill_content" ).html( str );
+                            //tab应该是打开了[支出]
+                            $( ".output_nav" ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
+
+                            billItemEvent();
+                            billAdd();
+
+                        })
+                        .catch( err => {
+                            loger( err );
+
+                        })
+                })
+
+            } )
+            .catch( err => {
+                loger( err );
+            } )
+
+    } );
+
+
+    //添加账户模块
     $( ".save_bill_btn_accounts" ).click( function () {
-
-
-        //获取账号信息
 
         let data = {
             "account_id" : $( ".account_name" ).val(),
@@ -369,13 +622,14 @@ function billModuleFile () {
             delete data[ "remarks" ];
         }
 
-        billModule.postBillAccount( data )
-            .then( res => {
-                loger(res);
-                //隐藏
+        if( accountPutPostFlag === "post" ) {
+            billModule.postBillAccount( data )
+                .then( res => {
+                    loger(res);
+                    //清空input
 
-                //新添加的数据需要写入
-                let str = `
+                    //新添加的数据需要写入
+                    let str = `
                             <div class="bill_account_item">
                                 <div class="bill_item_center">
                                     <p><span style="font-size: 2rem">`+ $( ".bank_name" ).val() +`</span></p>
@@ -388,23 +642,77 @@ function billModuleFile () {
                                 </div>
                             </div>
                 `;
-                $( ".bill_account_items" ).append( str );
+                    $( ".bill_account_items" ).append( str );
+                    billAccountEvent();
+                    //隐藏
 
-                $( ".add_bill_account" ).addClass( "hide" );
+                    $( ".add_bill_account" ).addClass( "hide" );
 
-            } )
-            .catch( err => {
-                loger( err );
-            } )
+                } )
+                .catch( err => {
+                    loger( err );
+                } )
 
+        }
+        else {
+
+            billModule.putBillAccountById( data )
+                .then( res => {
+                    loger(res);
+                    //需要修改原始的数据哦
+                    billModule.getAllBillAccount()
+                        .then( res =>{
+                            //所有的账户的数组，需要显示所有的账户的info?
+                            if( res.length <= 0 ) {
+                                return;
+                            }
+                            let str = "";
+                            res.forEach( ( value, key ) => {
+
+                                //显示所有的账户
+                                str += `
+                                        <div class="bill_account_item">
+                                            <div class="bill_item_center">
+                                                <p><span style="font-size: 2rem">`+value[ "name" ]+`</span></p>
+                                                <p class="account_id">
+                                                    <span>账户id:</span>
+                                                    <span>`+value[ "account_id" ]+`</span>
+                                                </p>
+                                                <p><span style="color: #ccc">`+ value[ "remarks" ] +`</span></p>
+                                                <p><span style="font-size: 2rem; color: #4fd2c2;"> `+ value[ "total_money" ] +` </span></p>
+                                            </div>
+                                        </div>
+                                        `;
+                            })
+                            $( ".bill_account_items" ).html( str );
+                            billAccountEvent();
+
+                            billItemEvent();
+                        })
+                        .catch( err => {
+                            loger( err );
+                        })
+                    $( ".add_bill_account" ).addClass( "hide" );
+
+                } )
+                .catch( err => {
+                    loger( err );
+                } )
+        }
     } );
-
 
     $( ".cancel_bill_btn_accounts" ).click( function () {
         $( ".add_bill_account" ).addClass( "hide" );
     } );
 
     $( ".add_bill_btn_accounts" ).click( function () {
+        $( ".account_name" ).val( "" );
+        $( ".bank_name" ).val( "" );
+        $( ".account_over" ).val( "" );
+        $( ".account_remark" ).val( "" );
+
+        accountPutPostFlag = "post";
+
         $( ".add_bill_account" ).removeClass( "hide" );
     } );
 }

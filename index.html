@@ -341,16 +341,16 @@
                             <div class="bill_nav">
                                 <div class="weui-navbar nav_item">
                                     <div style="border-radius: 25px 0 0 25px;"
-                                         class="weui-navbar__item nav_flag weui_bar__item_on">
+                                         class="weui-navbar__item nav_flag weui_bar__item_on income_nav">
                                         收入
                                     </div>
-                                    <div class="weui-navbar__item nav_flag">
+                                    <div class="weui-navbar__item nav_flag output_nav">
                                         支出
                                     </div>
                                 </div>
 
                             </div>
-                            <div style="margin-bottom: 185%" class="home_center bill_content"
+                            <div style="margin-bottom: 100%" class="home_center bill_content"
                                  style="position: relative;">
                                 <!-- 首页所有便签 -->
 
@@ -399,7 +399,7 @@
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input my_account" type="text"
+                                            <input class="weui-input my_account income_account" type="text"
                                                    style="font-size: 1.5rem;text-align: center" placeholder="我的账户">
                                         </div>
                                     </div>
@@ -416,8 +416,8 @@
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input" type="text"
-                                                   style="font-size: 1.5rem;text-align: center" placeholder="备注">
+                                            <input class="weui-input income_num" type="number"
+                                                   style="font-size: 1.5rem;text-align: center" placeholder="收入金额">
                                         </div>
                                     </div>
                                 </div>
@@ -426,7 +426,7 @@
 
                                     <div class="save_meno">
                                         <a href="javascript:;"
-                                           class="weui-btn weui-btn_plain-default save_bill_btn">保存</a>
+                                           class="weui-btn weui-btn_plain-default save_bill_btn add_bill_income">保存</a>
                                     </div>
 
                                 </div>
@@ -434,14 +434,14 @@
                             <div class="memo_input" id="bill_output">
                                 <div class="home_top_placeholder"></div>
 
-                                <div class="weui-cells">
-                                    <div class="weui-cell">
-                                        <div class="weui-cell__bd">
-                                            <input class="weui-input" type="text" style="font-size: 2rem;"
-                                                   placeholder="请输入标题">
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--<div class="weui-cells">-->
+                                    <!--<div class="weui-cell">-->
+                                        <!--<div class="weui-cell__bd">-->
+                                            <!--<input class="weui-input" type="text" style="font-size: 2rem;"-->
+                                                   <!--placeholder="请输入标题">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
@@ -453,23 +453,24 @@
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input my_account" type="text"
+                                            <input class="weui-input my_account output_account" type="text"
                                                    style="font-size: 1.5rem;text-align: center" placeholder="我的账户">
                                         </div>
                                     </div>
                                 </div>
                                 <!--<div class="weui-cells">-->
-                                <!--<div class="weui-cell">-->
-                                <!--<div class="weui-cell__bd">-->
-                                <!--<input class="weui-input" type="text" style="font-size: 1.5rem;text-align: center" placeholder="有成员">-->
-                                <!--</div >-->
-                                <!--</div>-->
+                                    <!--<div class="weui-cell">-->
+                                        <!--<div class="weui-cell__bd">-->
+                                            <!--<input class="weui-input" type="text"-->
+                                                   <!--style="font-size: 1.5rem;text-align: center" placeholder="有成员">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
                                 <!--</div>-->
                                 <div class="weui-cells">
                                     <div class="weui-cell">
                                         <div class="weui-cell__bd">
-                                            <input class="weui-input" type="text"
-                                                   style="font-size: 1.5rem;text-align: center" placeholder="备注">
+                                            <input class="weui-input output_num" type="number"
+                                                   style="font-size: 1.5rem;text-align: center" placeholder="支出金额">
                                         </div>
                                     </div>
                                 </div>
@@ -528,7 +529,7 @@
                                                 </div>
                                                 <div>
                                                     <a href="javascript:;"
-                                                       class="weui-btn weui-btn_plain-default save_bill_btn_accounts">添加</a>
+                                                       class="weui-btn weui-btn_plain-default save_bill_btn_accounts">确定</a>
                                                 </div>
                                             </div>
 

@@ -8,10 +8,10 @@ function memoModlueFile(){
     try {
         for ( let i = 0; i < len; i++ ) {
 
-        let element = memoInfoIncache[i];
+        let element = memoInfoIncache[ i ];
         let title   = element[ "title" ];
         let content = element[ "content" ] ? element[ "content" ] : "";
-
+        let memoId  = element[ "id" ];
         if ( title.length > 9 ) {
             title = title.slice( 0, 9 );
         }
@@ -21,7 +21,7 @@ function memoModlueFile(){
         }
 
         let str = `
-                    <div class="memo_item">
+                    <div class="memo_item" data=`+ memoId + `>
                         <div class="item_title">
                             <h5>`+title+`</h5>
                         </div>
@@ -46,11 +46,30 @@ function memoModlueFile(){
         //长按事件
         var timeOutEvent = null;
         $( ".memo_item" ).on( {
+
             touchstart: function ( e ) {
                 // 长按事件触发
+                let self = this;
                 timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
-                    console.log( '你长按了' );
+
+                    memoModule.delteMemoInfoById( $( self ).attr( "data"), function ( err, res ) {
+                        if( err ) {
+                            loger( err );
+                            return;
+                        }
+
+                        $.confirm( {
+                            title   : '提示',
+                            text    : '确定删除？',
+                            onOK    : function () {
+                                //点击确认
+                                $( self ).remove();
+                            }
+                        } );
+                    } )
+
+
                 }, 1000 );
                 //长按400毫秒
                  e.preventDefault();

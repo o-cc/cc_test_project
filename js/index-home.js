@@ -15,6 +15,8 @@ $( function () {
                         onClick  : function () {
                             //do something
                             GoHashUrl( "memo" );
+                            $( ".menu_title" ).html ( "备忘录" );
+
                         }
                     },
                     {
@@ -23,6 +25,8 @@ $( function () {
                         onClick  : function () {
                             //do something
                             GoHashUrl( "notes" );
+                            $( ".menu_title" ).html ( "记事本" );
+
                         }
                     },
                     {
@@ -31,6 +35,8 @@ $( function () {
                         onClick  : function () {
                             //do something
                             GoHashUrl( "plan" );
+                            $( ".menu_title" ).html ( "计划表" );
+
                         }
                     },
                     {
@@ -39,12 +45,31 @@ $( function () {
                         onClick  : function () {
                             //do something
                             GoHashUrl( "bill" );
+                            $( ".menu_title" ).html ( "记账本" );
                         }
                     }
                 ]
         } );
     } );
 
+    $( "#signout" ).click( function () {
+
+        $.confirm( {
+            title   : '提示',
+            text    : '确定退出吗',
+            onOK    : function () {
+                //点击确认
+                window.localStorage.setItem( "token", "" );
+                window.location.href = "./login.html";
+            }
+        } );
+
+    } )
+    //点击左边侧栏修改标题
+    $( ".bom_menu" ).on( "click", "a", function () {
+        $( ".menu_title" ).html ( this.innerHTML );
+
+    } )
     //首页默认10条 5条备忘录
     Promise.all([
         memoModule.getAllMemoInfo(),

@@ -9,7 +9,7 @@ function noteModuleFile () {
             let element = noteInfoIncache[i];
             let title   = element[ "titile" ];
             let content = element[ "content" ] ? element[ "content" ] : " ";
-
+            let noteId  = element[ "id" ];
             if ( title.length > 9 ) {
                 title = title.slice( 0, 9 );
             }
@@ -19,7 +19,7 @@ function noteModuleFile () {
             }
 
             let str = `
-                   <div class="note_item">
+                   <div class="note_item" data=`+noteId+`>
                         <div class="item_title">
                             <h5>`+ title +`</h5>
                         </div>
@@ -33,6 +33,7 @@ function noteModuleFile () {
 
             $( ".note_items" ).append( str );
         }
+
         if( $( ".note_item" ).length < 6 ) {
             let len = $( ".note_item" ).length;
 
@@ -45,6 +46,65 @@ function noteModuleFile () {
     }catch ( e ) {
         console.log( e );
     }
+
+    //长按事件
+    var timeOutEvent = null;
+    $( ".note_item" ).on( {
+
+        touchstart: function ( e ) {
+            // 长按事件触发
+            let self = this;
+            timeOutEvent = setTimeout( function () {
+                timeOutEvent = 0;
+
+                if( $( self ).attr( "data") ) {
+
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '确定删除？',
+                        onOK    : function () {
+                            //点击确认
+                            noteModule.delteNoteInfoById( $( self ).attr( "data"), function ( err, res ) {
+                                if( err ) {
+                                    loger( err );
+                                    return;
+                                }
+                                $( self ).remove();
+
+                            } )
+                        }
+                    } );
+
+                }
+
+
+            }, 1000 );
+            //长按400毫秒
+            e.preventDefault();
+        },
+        touchmove : function () {
+            clearTimeout( timeOutEvent );
+            timeOutEvent = 0;
+        },
+        touchend  : function () {
+            let self = this;
+            clearTimeout( timeOutEvent );
+            if ( timeOutEvent != 0 ) {
+                // 点击事件
+                //显示到记事本
+                if( $(self).attr("data") ) {
+
+                    $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
+                    editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                    GoHashUrl( "memo_input" );
+                }
+
+            }
+            return false;
+        }
+    } )
+
+
 
     //点击保存
     $(".save_notes_btn").click( function () {

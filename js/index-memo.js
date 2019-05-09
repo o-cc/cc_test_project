@@ -53,21 +53,26 @@ function memoModlueFile(){
                 timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
 
-                    memoModule.delteMemoInfoById( $( self ).attr( "data"), function ( err, res ) {
-                        if( err ) {
-                            loger( err );
-                            return;
-                        }
+                    if( $( self ).attr( "data") ) {
 
                         $.confirm( {
                             title   : '提示',
                             text    : '确定删除？',
                             onOK    : function () {
                                 //点击确认
-                                $( self ).remove();
+                                memoModule.delteMemoInfoById( $( self ).attr( "data"), function ( err, res ) {
+                                    if( err ) {
+                                        loger( err );
+                                        return;
+                                    }
+
+                                    $( self ).remove();
+
+                                } )
+
                             }
                         } );
-                    } )
+                    }
 
 
                 }, 1000 );
@@ -80,12 +85,16 @@ function memoModlueFile(){
             },
             touchend  : function () {
                 clearTimeout( timeOutEvent );
+                let self = this;
                 if ( timeOutEvent != 0 ) {
                     // 点击事件
                     //显示到记事本
-                    $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
-                    editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
-                    GoHashUrl( "memo_input" );
+                    if( $( self ).attr( "data" ) ) {
+                        $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
+                        editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                        GoHashUrl( "memo_input" );
+                    }
+
                 }
                 return false;
             }

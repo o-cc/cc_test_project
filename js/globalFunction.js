@@ -385,7 +385,7 @@ noteModule.delteNoteInfoById = function ( noteId, callback ) {
     }
 
     $.ajax( {
-        url: globalUrl.httpServerUrl.memo + noteId + "/",
+        url: globalUrl.httpServerUrl.note + noteId + "/",
         method: "DELETE",
         headers: {
             "Authorization" : window.localStorage.getItem("token")

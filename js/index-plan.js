@@ -628,7 +628,6 @@ function planModuleFile () {
                                     return;
                                 }
 
-                                loger( res );
                                 //删除dom
                                 $( self ).remove();
                             })

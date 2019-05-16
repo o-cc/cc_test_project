@@ -19,6 +19,26 @@ function loger( txt ) {
     } );
 };
 
+/*
+* 暂时就两个参数，未来可以拓展成类似闹钟，如增加第三个参数为10分钟后再次提示
+* 目前决定按了确认之后，不跳转到具体哪个备忘录响铃的，可以拓展，如再加一个参数，为一个函数，执行具体操作
+* */
+function showTimeWarning( actionTime, content ) {
+    //这里有个问题，如果多个定时器同时触发事件的话，只能添加一个！所以应该先清空文档中的audio
+
+    $.modal({
+        title: "标题",
+        text: content,
+        buttons: [
+            {
+                text: "关闭响铃",
+                onClick: function(){
+
+
+            } }
+        ]
+    });
+};
 
 function GoHashUrl( hashValue ) {
     window.location.href = "#" + hashValue;
@@ -79,6 +99,35 @@ memoModule.getAllMemoInfo = function () {
 
 };
 
+/*
+*  获取用户信息
+*
+* */
+function getUserInfo () {
+    return new Promise( ( resolve, reject ) => {
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.register,
+            method: "GET",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            success: function ( res ) {
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res );
+
+            },
+            error: function ( err ) {
+
+                return reject( "返回" + err.status + "信息为:" + err.responseText, null );
+            }
+
+        } )
+
+    })
+};
 /*
 * {
   "errmsg": "请求成功",

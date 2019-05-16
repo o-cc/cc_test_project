@@ -74,12 +74,24 @@ $( function () {
     Promise.all([
         memoModule.getAllMemoInfo(),
         noteModule.getAllNoteInfo(),
-        planModule.getAllPlanInfo()
+        planModule.getAllPlanInfo(),
+        getUserInfo()
     ])
         .then( data => {
             let memoInfo = data[ 0 ];
             let noteInfo = data[ 1 ];
+            let userInfo = data[ 3 ];
+
+            if( typeof userInfo !== "string" ){
+                loger( "用户名出错联系管理员" );
+            }
+
             try {
+
+                $( ".head_img" ).html( userInfo["username"].charAt(0) );
+                $( ".persion_info" ).children("p").eq(0).html( userInfo["username"] );
+                $( ".persion_info" ).children("p").eq(1).html( userInfo["email"] );
+
                 let len = memoInfo.length;
                 len     = len > 5? 5 : len;
 

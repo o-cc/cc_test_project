@@ -248,7 +248,7 @@ memoModule.postMemoInfo = function ( changeData ) {
                 if( res.errno !== "0" ) {
                     return reject( res[ "errmsg" ] );
                 }
-                return resolve( res[ "errmsg" ] );
+                return resolve( res );
 
             },
             error: function ( err ) {
@@ -319,7 +319,7 @@ noteModule.postNoteInfo = function ( noteData, callback ) {
             if( res.errno !== "0" ) {
                 return callback( res[ "errmsg" ], null );
             }
-            return callback( null, res[ "errmsg" ] );
+            return callback( null, res );
 
         },
         error: function ( err ) {

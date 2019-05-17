@@ -509,8 +509,39 @@ function billModuleFile () {
                         $( ".bill_content" ).html( str );
                         //tab应该是打开了[收入]
                         $( ".income_nav" ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
-                        billAdd();
-                        billItemEvent();
+
+                        billModule.getAllBillAccount()
+                            .then( res =>{
+                                //所有的账户的数组，需要显示所有的账户的info?
+                                if( res.length <= 0 ) {
+                                    return;
+                                }
+                                let str = "";
+                                res.forEach( ( value, key ) => {
+                                    //显示所有的账户
+                                    str += `
+                                        <div class="bill_account_item">
+                                            <div class="bill_item_center">
+                                                <p><span style="font-size: 2rem">`+value[ "name" ]+`</span></p>
+                                                <p class="account_id">
+                                                    <span>账户id:</span>
+                                                    <span>`+value[ "account_id" ]+`</span>
+                                                </p>
+                                                <p><span style="color: #ccc">`+ value[ "remarks" ] +`</span></p>
+                                                <p><span style="font-size: 2rem; color: #4fd2c2;"> `+ value[ "total_money" ] +` </span></p>
+                                            </div>
+                                        </div>`;
+
+                                })
+                                $( ".bill_account_items" ).html( str );
+                                billAccountEvent();
+                                billItemEvent();
+                                billAdd();
+                            })
+                            .catch( err => {
+                                loger( err );
+                            })
+
                     })
                     .catch( err => {
                         loger( err );
@@ -588,9 +619,37 @@ function billModuleFile () {
                             //tab应该是打开了[支出]
                             $( ".output_nav" ).addClass( "weui_bar__item_on" ).siblings( "div" ).eq( 0 ).removeClass( "weui_bar__item_on" );
 
-                            billItemEvent();
-                            billAdd();
+                            billModule.getAllBillAccount()
+                                .then( res =>{
+                                    //所有的账户的数组，需要显示所有的账户的info?
+                                    if( res.length <= 0 ) {
+                                        return;
+                                    }
+                                    let str = "";
+                                    res.forEach( ( value, key ) => {
+                                        //显示所有的账户
+                                        str += `
+                                        <div class="bill_account_item">
+                                            <div class="bill_item_center">
+                                                <p><span style="font-size: 2rem">`+value[ "name" ]+`</span></p>
+                                                <p class="account_id">
+                                                    <span>账户id:</span>
+                                                    <span>`+value[ "account_id" ]+`</span>
+                                                </p>
+                                                <p><span style="color: #ccc">`+ value[ "remarks" ] +`</span></p>
+                                                <p><span style="font-size: 2rem; color: #4fd2c2;"> `+ value[ "total_money" ] +` </span></p>
+                                            </div>
+                                        </div>`;
 
+                                    })
+                                    $( ".bill_account_items" ).html( str );
+                                    billAccountEvent();
+                                    billItemEvent();
+                                    billAdd();
+                                })
+                                .catch( err => {
+                                    loger( err );
+                                })
                         })
                         .catch( err => {
                             loger( err );

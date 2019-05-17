@@ -71,6 +71,13 @@ function noteModuleFile () {
                                 }
                                 $( self ).remove();
 
+                                if( $( ".note_item" ).length < 6 ) {
+                                    let len = $( ".note_item" ).length;
+
+                                    for ( let i = 0; i < 6 - len; i++ ) {
+                                        $( ".note_items" ).append( "<div class='note_item' style='opacity: 0'></div>" );
+                                    }
+                                }
                             } )
                         }
                     } );

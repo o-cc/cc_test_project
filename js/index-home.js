@@ -75,7 +75,7 @@ $( function () {
         memoModule.getAllMemoInfo(),
         noteModule.getAllNoteInfo(),
         planModule.getAllPlanInfo(),
-        getUserInfo()
+        //getUserInfo()
     ])
         .then( data => {
             let memoInfo = data[ 0 ];
@@ -92,13 +92,18 @@ $( function () {
                 $( ".persion_info" ).children("p").eq(0).html( userInfo["username"] );
                 $( ".persion_info" ).children("p").eq(1).html( userInfo["email"] );
 
+            }catch ( e ) {
+
+            }
+
+            try {
+
                 let len = memoInfo.length;
                 len     = len > 5? 5 : len;
 
                 for ( let i = 0; i < len; i++ ) {
 
                     let element = memoInfo[i];
-
                     let title   = element[ "title" ];
                     let content = element[ "content" ] ? element[ "content" ] : " ";
 
@@ -111,7 +116,7 @@ $( function () {
                     }
 
                     let str = `
-                    <div class="home_item" data-type="memo">
+                    <div class="home_item" id=`+element["id"]+` data-type="memo">
                         <div class="item_title">
                             <h5>` + title + `</h5>
                         </div>
@@ -129,9 +134,7 @@ $( function () {
                 let noteInfoLen = noteInfo.length;
                 noteInfoLen     = noteInfoLen > 5? 5 : noteInfoLen;
                 for ( let i = 0; i < noteInfoLen; i++ ) {
-
                     let element = noteInfo[i];
-
                     let title   = element[ "titile" ];
                     let content = element[ "content" ] ? element[ "content" ] : " ";
 
@@ -144,25 +147,24 @@ $( function () {
                     }
 
                     let str = `
-                    <div class="home_item" data-type="note">
-                        <div class="item_title">
-                            <h5>` + title + `</h5>
-                        </div>
-                        <div class="item_content">
-                            <p>
-                               ` + content + `
-                            </p>
-                        </div>
-                    </div>
-                `;
+                        <div class="home_item" id=`+ element["id"] +` data-type="note">
+                            <div class="item_title">
+                                <h5>` + title + `</h5>
+                            </div>
+                            <div class="item_content">
+                                <p>
+                                   ` + content + `
+                                </p>
+                            </div>
+                        </div>`;
 
                     $( ".home_items" ).append( str );
                 }
 
-                if( $( ".home_item" ).length < 6 ) {
+                if( $( ".home_item" ).length < 7 ) {
                     let len = $( ".home_item" ).length;
-                    for ( let i = 0; i < 6 - len; i++ ) {
-                        $( ".home_items" ).append( "<div class='home_item' style='opacity: 0'></div>" );
+                    for ( let i = 0; i < 7 - len; i++ ) {
+                        $( ".home_items" ).append( "<div class='home_item' data-type='hide' style='opacity: 0'></div>" );
                     }
                 }
 
@@ -190,13 +192,13 @@ $( function () {
                             let moduleType = $( this ).attr( "data-type" );
                             if( moduleType === "memo" ) {
                                 $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
-                                editor.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                                editor.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
                                 GoHashUrl( "memo_input" );
                             }
 
                             if( moduleType === "note" ) {
                                 $(".note_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
-                                editor1.txt.html( $( this ).children("div").eq(1).children("p").eq(0).html() );
+                                editor1.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
                                 GoHashUrl( "note_input" );
                             }
 

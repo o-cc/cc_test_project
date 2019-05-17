@@ -1,6 +1,8 @@
 
 const billModule = {
     billAccountIncache : "",
+    billIncomeInfoIncache: [],
+    billExpensesInfoIncache: []
 };
 const noteModule = {
     noteInfoIncache : ""
@@ -22,22 +24,37 @@ function loger( txt ) {
 /*
 * 暂时就两个参数，未来可以拓展成类似闹钟，如增加第三个参数为10分钟后再次提示
 * 目前决定按了确认之后，不跳转到具体哪个备忘录响铃的，可以拓展，如再加一个参数，为一个函数，执行具体操作
+* params1: 提示内容 默认为  我要放歌啦！
 * */
-function showTimeWarning( actionTime, content ) {
-    //这里有个问题，如果多个定时器同时触发事件的话，只能添加一个！所以应该先清空文档中的audio
+function showTimeWarning( content, actionTime ) {
+    //actionTime
+    //判断当前是否存在提示
+    if( $("#timeWarning") ) {
+        $("#timeWarning").remove();
+    }
 
-    $.modal({
-        title: "标题",
-        text: content,
-        buttons: [
-            {
-                text: "关闭响铃",
-                onClick: function(){
+    let audio = document.createElement( "audio" );
+    audio.src = "./test/Guns.mp3";
+    audio.id  = "timeWarning";
+    audio.setAttribute( "autoplay", "autoplay" );
+    audio.setAttribute( "loop", "loop" );
+    document.querySelector( "body" ).appendChild( audio );
 
+    setTimeout( function () {
 
-            } }
-        ]
-    });
+        $.modal({
+            title: "标题",
+            text: content?content: " 这首超好听的歌叫21 Guns！！",
+            buttons: [
+                {
+                    text: "关闭响铃",
+                    onClick: function(){
+                        $("#timeWarning").remove();
+                    } }
+            ]
+        });
+    },actionTime?actionTime:3000 )
+
 };
 
 function GoHashUrl( hashValue ) {
@@ -832,8 +849,7 @@ billModule.getBillIncomeInfoByAccountId = function ( accountId ) {
                 if( res.errno !== "0" ) {
                     return reject( res[ "errmsg" ] );
                 }
-
-                billModule.billIncomeInfoIncache = res[ "records" ];
+                billModule.billIncomeInfoIncache = billModule.billIncomeInfoIncache.concat( res[ "records" ] );
                 return resolve( res[ "records" ] );
 
             },
@@ -867,7 +883,7 @@ billModule.getBillExpensesInfoByAccountId = function ( accountId ) {
                 if( res.errno !== "0" ) {
                     return reject( res[ "errmsg" ] );
                 }
-                billModule.billExpensesInfoIncache = res[ "records" ];
+                billModule.billExpensesInfoIncache = billModule.billExpensesInfoIncache.concat( res[ "records" ] );
                 return resolve( res[ "records" ] );
 
             },
@@ -902,13 +918,56 @@ billModule.postBillIncome = function ( accountId, incomeData ) {
         }
 
         $.ajax( {
-            url: globalUrl.httpServerUrl.income + accountId,
+            url: globalUrl.httpServerUrl.income + accountId + "/",
             method: "POST",
             headers: {
                 "Authorization" : window.localStorage.getItem("token")
             },
             contentType: 'application/json',
             data: JSON.stringify( incomeData ),
+            success: function ( res ) {
+
+                if( res.errno !== "0" ) {
+                    return reject( res[ "errmsg" ] );
+                }
+                return resolve( res[ "errmsg" ] );
+
+            },
+            error: function ( err ) {
+                return reject( "返回" + err.status + "信息为:" + err.responseText );
+            }
+        } )
+    });
+
+    return pre;
+};
+
+/*
+* 添加支出
+*@param1 accountId 账户id
+*@param2 outputData
+*   {
+*       "money": 800,
+*       "remark": "xx"
+*   }
+* */
+billModule.postBillOutput = function ( accountId, outputData ) {
+
+    let pre = new Promise( (resolve, reject ) => {
+
+        if( !accountId || !outputData[ "money" ] ) {
+
+            return reject( "参数有误: "+ JSON.stringify( outputData ) );
+        }
+
+        $.ajax( {
+            url: globalUrl.httpServerUrl.expenses + accountId + "/",
+            method: "POST",
+            headers: {
+                "Authorization" : window.localStorage.getItem("token")
+            },
+            contentType: 'application/json',
+            data: JSON.stringify( outputData ),
             success: function ( res ) {
 
                 if( res.errno !== "0" ) {

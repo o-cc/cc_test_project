@@ -9,7 +9,7 @@ function billModuleFile () {
                 // 长按事件触发
                 timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
-                    console.log(     '你长按了' );
+                    console.log( '你长按了' );
                 }, 500 );
                 //长按400毫秒
                 // e.preventDefault();
@@ -116,9 +116,7 @@ function billModuleFile () {
             if( res.length <= 0 ) {
                 return;
             }
-
             res.forEach( ( value, key ) => {
-
                 Promise.all([
                     billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] ),
                     billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] ) ])
@@ -182,7 +180,6 @@ function billModuleFile () {
             })
 
             billItemEvent();
-
 
         })
         .catch( err => {
@@ -448,7 +445,6 @@ function billModuleFile () {
 
     })
 
-
     //添加收入
     $( ".add_bill_income" ).click( function () {
 
@@ -466,7 +462,8 @@ function billModuleFile () {
                 loger( res );
                 //添加到首页上
                 billModule.billAccountIncache.forEach( ( value ) => {
-                Promise.all([
+
+                    Promise.all([
                     //billModule.getBillExpensesInfoByAccountId( value[ "account_id" ] ),
                     billModule.getBillIncomeInfoByAccountId( value[ "account_id" ] ) ])
                     .then( dataArr => {
@@ -526,19 +523,19 @@ function billModuleFile () {
                 loger( err );
             } )
     } );
-
+    //添加支出
     $( ".save_bill_btn_out" ).click( function () {
 
-        if( !$( "#bill_type" ).val() || !$( ".income_account" ).val() || !$( ".income_num" ).val() ) {
+        if( !$( "#output_type" ).val() || !$( ".output_account" ).val() || !$( ".output_num" ).val() ) {
             loger( "不允许存在空值" );
             return;
         }
-        let incomeData = {
-            "money": Number( $( ".income_num" ).val() ),
-            "remarks": $( "#bill_type" ).val()
+        let outputData = {
+            "money": Number( $( ".output_num" ).val() ),
+            "remarks": $( "#output_type" ).val()
         };
 
-        billModule.postBillIncome( $( ".income_account" ).val(), incomeData )
+        billModule.postBillOutput( $( ".output_account" ).val(), outputData )
             .then( res => {
                 loger( res );
                 //添加到首页上

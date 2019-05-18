@@ -38,7 +38,7 @@ function showTimeWarning( actionTime, title, content ) {
         }
 
         let audio = document.createElement( "audio" );
-        audio.src = "./test/Guns.mp3";
+        audio.src = "./images/Guns.mp3";
         audio.id  = "timeWarning";
         audio.setAttribute( "autoplay", "autoplay" );
         audio.setAttribute( "loop", "loop" );
@@ -202,6 +202,7 @@ memoModule.putMemoInfoById = function ( memoId, changeData, callback ) {
         headers: {
             "Authorization" : window.localStorage.getItem("token")
         },
+        contentType: 'application/json',
         data: JSON.stringify( changeData ),
         success: function ( res ) {
             if( res.errno !== "0" ) {

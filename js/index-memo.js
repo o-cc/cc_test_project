@@ -88,6 +88,10 @@ function memoModlueFile(){
                     if( $( self ).attr( "data" ) || $(self).attr("data-id") ) {
                         $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
                         editor.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
+
+                        //判断是不是要修改的
+                        $(".save_memo_btn").attr( "submit-type", "put" );
+                        $(".save_memo_btn").attr( "id", $( self ).attr( "data" )  );
                         GoHashUrl( "memo_input" );
                     }
 
@@ -202,6 +206,10 @@ function memoModlueFile(){
         }
     } );
 
+    $( ".memo_a" ).click( function () {
+        //是post操作
+        $(".save_memo_btn").attr( "submit-type", "post" );
+    } )
     //点击保存
     $(".save_memo_btn").click( function () {
         //点击保存
@@ -228,6 +236,39 @@ function memoModlueFile(){
         if( !boo ) {
             delete changeData[ "warn_time" ]
         }
+
+        //如果存在一个属性，说明是修改的 否则是添加
+        if( $(this).attr( "submit-type" ) === "put" ) {
+
+            if( !$(this).attr("id") ) {
+                loger( "无法获取id修改" );
+                return;
+            }
+            let changeData = {
+                "title"    : $(".memo_title").val(),
+                "content"  : editor.txt.text()
+            }
+            let id = $(this).attr( "id" );
+
+            memoModule.putMemoInfoById( $(this).attr("id"), changeData, function ( err, tf ) {
+
+                if( err ) {
+                    loger( err );
+                    return;
+                }
+
+                $(".memo_item[data='"+id+"']").find("h5").html( changeData[ "title" ] );
+                $(".memo_item[data='"+id+"']").find(".item_content").children("p").eq(0).html( changeData[ "content" ] );
+                $( ".memo_title" ).val( "" );
+                editor.txt.text( "" );
+                $(".audio_click").prop( "checked", false );
+                $("#datetime-picker").val("");
+                GoHashUrl( "memo" );
+
+            } )
+            return;
+        }
+
         memoModule.postMemoInfo( changeData )
             .then( res => {
 

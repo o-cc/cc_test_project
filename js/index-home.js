@@ -193,12 +193,20 @@ $( function () {
                             if( moduleType === "memo" ) {
                                 $(".memo_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
                                 editor.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
+
+                                //判断是不是要修改的
+                                $(".save_memo_btn").attr( "submit-type", "put" );
+                                $(".save_memo_btn").attr( "id", $( this ).attr( "id" )  );
                                 GoHashUrl( "memo_input" );
                             }
 
                             if( moduleType === "note" ) {
                                 $(".note_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() )
                                 editor1.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
+
+                                //判断是不是要修改的
+                                $(".save_notes_btn").attr( "submit-type", "put" );
+                                $(".save_notes_btn").attr( "id", $( this ).attr( "id" )  );
                                 GoHashUrl( "note_input" );
                             }
 

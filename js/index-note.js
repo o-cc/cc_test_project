@@ -134,6 +134,9 @@ function noteModuleFile () {
                     if( $(self).attr("data") || $(self).attr("data-id") ){
                         $(".note_title").val( $( this ).children("div").eq(0).children("h5").eq(0).html() );
                         editor1.txt.text( $( this ).children("div").eq(1).children("p").eq(0).html() );
+
+                        $(".save_notes_btn").attr( "submit-type", "put" );
+                        $(".save_notes_btn").attr( "id", $( self ).attr( "data" )  );
                         GoHashUrl( "note_input" );
                     }
 
@@ -150,6 +153,7 @@ function noteModuleFile () {
     $(".save_notes_btn").click( function () {
         //点击保存
         //是否有声音
+        let self = this;
         if( !$(".note_title").val() ) {
             loger( "请填写备忘录标题" );
             return;
@@ -166,6 +170,31 @@ function noteModuleFile () {
             "content"  : editor1.txt.text(),
 
         };
+
+        if( $(this).attr( "submit-type" ) === "put" ) {
+
+            if( !$( this ).attr( "id" ) ) {
+                loger( "无法获取id修改" );
+                return;
+            }
+            let id = $(self).attr( "id" );
+
+            noteModule.putNoteInfoById( id, changeData, function ( err, res ) {
+
+                if( err ){
+                    loger(err);
+                    return;
+                }
+
+                $(".note_title").val("");
+                $(".note_item[data='"+id+"']").find("h5").html( changeData[ "title" ] );
+                $(".note_item[data='"+id+"']").find(".item_content").children("p").eq(0).html( changeData[ "content" ] );
+                editor1.txt.text( "" );
+                GoHashUrl( "notes" );
+            } )
+            return;
+        }
+
         noteModule.postNoteInfo( changeData, function (err, res) {
             if( err ) {
                 loger( err );
@@ -206,6 +235,11 @@ function noteModuleFile () {
             GoHashUrl( "notes" );
 
         })
+    })
+
+    $(".note_add").click( function () {
+        $(".save_notes_btn").attr( "submit-type", "post" );
+
     })
 
 };

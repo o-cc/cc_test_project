@@ -570,7 +570,7 @@ function planModuleFile () {
 
     function planItemClick () {
 
-        $( ".plan_item" ).click( function () {
+        $( ".plan_items label" ).click( function () {
             let self = this;
             if ( $( self ).prop( "checked" ) ) {
                 $.confirm( {

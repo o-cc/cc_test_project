@@ -314,6 +314,15 @@ function planModuleFile () {
 
                     }
 
+                    //这里有个问题，如果是计划几天后的日期了，那我要不要设置个响铃的
+                    //如果设置那么万一未来有很多怎么处理？目前就决定给所有未来的计划都制定定时器--->20190518
+                    if( !is_finish ) {
+                        //规定未完成才响铃
+                        let actionTime = wranDay - new Date();
+                        if( actionTime > 0 ) {
+                            showTimeWarning( actionTime, "计划提醒", content );
+                        }
+                    }
                 }
 
                 $( ".plan_items" ).html( str );
@@ -481,7 +490,19 @@ function planModuleFile () {
                 loger( err );
                 return;
             }
-            loger( res );
+            //loger( res );
+            //之后得设置一个时间提醒
+            //如果是已完成的计划
+            if( !data[ "is_finish" ] ) {
+
+                let warnTime = data[ "warn_time" ];
+                let actionTime = new Date( warnTime ) - new Date();
+                if( actionTime > 0 ) {
+                    showTimeWarning( actionTime, "计划提醒", $( ".plan_title" ).val() )
+                }
+            }
+
+
             //完了之后需要重新更新一个下module_incache,并且更新当天的计划
             planModule.getAllPlanInfo()
                 .then( res => {
@@ -569,7 +590,6 @@ function planModuleFile () {
                                 return;
                             }
 
-                            //loger( res );
                         })
                     },
                     onCancel: function () {
@@ -616,7 +636,6 @@ function planModuleFile () {
                 let self = this;
                 timeOutEvent = setTimeout( function () {
                     timeOutEvent = 0;
-
                     //是否需要删除
                     $.confirm( {
                         title   : '提示',
@@ -629,9 +648,11 @@ function planModuleFile () {
                                     loger( err );
                                     return;
                                 }
-
                                 //删除dom
                                 $( self ).remove();
+                                //缓冲池没有更新
+                                planModule.planInfoIncache = planModule.planInfoIncache.filter( item => item["id"]+"" !== planId  );
+
                             })
                         }
                     } );

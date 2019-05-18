@@ -30,7 +30,7 @@ function loger( txt ) {
 * */
 function showTimeWarning( actionTime, title, content ) {
     //判断当前是否存在提示
-    console.log( '设置了闹钟' );
+    console.log( '设置了闹钟 大概'+ actionTime +'毫秒后提醒'  );
     setTimeout( function () {
 
         if( $("#timeWarning") ) {

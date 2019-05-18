@@ -104,42 +104,54 @@ function memoModlueFile(){
     let len             = memoInfoIncache.length;
 
     try {
+
         for ( let i = 0; i < len; i++ ) {
+            let element = memoInfoIncache[ i ];
+            let title   = element[ "title" ];
+            let content = element[ "content" ] ? element[ "content" ] : "";
+            let memoId  = element[ "id" ];
 
-        let element = memoInfoIncache[ i ];
-        let title   = element[ "title" ];
-        let content = element[ "content" ] ? element[ "content" ] : "";
-        let memoId  = element[ "id" ];
-        if ( title.length > 9 ) {
-            title = title.slice( 0, 9 );
+            let warnTime = element[ "warn_time" ];
+            if( warnTime ) {
+
+                let warnDate = new Date( warnTime );
+                let timeOut  = warnDate - new Date();
+                if( warnDate.toString() !== "Invalid Date" ) {
+                    if( warnDate - new Date() > 0 ) {
+                        showTimeWarning( timeOut );
+                    }
+                }
+            }
+
+            if ( title.length > 9 ) {
+                title = title.slice( 0, 9 );
+            }
+
+            if ( content.length > 60 ) {
+                content = content.slice( 0, 60 );
+            }
+
+            let str = `
+                        <div class="memo_item" data=`+ memoId + `>
+                            <div class="item_title">
+                                <h5>`+title+`</h5>
+                            </div>
+                            <div class="item_content">
+                                <p>
+                                   `+content+`
+                                </p>
+                            </div>
+                        </div>`;
+
+            $( ".memo_items" ).append( str );
         }
 
-        if ( content.length > 60 ) {
-            content = content.slice( 0, 60 );
+        if( $( ".memo_item" ).length < 6 ) {
+            let len = $( ".memo_item" ).length;
+            for ( let i = 0; i < 6 - len; i++ ) {
+                $( ".memo_items" ).append( "<div class='memo_item' style='opacity: 0'></div>" );
+            }
         }
-
-        let str = `
-                    <div class="memo_item" data=`+ memoId + `>
-                        <div class="item_title">
-                            <h5>`+title+`</h5>
-                        </div>
-                        <div class="item_content">
-                            <p>
-                               `+content+`
-                            </p>
-                        </div>
-                    </div>
-                `;
-
-        $( ".memo_items" ).append( str );
-    }
-
-    if( $( ".memo_item" ).length < 6 ) {
-        let len = $( ".memo_item" ).length;
-        for ( let i = 0; i < 6 - len; i++ ) {
-            $( ".memo_items" ).append( "<div class='memo_item' style='opacity: 0'></div>" );
-        }
-    }
 
         //长按事件
         timeEvent();
@@ -204,6 +216,7 @@ function memoModlueFile(){
             return;
         }
         choseDate += ":00";
+
         let boo = $( ".audio_click" ).prop( "checked" )?true:false;
         let changeData = {
             "title"    : $(".memo_title").val(),
@@ -236,6 +249,13 @@ function memoModlueFile(){
                     `;
                 $( ".memo_a" ).after( str );
 
+                //控制声音
+                if( choseDate ) {
+                    let warningTime = new Date(choseDate) - new Date();
+                    if( warningTime > 0 ) {
+                        showTimeWarning( warningTime, $( ".memo_title" ).val(), content );
+                    }
+                }
                 //加了一行辣鸡代码 用来添加到首页html
                 $( ".home_items" ).prepend( str );
                 //欸这里会影响性能！

@@ -24,26 +24,28 @@ function loger( txt ) {
 /*
 * 暂时就两个参数，未来可以拓展成类似闹钟，如增加第三个参数为10分钟后再次提示
 * 目前决定按了确认之后，不跳转到具体哪个备忘录响铃的，可以拓展，如再加一个参数，为一个函数，执行具体操作
-* params1: 提示内容 默认为  我要放歌啦！
+* params1: 多少毫秒后 播放声音
+* params2: 标题
+* params3：内容
 * */
-function showTimeWarning( content, actionTime ) {
-    //actionTime
+function showTimeWarning( actionTime, title, content ) {
     //判断当前是否存在提示
-    if( $("#timeWarning") ) {
-        $("#timeWarning").remove();
-    }
-
-    let audio = document.createElement( "audio" );
-    audio.src = "./test/Guns.mp3";
-    audio.id  = "timeWarning";
-    audio.setAttribute( "autoplay", "autoplay" );
-    audio.setAttribute( "loop", "loop" );
-    document.querySelector( "body" ).appendChild( audio );
-
+    console.log( '设置了闹钟' );
     setTimeout( function () {
 
+        if( $("#timeWarning") ) {
+            $("#timeWarning").remove();
+        }
+
+        let audio = document.createElement( "audio" );
+        audio.src = "./test/Guns.mp3";
+        audio.id  = "timeWarning";
+        audio.setAttribute( "autoplay", "autoplay" );
+        audio.setAttribute( "loop", "loop" );
+        document.querySelector( "body" ).appendChild( audio );
+
         $.modal({
-            title: "标题",
+            title: title ? title : "我要放歌啦！",
             text: content?content: " 这首超好听的歌叫21 Guns！！",
             buttons: [
                 {
@@ -53,7 +55,7 @@ function showTimeWarning( content, actionTime ) {
                     } }
             ]
         });
-    },actionTime?actionTime:3000 )
+    },actionTime )
 
 };
 

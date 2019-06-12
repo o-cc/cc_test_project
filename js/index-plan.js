@@ -507,32 +507,32 @@ function planModuleFile () {
             planModule.getAllPlanInfo()
                 .then( res => {
 
-                //我得知道今天是第几天 又要设置一个全局变量？
-                let thisDay         = new Date( choseDay );
-                let planInfoIncache = planModule.planInfoIncache;
-                planInfoIncache     = planInfoIncache?planInfoIncache:" ";
-                let len             = planInfoIncache.length;
+                    //我得知道今天是第几天 又要设置一个全局变量？
+                    let thisDay         = new Date( choseDay );
+                    let planInfoIncache = planModule.planInfoIncache;
+                    planInfoIncache     = planInfoIncache?planInfoIncache:" ";
+                    let len             = planInfoIncache.length;
 
-                let str = "";
-                try {
+                    let str = "";
+                    try {
 
-                    for ( let i = 0; i < len; i++ ) {
+                        for ( let i = 0; i < len; i++ ) {
 
-                        let element = planInfoIncache[i];
-                        let content = element[ "content" ];
-                        let wranDay = new Date( element[ "warn_time" ] );
-                        let planId  = element[ "id" ];
-                        let is_finish = element[ "is_finish" ]?"checked":"";
+                            let element = planInfoIncache[i];
+                            let content = element[ "content" ];
+                            let wranDay = new Date( element[ "warn_time" ] );
+                            let planId  = element[ "id" ];
+                            let is_finish = element[ "is_finish" ]?"checked":"";
 
-                        //判断是否是今天的日期
-                        if( wranDay.getFullYear() === thisDay.getFullYear()
-                            &&
-                            wranDay.getMonth() === thisDay.getMonth()
-                            &&
-                            wranDay.getDate() === thisDay.getDate()
-                        ) {
+                            //判断是否是今天的日期
+                            if( wranDay.getFullYear() === thisDay.getFullYear()
+                                &&
+                                wranDay.getMonth() === thisDay.getMonth()
+                                &&
+                                wranDay.getDate() === thisDay.getDate()
+                            ) {
 
-                            str += `
+                                str += `
                                    <label class="weui-cell weui-check__label plan_label" for=`+planId+`>
                                         <div class="weui-cell__hd">
                                             <input type="checkbox" name="checkbox1" `+is_finish+` class="weui-check plan_item" id=`+planId+`>
@@ -547,21 +547,21 @@ function planModuleFile () {
                                     </label>
                                     `;
 
+                            }
+
                         }
 
+                        $( ".plan_items" ).html( str );
+                        planItemClick();
+                        timeoutEvent();
+
+
+                    }catch ( e ) {
+                        console.log( e );
                     }
 
-                    $( ".plan_items" ).html( str );
-                    planItemClick();
-                    timeoutEvent();
 
-
-                }catch ( e ) {
-                    console.log( e );
-                }
-
-
-            } )
+                } )
             GoHashUrl( "node_input" );
 
         } )
@@ -570,60 +570,9 @@ function planModuleFile () {
 
     function planItemClick () {
 
-        $( ".plan_items label" ).click( function () {
-            let self = this;
-            if ( $( self ).prop( "checked" ) ) {
-                $.confirm( {
-                    title   : '提示',
-                    text    : '完成计划啦？',
-                    onOK    : function () {
-                        //点击确认
-                        let data = {
-                            "content"  : $( self ).val(),
-                            "is_finish": $( self ).prop( "checked" ),
-                            "warn_time": $( self ).attr( "data-time" ) + " 00:00:00"
-                        };
-                        planModule.putPlanInfoById( $( self ).attr( "id" ), data, function ( err, res ) {
-                            if( err ) {
-                                loger( err );
-                                $( self ).prop( "checked", "checked" );
-                                return;
-                            }
+        $( ".plan_items" ).on( "click", "label", function () {
+            //let self = this;
 
-                        })
-                    },
-                    onCancel: function () {
-                        $( self ).prop( "checked", false );
-                    }
-                } );
-                return;
-            }
-
-            $.confirm( {
-                title   : '提示',
-                text    : '要修改状态吗？',
-                onOK    : function () {
-                    //点击确认修改状态
-                    let data = {
-                        "content"  : $( self ).val(),
-                        "is_finish": $( self ).prop( "checked" ),
-                        "warn_time": $( self ).attr( "data-time" ) + " 00:00:00"
-                    };
-                    //console.log( $( self ).attr( "data-time" ) );
-                    planModule.putPlanInfoById( $( self ).attr( "id" ), data, function ( err, res ) {
-                        if( err ) {
-                            loger( err );
-                            $( self ).prop( "checked", "checked" );
-                            return;
-                        }
-
-                        //loger( res );
-                    })
-                },
-                onCancel: function () {
-                    $( self ).prop( "checked", "checked" );
-                }
-            } );
         } )
 
     };
@@ -661,6 +610,7 @@ function planModuleFile () {
                 //长按400毫秒
                 // e.preventDefault();
             },
+
             touchmove : function () {
                 clearTimeout( timeOutEvent );
                 timeOutEvent = 0;
@@ -673,6 +623,60 @@ function planModuleFile () {
                 //
                 //}
                 //return false;
+                let self = $(this).find( ".plan_item" );
+
+                if ( !self.prop( "checked" ) ) {
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '完成计划啦？',
+                        onOK    : function () {
+                            //点击确认
+                            let data = {
+                                "content"  : self.val(),
+                                "is_finish": self.prop( "checked" ),
+                                "warn_time": self.attr( "data-time" ) + " 00:00:00"
+                            };
+                            planModule.putPlanInfoById( self.attr( "id" ), data, function ( err, res ) {
+                                if( err ) {
+                                    loger( err );
+                                    self.prop( "checked", false );
+                                    return;
+                                }
+
+                                self.prop( "checked", "checked" );
+                            })
+                        },
+                        onCancel: function () {
+                            self.prop( "checked", false );
+                        }
+                    } );
+                }else{
+                    $.confirm( {
+                        title   : '提示',
+                        text    : '要修改状态吗？',
+                        onOK    : function () {
+                            //点击确认修改状态
+                            let data = {
+                                "content"  : self.val(),
+                                "is_finish": self.prop( "checked" ),
+                                "warn_time": self.attr( "data-time" ) + " 00:00:00"
+                            };
+                            //console.log( $( self ).attr( "data-time" ) );
+                            planModule.putPlanInfoById( self.attr( "id" ), data, function ( err, res ) {
+                                if( err ) {
+                                    loger( err );
+                                    self.prop( "checked", "checked" );
+                                    return;
+                                }
+                                self.prop( "checked", false );
+                                //loger( res );
+                            })
+                        },
+                        onCancel: function () {
+                            self.prop( "checked", "checked" );
+                        }
+                    } );
+                }
             }
         } )
 
